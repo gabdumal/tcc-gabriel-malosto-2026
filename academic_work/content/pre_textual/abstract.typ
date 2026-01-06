@@ -3,7 +3,7 @@
 
 #import "../../components/note.typ": note_from_gabriel
 #import "/template/academic_work/pages/pre_textual/abstract.typ": include_abstract
-#import "/template/common/components/note.typ": todo_note
+#import "/template/common/components/note.typ": progress_note, todo_note
 
 #let abstract_in_main_language = {
   (
@@ -17,12 +17,12 @@
     title: "Resumo",
     body: [
 
-      #todo_note(note_from_gabriel[Escrever resumo])
+      #progress_note(note_from_gabriel[Aprimorar resumo e atualizar no sistema de monografia])
 
-      Este trabalho apresenta uma análise de sensibilidade aplicada ao contexto de uma confeitaria fictícia, com o objetivo de investigar o impacto da variação de preços dos insumos na lucratividade de receitas.
-      Utilizou-se modelagem analítica com apoio de ferramentas como PlantUML, SQLite, PostgreSQL e Apache Superset para criação, manipulação e visualização de dados.
-      Foram escolhidas três receitas representativas — pão francês, brigadeiro e bolo de milho verde —, modeladas em banco de dados e analisadas por meio de simulações de aumento de custos em 5%, 10% e 15% para cada insumo.
-      A análise permitiu identificar quais insumos exercem maior influência nos resultados e apoiar decisões estratégicas sobre precificação e diversificação do portfólio de produtos.
+      O mercado em ascensão de jogos autorais requer métodos de apoio no processo de criação.
+      Nessa fase, um protótipo passa por @pt:pl repetidos a fim de identificar desbalanços, o que exige tempo e recursos humanos.
+      Por meio desta pesquisa exploratória, avaliamos o uso de @intag:pl treinados por métodos de @sp e reforço não supervisionado.
+      Este processo é inspirado pelo projeto @az que utiliza os métodos de @mcts e de @resnet:pl.
 
       #todo_note(
         note_from_gabriel[Trocar palavra chave "play-test" para "play-testing", e atualizar no sistema de monografias],
@@ -50,10 +50,6 @@
 
         #todo_note(note_from_gabriel[Traduzir resumo])
 
-        This study presents a sensitivity analysis applied to the context of a fictional bakery, aiming to investigate the impact of price variations of ingredients on recipe profitability.
-        Analytical modeling was employed with the support of tools such as PlantUML, SQLite, PostgreSQL, and Apache Superset for data creation, manipulation, and visualization.
-        Three representative recipes — french bread, brigadeiro, and corn cake — were modeled in a database and analyzed through simulations of cost increases of 5%, 10%, and 15% for each ingredient.
-        The analysis allowed the identification of which ingredients exert the greatest influence on the results and supported strategic decisions regarding pricing and diversification of the product portfolio.
       ]
     ],
   )
