@@ -6,15 +6,9 @@
 // Autores — obrigatório.
 #let authors = (
   (
-    first_name: [Alice],
-    middle_name: [Medeiros de],
-    last_name: [Almeida],
-    gender: "feminine",
-  ),
-  (
-    first_name: [Bruno],
-    middle_name: [da Silva],
-    last_name: [Barbosa],
+    first_name: [Celso Gabriel],
+    middle_name: [Dutra Almeida],
+    last_name: [Malosto],
     gender: "masculine",
   ),
 )
@@ -23,20 +17,9 @@
 // Orientadores — obrigatório.
 #let advisors = (
   (
-    first_name: [Maria],
-    middle_name: [de],
-    last_name: [Medeiros],
-    gender: "feminine",
-    prefix: [Prof.ª Dr.ª],
-    organization: (
-      name: [Universidade Federal de Juiz de Fora],
-      gender: "feminine",
-    ),
-  ),
-  (
-    first_name: [João],
-    middle_name: none,
-    last_name: [Jimenez],
+    first_name: [Igor],
+    middle_name: [de Oliveira],
+    last_name: [Knop],
     gender: "masculine",
     prefix: [Prof. Dr.],
     organization: (
@@ -45,14 +28,14 @@
     ),
   ),
   (
-    first_name: [Ana Paula],
-    middle_name: none,
-    last_name: [Andrade],
+    first_name: [Luciana],
+    middle_name: [Conceição Dias],
+    last_name: [Campos],
     gender: "feminine",
     prefix: [Prof.ª Dr.ª],
     organization: (
-      name: [Instituto Federal de Educação, Ciência e Tecnologia do Sudeste de Minas Gerais],
-      gender: "masculine",
+      name: [Universidade Federal de Juiz de Fora],
+      gender: "feminine",
     ),
   ),
 )
@@ -87,14 +70,12 @@
 // Title — required.
 // Título — obrigatório.
 #let title = {
-  [Análise de sensibilidade]
+  [Ferramenta de apoio automatizado à fase de balanceamento de regras em jogos de turnos]
 }
 
 // Subtitle — optional.
 // Subtítulo — opcional.
-#let subtitle = {
-  [impactos do aumento de custo de insumos em uma confeitaria]
-}
+#let subtitle = {}
 
 // Organization — required. Usually the name of the university.
 // Organização — obrigatório. Geralmente o nome da universidade.
@@ -230,7 +211,7 @@
 // Year — required. The year of publication.
 // Ano — obrigatório. O ano de publicação.
 #let year = {
-  [2025]
+  [2026]
 }
 
 // Volume number — optional. If the work is part of a series or collection, specify the volume number.
@@ -256,8 +237,8 @@
 // Data de aprovação — obrigatório.
 #let approval_date = {
   (
-    day: [01],
+    day: [09],
     month: [janeiro],
-    year: [2025],
+    year: [2026],
   )
 }
