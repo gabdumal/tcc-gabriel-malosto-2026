@@ -33,4 +33,11 @@
     description: "Sistema capaz de interpretar um estado, tomar decisões autônomas e agir para atingir objetivos definidos, aprendendo a adaptar seu comportamento.",
     group: "Computação",
   ),
+  (
+    key: "nn",
+    short: "rede neural",
+    plural: "redes neurais",
+    description: [Em inglês, #text_in_english[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos, inspirado em redes biológicas.],
+    group: "Computação",
+  ),
 )
