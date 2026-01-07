@@ -20,9 +20,9 @@
       #progress_note(note_from_gabriel[Aprimorar resumo e atualizar no sistema de monografia])
 
       O mercado em ascensão de @jogo:pl autorais requer métodos de apoio no processo de criação.
-      Nessa fase, um protótipo passa por @pt:pl repetidos a fim de identificar desbalanços, o que exige tempo e recursos humanos.
-      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @sp e reforço não supervisionado.
-      Este processo é inspirado pelo projeto @az que utiliza os métodos de @mcts e de @resnet:pl.
+      Nessa fase, um protótipo passa por @playtesting repetidamente a fim de identificar desbalanços, o que exige tempo e recursos humanos.
+      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @selfplay e reforço não supervisionado.
+      Este processo é inspirado pelo projeto @alphazero que utiliza os métodos de @mcts e de @resnet:pl.
 
       #todo_note(
         note_from_gabriel[Trocar palavra chave "play-test" para "play-testing", e atualizar no sistema de monografias],

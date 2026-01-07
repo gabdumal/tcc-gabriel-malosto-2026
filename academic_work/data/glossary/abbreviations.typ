@@ -38,6 +38,15 @@
     group: "Computação",
   ),
   (
+    key: "cnn",
+    short: "CNN",
+    plural: "CNNs",
+    long: "rede neural convolucional",
+    longplural: "redes neurais convolucionais",
+    description: [Em inglês, #text_in_english[convolutional neural network]. Arquitetura de rede neural especializada em processar dados com estrutura de grade, como imagens, usando camadas convolucionais para extrair características.],
+    group: "Computação",
+  ),
+  (
     key: "tic",
     short: "TIC",
     plural: "TICs",

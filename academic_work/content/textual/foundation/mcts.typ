@@ -2,12 +2,7 @@
 #import "/template/common/components/figure.typ": describe_figure
 #import "/template/common/packages.typ": glossarium
 
-= Fundamentação teórica <chapter:fundamentacao>
-
-A fim de atingir os objetivos propostos, o presente trabalho investiga duas técnicas para a construção de @jogador:pl digitais autônomos para @jogo:pl de mesa, sendo elas a @mcts e as @resnet:pl, de acordo com os usos que o @az faz delas.
-Este capítulo faz a revisão desses métodos, bem como elenca os trabalhos relacionados a uso de @agint:pl como ferramentas de @pt.
-
-== #glossarium.Gls(long: true, "mcts") <sec:mcts>
+== #glossarium.Gls(long: true, "mcts") <section:mcts>
 
 O método de @mcts:long (@mcts:short) é um algoritmo de decisão em que cada nó de uma árvore representa dado @estado de um @jogo @kocsis:2006:bandit_based_mcts_planning@coulom:2006:efficient_selectivity_backup_operators.
 Além disso, cada nó guarda um contador de visitas e um marcador referente à qualidade daquele nó para a @partida.
@@ -33,7 +28,7 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
     caption: [Ciclo da @mcts:long: suas quatro etapas são a seleção, a expansão, a simulação e a retro-propagação.],
     image(
       width: 80%,
-      "../../assets/images/mcts_cycle.jpg",
+      "/academic_work/assets/images/mcts_cycle.jpg",
     ),
   )<figure:mcts_cycle>],
 )
@@ -41,7 +36,7 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
 A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folha a explorar, orientada por uma diretriz de busca.
 A mais frequentemente utilizada nas implementações de referência é chamada de @uct @kocsis:2006:bandit_based_mcts_planning.
 Essa política atribui contadores de visita e de vitória a cada nó.
-Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao e @aproveitamento do espaço de busca.
+Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao (#glossarium.gls-custom("exploracao")) e @aproveitamento (#glossarium.gls-custom("aproveitamento")) do espaço de busca.
 A @eq:ucb_teorica apresenta como escolher uma ação.
 
 #equation(width: 80%)[
@@ -63,7 +58,7 @@ Então o @estado resultante é criado, o qual é armazenado em um novo nó, defi
 A partir do nó criado, realiza-se a fase de simulação.
 Nela se sucedem @turno:pl entre os @jogador:pl, em que os @movimento:pl são aleatoriamente selecionados.
 A simulação se encerra quando é atingido um @estado que represente o fim da @partida.
-Uma função de @avaliacao quantifica a qualidade da @partida com o objetivo de aferir a influência do @movimento escolhido na @pontuacao dos @jogador:pl.
+Uma função de @avaliacao (#glossarium.gls-custom("avaliacao")) quantifica a qualidade da @partida com o objetivo de aferir a influência do @movimento escolhido na @pontuacao dos @jogador:pl.
 
 Por fim, na fase de retro-propagação, os nós do ramo selecionado são atualizados com os dados gerados.
 O contador de visitas é aumentado em $1$, ao passo em que o marcador de qualidade é incrementado pelo valor de @avaliacao calculado.
