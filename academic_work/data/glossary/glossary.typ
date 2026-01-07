@@ -3,7 +3,92 @@
 
 #import "/template/common/util/text_in_english.typ": text_in_english
 
-#let glossary_entries = (
+#let glossary_entries_about_computing = (
+  (
+    key: "agrupamento",
+    short: text_in_english[pooling],
+    custom: [agrupamento],
+    description: [Em português, agrupamento. Operação em @cnn:pl que reduz a dimensionalidade espacial dos dados, preservando as informações mais relevantes ao selecionar valores representativos de regiões locais.],
+    group: "Computação",
+  ),
+  (
+    key: "overfitting",
+    short: text_in_english[overfitting],
+    custom: [sobre-ajuste],
+    description: [Em português, sobre-ajuste. Fenômeno em que um modelo de aprendizado de máquina se ajusta excessivamente aos dados de treinamento, capturando ruído e padrões específicos em vez de generalizar para novos dados, resultando em baixo desempenho para dados não vistos.],
+    group: "Computação",
+  ),
+  (
+    key: "selfplay",
+    short: text_in_english[self-play],
+    custom: [autoaprendizado por simulação de partidas],
+    description: [Em português, autoaprendizado por simulação de partidas. Técnica em que um @agint treina jogando contra versões de si mesmo para aprender estratégias por reforço sem dados externos.],
+    group: "Computação",
+  ),
+  (
+    key: "exploracao",
+    short: text_in_english[exploration],
+    plural: text_in_english[explorations],
+    custom: [exploração],
+    description: [Em português, exploração. Componente do critério @uct na @mcts que eleva o termo de confiança para priorizar nós pouco visitados, ampliando a busca e evitando convergir cedo demais.],
+    group: "Computação",
+  ),
+  (
+    key: "aproveitamento",
+    short: text_in_english[exploitation],
+    plural: text_in_english[exploitations],
+    custom: [aproveitamento],
+    description: [Em português, aproveitamento. Componente do critério @uct na @mcts que favorece nós com maior valor médio estimado, aproveitando recompensas já observadas para guiar a seleção.],
+    group: "Computação",
+  ),
+  (
+    key: "alphazero",
+    short: text_in_english[AlphaZero],
+    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pela DeepMind.],
+    group: "Computação",
+  ),
+  (
+    key: "avaliacao",
+    short: text_in_english[fitness],
+    plural: text_in_english[fitnesses],
+    custom: [avaliação],
+    description: [Em português, avaliação. Métrica que quantifica a qualidade de um @estado ou solução em relação aos objetivos, atribuindo um valor numérico que orienta a tomada de decisão ou o processo de aprendizado.],
+    group: "Computação",
+  ),
+  (
+    key: "agint",
+    short: "agente inteligente",
+    plural: "agentes inteligentes",
+    description: [Sistema capaz de interpretar um estado, tomar decisões autônomas e agir para atingir objetivos definidos, aprendendo a adaptar seu comportamento.],
+    group: "Computação",
+  ),
+  (
+    key: "rn",
+    short: "rede neural",
+    plural: "redes neurais",
+    custom: text_in_english[neural network],
+    description: [Em inglês, #text_in_english[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos, inspirado em redes biológicas.],
+    group: "Computação",
+  ),
+  (
+    key: "peso",
+    short: text_in_english[weight],
+    plural: text_in_english[weights],
+    custom: [peso],
+    description: [Em português, peso. Parâmetro ajustável que pondera a conexão entre neurônios em uma @rn, determinando a força da influência de uma entrada sobre a saída de uma unidade.],
+    group: "Computação",
+  ),
+  (
+    key: "vies",
+    short: text_in_english[bias],
+    plural: text_in_english[biases],
+    custom: [viés],
+    description: [Em português, viés. Parâmetro aditivo em um neurônio de @rn que ajusta o limiar de ativação, permitindo que o modelo se adapte melhor aos dados.],
+    group: "Computação",
+  ),
+)
+
+#let glossary_entries_about_games = (
   (
     key: "jogo",
     short: "jogo",
@@ -34,74 +119,6 @@
     custom: text_in_english[turn-based game],
     description: [Em inglês, #text_in_english[turn-based game]. @Jogo em que os @jogador:pl atuam de forma alternada em @turno:pl sequenciais, fazendo o @estado avançar passo a passo. Neste tipo de @jogo, não são permitidos @movimento:pl simultâneos.],
     group: "Jogos",
-  ),
-  (
-    key: "selfplay",
-    short: text_in_english[self-play],
-    custom: [autoaprendizado por simulação de partidas],
-    description: [Em português, autoaprendizado por simulação de partidas. Técnica em que um @agint treina jogando contra versões de si mesmo para aprender estratégias por reforço sem dados externos.],
-    group: "Computação",
-  ),
-  (
-    key: "exploracao",
-    short: "exploração",
-    plural: "explorações",
-    custom: text_in_english[exploration],
-    description: [Em inglês, #text_in_english[exploration]. Componente do critério @uct na @mcts que eleva o termo de confiança para priorizar nós pouco visitados, ampliando a busca e evitando convergir cedo demais.],
-    group: "Computação",
-  ),
-  (
-    key: "aproveitamento",
-    short: "aproveitamento",
-    plural: "aproveitamentos",
-    custom: text_in_english[exploitation],
-    description: [Em inglês, #text_in_english[exploitation]. Componente do critério @uct na @mcts que favorece nós com maior valor médio estimado, aproveitando recompensas já observadas para guiar a seleção.],
-    group: "Computação",
-  ),
-  (
-    key: "alphazero",
-    short: text_in_english[AlphaZero],
-    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pela DeepMind.],
-    group: "Computação",
-  ),
-  (
-    key: "avaliacao",
-    short: "avaliação",
-    plural: "avaliação",
-    custom: text_in_english[fitness],
-    description: [Em inglês, #text_in_english[fitness]. Métrica que quantifica a qualidade de um @estado ou solução em relação aos objetivos, atribuindo um valor numérico que orienta a tomada de decisão ou o processo de aprendizado.],
-    group: "Computação",
-  ),
-  (
-    key: "agint",
-    short: "agente inteligente",
-    plural: "agentes inteligentes",
-    description: [Sistema capaz de interpretar um estado, tomar decisões autônomas e agir para atingir objetivos definidos, aprendendo a adaptar seu comportamento.],
-    group: "Computação",
-  ),
-  (
-    key: "rn",
-    short: "rede neural",
-    plural: "redes neurais",
-    custom: text_in_english[neural network],
-    description: [Em inglês, #text_in_english[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos, inspirado em redes biológicas.],
-    group: "Computação",
-  ),
-  (
-    key: "peso",
-    short: "peso",
-    plural: "pesos",
-    custom: text_in_english[weight],
-    description: [Em inglês, #text_in_english[weight]. Parâmetro ajustável que pondera a conexão entre neurônios em uma @rn, determinando a força da influência de uma entrada sobre a saída de uma unidade.],
-    group: "Computação",
-  ),
-  (
-    key: "vies",
-    short: "viés",
-    plural: "vieses",
-    custom: text_in_english[bias],
-    description: [Em inglês, #text_in_english[bias]. Parâmetro aditivo em um neurônio de @rn que ajusta o limiar de ativação, permitindo que o modelo se adapte melhor aos dados.],
-    group: "Computação",
   ),
   (
     key: "casa",
@@ -167,4 +184,9 @@
     description: [Em inglês, #text_in_english[player]. Participante que toma decisões e executa @movimento:pl conforme as regras do @jogo.],
     group: "Jogos",
   ),
+)
+
+#let glossary_entries = (
+  ..glossary_entries_about_computing,
+  ..glossary_entries_about_games,
 )

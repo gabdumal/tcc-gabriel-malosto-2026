@@ -3,7 +3,7 @@
 
 #import "/template/common/util/text_in_english.typ": text_in_english
 
-#let abbreviations_entries = (
+#let abbreviations_entries_about_computing = (
   (
     key: "ia",
     short: "IA",
@@ -47,6 +47,14 @@
     group: "Computação",
   ),
   (
+    key: "relu",
+    short: "ReLU",
+    long: "unidade linear retificada",
+    longplural: "unidades lineares retificadas",
+    description: [Em inglês, #text_in_english[rectified linear unit]. Função de ativação não-linear que retorna o valor de entrada se positivo, ou zero caso contrário.],
+    group: "Computação",
+  ),
+  (
     key: "tic",
     short: "TIC",
     plural: "TICs",
@@ -54,6 +62,10 @@
     longplural: "tecnologias de informação e comunicação",
     group: "Computação",
   ),
+)
+
+#let abbreviations_entries = (
+  ..abbreviations_entries_about_computing,
   (
     key: "ibge",
     short: "IBGE",
