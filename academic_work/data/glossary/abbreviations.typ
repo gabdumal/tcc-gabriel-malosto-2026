@@ -21,6 +21,14 @@
     group: "Computação",
   ),
   (
+    key: "uct",
+    short: "UCT",
+    long: "limite superior de confiança aplicado a árvores",
+    longplural: "limites superiores de confiança aplicados a árvores",
+    description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e em um termo de confiança (UCB).],
+    group: "Computação",
+  ),
+  (
     key: "resnet",
     short: "ResNet",
     plural: "ResNets",
@@ -37,8 +45,18 @@
     longplural: "tecnologias de informação e comunicação",
     group: "Computação",
   ),
-  (key: "ibge", short: "IBGE", long: "Instituto Brasileiro de Geografia e Estatística", group: "Normatização"),
-  (key: "abnt", short: "ABNT", long: "Associação Brasileira de Normas Técnicas", group: "Normatização"),
+  (
+    key: "ibge",
+    short: "IBGE",
+    long: "Instituto Brasileiro de Geografia e Estatística",
+    group: "Normatização",
+  ),
+  (
+    key: "abnt",
+    short: "ABNT",
+    long: "Associação Brasileira de Normas Técnicas",
+    group: "Normatização",
+  ),
   (
     key: "nbr",
     short: "NBR",

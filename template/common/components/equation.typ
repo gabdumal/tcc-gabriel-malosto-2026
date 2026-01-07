@@ -12,13 +12,18 @@
   )
   set math.equation(numbering: "(1.1)")
 
-  align(
-    center,
-    block(
-      width: width,
-      align(
-        start,
-        body,
+  place(
+    auto,
+    float: true,
+    align(
+      center,
+      block(
+        sticky: true,
+        width: width,
+        align(
+          start,
+          body,
+        ),
       ),
     ),
   )
