@@ -1,6 +1,7 @@
 #import "/academic_work/components/note.typ": note_from_gabriel
 #import "/template/common/components/equation.typ": equation
 #import "/template/common/components/figure.typ": describe_figure
+#import "/template/common/components/information_footer.typ": information_footer
 #import "/template/common/components/note.typ": todo_note
 #import "/template/common/packages.typ": glossarium
 
@@ -21,16 +22,16 @@ Essa estrutura possibilita ao algoritmo jogar como cada um dos @jogador:pl, de f
 Dessa forma, o método busca prever a melhor ação futura segundo o histórico disponível a cada iteração @swiechowski:2022:monte_carlo_tree_search.
 
 O processo de @mcts:long tem o objetivo de encontrar as melhores sequências de jogadas, que conduzam a uma vitória do @jogador.
-Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-propagação, as quais são representas na @figure:ciclo_mcts.
+Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-propagação, as quais são representas na @figure:ciclo_mcts @swiechowski:2022:monte_carlo_tree_search[p. 2504].
 
 #describe_figure(
   placement: auto,
-  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose").],
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2504]).],
   sticky: true,
   [#figure(
     caption: [Ciclo da @mcts:long: suas quatro etapas são a seleção, a expansão, a simulação e a retro-propagação.],
     image(
-      width: 80%,
+      width: 70%,
       "/academic_work/assets/images/mcts_cycle.png",
     ),
   )<figure:ciclo_mcts>],
@@ -39,19 +40,35 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
 A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folha a explorar, orientada por uma diretriz de busca.
 A mais frequentemente utilizada nas implementações de referência é chamada de @uct @kocsis:2006:bandit_based_mcts_planning.
 Essa política atribui contadores de visita e de vitória a cada nó.
-Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploration (#glossarium.gls-custom("exploration")) e @exploitation (#glossarium.gls-custom("exploitation")) do espaço de busca.
-A @eq:ucb_teorica apresenta como escolher uma ação.
+Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao (#glossarium.gls-custom("exploracao")) e @aproveitamento (#glossarium.gls-custom("aproveitamento")) do espaço de busca.
+A @eq:uct_teorica apresenta como escolher uma ação.
 
-#equation(width: 80%)[
-  $ a^* = max_(a in A(s)) (Q(s, a) + C sqrt((ln[N(s)])/(N(s,a)))) $ <eq:ucb_teorica>
+#equation(
+  placement: auto,
+)[
+  $
+    m^* = max_(m in M(s))
+    (
+      Q(s, m) +
+      C * sqrt(
+        (ln(V(s)))
+        /
+        (V(s,m))
+      )
+    )
+  $ <eq:uct_teorica>
 
   Na qual:
-  - $a^*$ é a ação ótima selecionada;
-  - $A(s)$ é o conjunto de ações disponíveis dado o estado $s$;
-  - $Q(s,a)$ é o resultado médio calculado jogando a ação $a$ no estado $s$, simulado até o momento;
-  - $N(s)$ é o número de vezes em que o estado $s$ foi visitado nas iterações anteriores;
-  - $N(s,a)$ é o número de vezes que a ação $a$ foi amostrada no estado $s$;
-  - $C$ é o coeficiente que regula a relação entre @exploration e @exploitation.
+  - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+  - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+  - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+  - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+  - $V(s,a)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+  - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+
+  #information_footer(
+    source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
+  )
 ]
 
 Havendo sido selecionado um nó folha e não sendo este um nó que represente o fim do @jogo, então se executa a fase de expansão.
@@ -79,6 +96,7 @@ Dispondo do vetor de probabilidades, o método da seleção aleatória por rolet
   placement: auto,
   sticky: true,
   note: [Neste exemplo, o cálculo das probabilidades dos três @movimento:pl válidos a partir do @estado inicial utilizou apenas a quantidade de visitas a cada um dos ramos iniciados pelo respectivo movimento.],
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
   [#figure(
     caption: [Uso da @mcts para calcular as probabilidades de jogar cada um dos @movimento:pl válidos a partir de um @estado inicial.],
     image(

@@ -4,6 +4,7 @@
 #import "../../components/note.typ": note_from_gabriel
 #import "/template/academic_work/pages/pre_textual/abstract.typ": include_abstract
 #import "/template/common/components/note.typ": progress_note, todo_note
+#import "/template/common/packages.typ": glossarium
 
 #let abstract_in_main_language = {
   (
@@ -17,16 +18,13 @@
     title: "Resumo",
     body: [
 
-      #progress_note(note_from_gabriel[Aprimorar resumo e atualizar no sistema de monografia])
+      #progress_note(note_from_gabriel[Aprimorar resumo])
+      #todo_note(note_from_gabriel[Atualizar no sistema de monografia])
 
       O mercado em ascensão de @jogo:pl autorais requer métodos de apoio no processo de criação.
-      Nessa fase, um protótipo passa por @playtesting repetidamente a fim de identificar desbalanços, o que exige tempo e recursos humanos.
-      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @selfplay e reforço não supervisionado.
+      Nessa fase, um protótipo passa por @playtest (#glossarium.gls-custom("playtest")) repetidamente a fim de identificar desbalanços, o que exige tempo e recursos humanos.
+      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @selfplay (#glossarium.gls-custom("selfplay")) e reforço não supervisionado.
       Este processo é inspirado pelo projeto @alphazero que utiliza os métodos de @mcts e de @resnet:pl.
-
-      #todo_note(
-        note_from_gabriel[Trocar palavra chave "play-test" para "play-testing", e atualizar no sistema de monografias],
-      )
 
     ],
   )

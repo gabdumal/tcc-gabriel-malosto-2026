@@ -1,7 +1,9 @@
 #import "/academic_work/components/note.typ": note_from_gabriel
+#import "/template/common/components/equation.typ": equation
 #import "/template/common/components/figure.typ": describe_figure
+#import "/template/common/components/information_footer.typ": information_footer
 #import "/template/common/components/note.typ": todo_note
-#import "/template/common/packages.typ": glossarium, subpar
+#import "/template/common/packages.typ": equate, glossarium, subpar
 #import "/template/common/style/style.typ": spacing_for_smaller_text
 #import "/template/common/util/text_in_english.typ": text_in_english
 
@@ -21,11 +23,11 @@ A fim de desenvolver um @jogador autônomo para o Go a nível competitivo, o lab
 Essa versão gerava dados para treinar o modelo ao colocá-lo para jogar contra @jogador:pl humanos.
 
 Foi então desenvolvida sua evolução, chamada de #text_in_english[AlphaGo Zero], que acumula dados de treinamento jogando contra si mesma, no que se define como @selfplay (#glossarium.gls-custom("selfplay")).
-Um novo modelo construído é iniciado com @weight:pl (#glossarium.gls-custom("weight")) e @bias:pl (#glossarium.gls-custom("bias")) aleatórios, o que leva a @movimento:pl arbitrários.
+Um novo modelo construído é iniciado com @peso:pl (#glossarium.gls-custom("peso")) e @vies:pl (#glossarium.gls-custom("vies")) aleatórios, o que leva a @movimento:pl arbitrários.
 Ainda assim, a massa de dados gerada permite identificar quais estados levaram a melhores avaliações pela função de @fitness @silver:2016:mastering_game_go.
 
 Dessa forma, por meio de treinamentos e geração de dados sucessivos, o modelo tende a alcançar desempenho excepcional.
-Esse processo de lapidação dos @weight:pl e @bias:pl por meio de @selfplay é compreendido como um método de aprendizado por reforço @silver:2017:mastering_chess_shogi.
+Esse processo de lapidação dos @peso:pl e @vies:pl por meio de @selfplay é compreendido como um método de aprendizado por reforço @silver:2017:mastering_chess_shogi.
 
 O método foi então generalizado para permitir a criação de modelos capazes de aprender qualquer @jogo de tabuleiro dadas apenas as suas regras, ao que se denominou @alphazero.
 Os principais destaques foram os @jogo:pl Go, Shogi e Xadrez @silver:2018:general_reinforcement_learning_algorithm.
@@ -51,7 +53,7 @@ Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
   [#figure(
     caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma #text_in_english[backbone] e camadas de saída #text_in_english[policy head] e #text_in_english[value head].],
     image(
-      width: 50%,
+      width: 80%,
       "/academic_work/assets/images/resnet.png",
     ),
   )<figure:resnet>],
@@ -100,7 +102,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
   [#figure(
     caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador `X`.],
     image(
-      width: 100%,
+      width: 80%,
       "/academic_work/assets/images/prediction.png",
     ),
   )<figure:predicao>],
@@ -111,8 +113,9 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
 O processo de treinamento de um modelo é feito em duas fases.
 A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
 Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
-No caso de jogos sem cálculo de @pontuacao, como o Jogo da Velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor.
-Segue-se então a fase de alinhamento do modelo, que utiliza @machine_learning para ajustar os @weight:pl e @bias:pl.
+No caso de jogos sem cálculo de @pontuacao, como o Jogo da Velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
+
+Segue-se então a fase de alinhamento do modelo, que utiliza @machine_learning para ajustar os @peso:pl e @vies:pl.
 Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento por regressão linear.
 Espera-se que o modelo resultante possa gerar uma memória de @partida:pl mais significativa que o anterior.
 Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:treinamento.
@@ -123,7 +126,7 @@ Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:t
   [#figure(
     caption: [Ciclo de treinamento de um modelo do @alphazero, constituído das fases de geração da memória de @partida:pl e de alinhamento do modelo de @resnet.],
     image(
-      width: 80%,
+      width: 50%,
       "/academic_work/assets/images/train.png",
     ),
   )<figure:treinamento>],
@@ -153,15 +156,43 @@ Então, a retro-propagação é feita a partir desse nó terminal com base na qu
   [#figure(
     caption: [Ciclo da @mcts:long guiada por @agint:pl, conforme adaptação do @alphazero: suas quatro etapas são a seleção, a predição, a expansão e a retro-propagação.],
     image(
-      width: 80%,
+      width: 70%,
       "/academic_work/assets/images/agent_guided_mcts_cycle.png",
     ),
   )<figure:agent_guided_mcts_cycle>],
 )
 
-#todo_note(note_from_gabriel[Continuar daqui])
+A definição do novo marcador de qualidade em cada nó é relevante para realizar o cálculo de uma diretriz de @fitness adaptada, como demonstrada na @equation:uct_adaptada.
+A @uct passa a considerar como componente de @aproveitamento apenas a qualidade da @partida simulada pelas iterações.
+Já como componente de @exploracao, a política alinha dois fatores: como numerador, a predição do modelo para o sucesso do @movimento representado; e como denominador, a quantidade de visitas realizadas ao nó resultante da aplicação do @movimento, que é somada ao número $1$ para garantir que o resultado não seja indefinido.
 
-A definição de um novo marcador de qualidade em cada nó é relevante para realizar o cálculo de uma diretriz de @fitness adaptada.
+#equation(
+  placement: auto,
+)[
+  #equate.equate(sub-numbering: true)[
+    $
+      m^* = max(m in M(s)) = Q(s,a) + X(s,a)\
+      X(s,a) = C times
+      P(s,a) / (V(s,a) + 1)
+    $ <equation:uct_adaptada>
+
+    Na qual:
+    - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+    - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+    - $X(s,m)$ é o componente de @exploracao (#glossarium.gls-custom("exploracao")) calculado ao jogar o @movimento $m$ no @estado $s$;
+    - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+    - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+    - $V(s,m)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+    - $P(s,m)$ é a qualidade previamente atribuída pelo modelo de @resnet para jogar o @movimento $m$ no estado $s$;
+    - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+  ]
+
+  #information_footer(
+    source: [
+      Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505])#cite(<silver:2016:mastering_game_go>, form: "prose", supplement: [p. 486]).
+    ],
+  )
+]
 
 É relevante considerar como a @mcts utilizada pelo @alphazero representa um @estado do jogo.
 Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.
@@ -190,7 +221,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
             #figure(
               caption: [Tabuleiro do Jogo da Velha.],
               image(
-                width: 4.5cm,
+                width: 3.5cm,
                 "/academic_work/assets/images/tabletop.png",
               ),
             )<figure:tabuleiro_jogo_da_velha>
@@ -198,7 +229,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
 
           grid.cell()[
             #figure(caption: [Tabuleiro do Jogo da Velha representado numericamente.], image(
-              width: 4.5cm,
+              width: 3.5cm,
               "/academic_work/assets/images/state.png",
             ))<figure:estado_jogo_da_velha>
           ],
@@ -232,7 +263,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
           #figure(
             caption: [Canal do @jogador `X`.],
             image(
-              width: 4.5cm,
+              width: 3.5cm,
               "/academic_work/assets/images/red_channel.png",
             ),
           )<figure:canal_vermelho>
@@ -240,14 +271,14 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 
         grid.cell()[
           #figure(caption: [Canal do @jogador `O`.], image(
-            width: 4.5cm,
+            width: 3.5cm,
             "/academic_work/assets/images/green_channel.png",
           ))<figure:canal_verde>
         ],
 
         grid.cell()[
           #figure(caption: [Canal de @casa:pl vazias.], image(
-            width: 4.5cm,
+            width: 3.5cm,
             "/academic_work/assets/images/blue_channel.png",
           ))<figure:canal_azul>
         ],

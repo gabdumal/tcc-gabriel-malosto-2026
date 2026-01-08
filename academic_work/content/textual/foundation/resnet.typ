@@ -32,7 +32,7 @@ Essa estrutura permite que a rede aprenda transformações incrementais enquanto
   [#figure(
     caption: [Estrutura de um bloco residual usado em uma @resnet.],
     image(
-      width: 60%,
+      width: 45%,
       "/academic_work/assets/images/residual_block.webp",
     ),
   )<figure:residual_block>],

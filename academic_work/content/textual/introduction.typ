@@ -32,14 +32,14 @@ Estes @jogo:pl são também conhecidos como #text_in_english[designer's games], 
 Eles são fruto de uma organização de criadores que proporciona uma série de benefícios para um mercado baseado em novidades @woods:2012:eurogame_design_culture_play.
 Anualmente, entre 500 e 600 novos @jogo:pl são apresentados nas maiores convenções do meio, além de reimpressões e reedições @boardgamegeek:2022:spiel22_preview.
 
-#progress_note[#note_from_gabriel[Escrever sobre @playtesting]]
+#progress_note[#note_from_gabriel[Escrever sobre @playtest]]
 
 O processo de criação de um @jogo é iterativo.
 O criador implementa a sua ideia em um protótipo, de preferência de baixo custo para facilitar as modificações necessárias.
-Assim que o autor julga que esse protótipo do @jogo está pronto, ele deve ser testado, ao que se denomina a fase de @playtesting (#glossarium.gls-custom("playtesting")).
+Assim que o autor julga que esse protótipo do @jogo está pronto, ele deve ser testado, ao que se denomina a fase de @playtest (#glossarium.gls-custom("playtest")).
 Esta é a etapa na qual se realizam @partida:pl para explorar o comportamento dos sistemas e encontrar possíveis desequilíbrios @marcelo:2009:design_de_jogos@fullerton:2019:game_design_workshop.
 
-Deve-se ressaltar que desenvolvimento de um @jogo autoral é um processo complexo e custoso, sobretudo durante a fase de @playtesting.
+Deve-se ressaltar que desenvolvimento de um @jogo autoral é um processo complexo e custoso, sobretudo durante a fase de @playtest.
 Não é incomum o autor realizar os testes sozinho, simulando vários @jogador:pl.
 Mas algumas dinâmicas e mecanismos não funcionam dessa forma e é necessário convidar outras pessoas para auxiliá-lo.
 Adicionalmente, são feitos testes de estresse para diversos sistemas do @jogo.
@@ -50,7 +50,7 @@ A busca pelo balanceamento em @jogo:pl apresenta um desafio grande para a indús
 Tal processo é altamente dependente de contexto, com desdobramentos para equilíbrio matemático, progressão de dificuldade, progressão de conteúdo, variedade de estratégias e imparcialidade entre @jogador:pl.
 Cada um desses grupos apresenta suas próprias características, constituindo subsistemas altamente inter-relacionados de um sistema complexo maior, que é o @jogo @romero:2021:game_balance.
 
-Esta etapa de @playtesting, na qual @partida:pl do @jogo são performadas repetidamente, tem alto custo de recursos humanos.
+Esta etapa de @playtest, na qual @partida:pl do @jogo são performadas repetidamente, tem alto custo de recursos humanos.
 É difícil manter o grupo de teste ativo e focado, dado que se trata de um processo exaustivo e cujo objetivo nem sempre é claro para os @jogador:pl @trzewiczek:2017:i_play_tested_it_100_times.
 
 Ademais, as ações dos próprios testadores podem influenciar os resultados dos testes com suas expectativas, humores, excessos ou falta de concentração.
@@ -73,7 +73,7 @@ Assim, ao considerar o aprendizado não informado resultante das repetidas @part
 #progress_note[#note_from_gabriel[Escrever sobre a contribuição]]
 
 Dado este contexto, o presente trabalho continua uma pesquisa exploratória para investigar relações de balanceamento em @jogo:pl durante sua criação @araki:2020:testes_de_software@malosto:2023:alphazero_como_ferramenta_de_playtest@malosto:2025:moving_towards.
-A nível específico, é proposto um ambiente de @playtesting simulado para auxiliar as pessoas autoras de @jogo:pl a realizar as primeiras iterações do processo de teste.\
+A nível específico, é proposto um ambiente de @playtest simulado para auxiliar as pessoas autoras de @jogo:pl a realizar as primeiras iterações do processo de teste.\
 #todo_note[#note_from_gabriel(margin: true)[Possivelmente alterar a contribuição, para reduzir o escopo]]
 
 O objetivo dessas etapas compreende testes de estresse e equilíbrio matemático, de forma a eliminar a necessidade de testadores humanos além do autor.

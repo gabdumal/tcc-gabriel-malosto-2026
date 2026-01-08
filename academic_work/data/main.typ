@@ -44,22 +44,22 @@
 // Banca examinadora — obrigatório.
 #let examination_committee = (
   (
-    first_name: [Luciano],
-    middle_name: [de],
-    last_name: [Lopes],
+    first_name: [Heder],
+    middle_name: [Soares],
+    last_name: [Bernardino],
     gender: "masculine",
     prefix: [Prof. Dr.],
     organization: (
-      name: [Universidade Federal de Minas Gerais],
+      name: [Universidade Federal de Juiz de Fora],
       gender: "feminine",
     ),
   ),
   (
-    first_name: [Renata],
-    middle_name: none,
-    last_name: [Ribeiro],
-    gender: "feminine",
-    prefix: [Prof.ª Dr.ª],
+    first_name: [Marcelo],
+    middle_name: [Caniato],
+    last_name: [Renhe],
+    gender: "masculine",
+    prefix: [Prof. Dr.],
     organization: (
       name: [Universidade Federal de Juiz de Fora],
       gender: "feminine",
@@ -237,7 +237,7 @@
 // Data de aprovação — obrigatório.
 #let approval_date = {
   (
-    day: [09],
+    day: [23],
     month: [janeiro],
     year: [2026],
   )

@@ -5,12 +5,12 @@
 
 == Trabalhos relacionados <section:related_works>
 
-#cite(form: "prose", <zook:2019:automatic_playtesting>) reforçam as vantagens da substituição de @jogador:pl humanos em partes bem específicas do processo de @playtesting.
+#cite(form: "prose", <zook:2019:automatic_playtesting>) reforçam as vantagens da substituição de @jogador:pl humanos em partes bem específicas do processo de @playtest.
 O principal destaque é no ajuste de parâmetros e de dificuldade quando os sistemas do @jogo já estão definidos mas se busca uma melhor experiência para o público alvo do @jogo.
 
 Ademais, os autores desenvolvem um estudo combinando técnicas de regressão e classificação para realizar uma aprendizagem ativa @cohn:1994:improving_generalization_with_active_learning de um @jogo #text_in_english[shoot'em up].
 A mecânica desse @jogo é bem definida, mas os parâmetros --- como velocidades de jogador, inimigos e tiros --- são ajustados através de testes exaustivos.
-Nesse trabalho, eles foram substituídos pelo @playtesting automatizado.
+Nesse trabalho, eles foram substituídos pelo @playtest automatizado.
 
 Nos trabalhos de #cite(form: "prose", <gudmundsson:2018:human_like_playtesting>)#cite(form: "prose", <zook:2019:automatic_playtesting>), a @mcts é utilizada junto a #glossarium.gls(plural: true, long: true, "cnn").
 Elas são treinadas através de um massivo conjunto de dados de @jogador:pl reais para prever a dificuldade de missões em @jogo:pl digitais #text_in_english[match-3] --- respectivamente #text_in_english[Candy Crush] e #text_in_english[Jewels Star Story].
