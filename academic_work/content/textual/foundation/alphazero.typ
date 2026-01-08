@@ -21,20 +21,155 @@ A fim de desenvolver um @jogador autônomo para o Go a nível competitivo, o lab
 Essa versão gerava dados para treinar o modelo ao colocá-lo para jogar contra @jogador:pl humanos.
 
 Foi então desenvolvida sua evolução, chamada de #text_in_english[AlphaGo Zero], que acumula dados de treinamento jogando contra si mesma, no que se define como @selfplay (#glossarium.gls-custom("selfplay")).
-Um novo modelo construído é iniciado com @peso:pl (#glossarium.gls-custom("peso")) e @vies:pl (#glossarium.gls-custom("vies")) aleatórios, o que leva a @movimento:pl arbitrários.
+Um novo modelo construído é iniciado com @weight:pl (#glossarium.gls-custom("weight")) e @bias:pl (#glossarium.gls-custom("bias")) aleatórios, o que leva a @movimento:pl arbitrários.
 Ainda assim, a massa de dados gerada permite identificar quais estados levaram a melhores avaliações pela função de @fitness @silver:2016:mastering_game_go.
 
 Dessa forma, por meio de treinamentos e geração de dados sucessivos, o modelo tende a alcançar desempenho excepcional.
-Esse processo de lapidação dos @peso:pl e @vies:pl por meio de @selfplay é compreendido como um método de aprendizado por reforço @silver:2017:mastering_chess_shogi.
+Esse processo de lapidação dos @weight:pl e @bias:pl por meio de @selfplay é compreendido como um método de aprendizado por reforço @silver:2017:mastering_chess_shogi.
 
 O método foi então generalizado para permitir a criação de modelos capazes de aprender qualquer @jogo de tabuleiro dadas apenas as suas regras, ao que se denominou @alphazero.
 Os principais destaques foram os @jogo:pl Go, Shogi e Xadrez @silver:2018:general_reinforcement_learning_algorithm.
 
-A @mcts utilizada pelo @alphazero representa um @estado do jogo como um tabuleiro composto de @casa:pl.
-Cada @casa guarda a informação sobre a peça marcada em si, e o @jogador que a posicionou.
-O tabuleiro é salvo numericamente, atribuindo um número a cada um dos @jogador:pl. A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do Jogo da Velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
+#todo_note(note_from_gabriel[Citar referências para os parágrafos seguintes])
+
+Um dos objetivos do método @alphazero é reduzir o custo computacional de @agint:pl que atuam como @jogador:pl.
+Essa preocupação se torna mais evidente ao considerar a complexidade das árvores de busca para jogos que apresentam muitos @movimento:pl.
+Com esse foco, os pesquisadores propuseram substituir as buscas por modelos de @ia:long baseados em @rn:pl.
+Em vez de simular uma @partida para calcular a qualidade de cada @movimento, o @agint pode solicitar uma predição a um modelo de @resnet previamente treinado para aquele @jogo.
+
+#todo_note(note_from_gabriel[Explicar melhor a função de cada camada e colocar as referências])
+
+A arquitetura da @resnet aplicada no @alphazero é representada na @figure:resnet.
+Ela se inicia pela recepção do @estado do @jogo cujos @movimento:pl viáveis se deseja analisar.
+Esse @estado passa por uma camada de adaptação, que transforma a entrada em um formato adequado para realizar as sucessivas convoluções.
+Em seguida, inicia-se a construção da cadeia profunda de blocos residuais, ao que se denomina #text_in_english[backbone].
+Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma #text_in_english[backbone] e camadas de saída #text_in_english[policy head] e #text_in_english[value head].],
+    image(
+      width: 50%,
+      "/academic_work/assets/images/resnet.png",
+    ),
+  )<figure:resnet>],
+)
+
+A primeira saída é construída pela camada de #text_in_english[policy head], que retorna um vetor de números reais.
+Esses valores representam a qualidade atribuída a cada um dos @movimento:pl válidos a partir do @estado fornecido.
+Na verdade, devido à restrição de formato da saída da rede, o modelo atribuirá uma classificação para todos os movimentos possíveis de acordo com as regras do @jogo, sendo estes válidos ou não a partir do @estado atual.
+Dessa forma, é necessário que o #text_in_english[designer] do @jogo simulado descreva previamente a lista de todos os @movimento:pl e os guarde em um vetor.
+O algoritmo do @agint indexará as posições deste àquelas do vetor retornado pela rede.
+
+A segunda saída da @resnet é construída pela camada de #text_in_english[value head].
+Seu retorno é um valor escalar que representa a estimativa da qualidade do resultado da @partida a partir do @estado fornecido.
+Esse valor será maior para quando houver uma expectativa de vitória e menor para quando a expectativa for de derrota.
+
+Esses retornos são exemplificados pela @figure:predicao, que utiliza valores fictícios.
+O exemplo considera um @estado vantajoso no Jogo da Velha para o @jogador `X` que será o próximo a jogar.
+O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[policy head]
+#footnote[
+  Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
+  No algoritmo, isso seria realizado por uma função de @softmax.
+].
+As @casa:pl já preenchidas por peças têm qualidade $0$ atribuída, uma vez que nelas não são permitidos mais @movimento:pl.
+A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador `X`.
+As demais casas apresentam qualidades pouco significativas.
+Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela #text_in_english[value head].
+Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: (
+    [
+      O @estado do Jogo da Velha elencado, ao ser informado para a @resnet, deve ser convertido para a representação em canais.
+    ],
+    [
+      As predições de qualidade de cada @movimento são representadas como uma matriz de probabilidades para facilitar a visualização.
+      Na verdade, o resultado gerado pelo modelo é um vetor de números reais, em que cada posição é referente a um @movimento na lista de @movimento:pl previamente definida pelo @jogo.
+      Esses valores devem passar por uma função de @softmax para se tornarem probabilidades.
+    ],
+    [
+      A estimativa de qualidade da @partida é mostrada como uma probabilidade para facilitar a visualização.
+      Na verdade, o retorno se trata de um escalar similar aos retornados pela predição de qualidades de @movimento:pl.
+    ],
+  ),
+  [#figure(
+    caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador `X`.],
+    image(
+      width: 100%,
+      "/academic_work/assets/images/prediction.png",
+    ),
+  )<figure:predicao>],
+)
+
+#todo_note(note_from_gabriel[Verificar se de fato estamos usando regressão linear])
+
+O processo de treinamento de um modelo é feito em duas fases.
+A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
+Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
+No caso de jogos sem cálculo de @pontuacao, como o Jogo da Velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor.
+Segue-se então a fase de alinhamento do modelo, que utiliza @machine_learning para ajustar os @weight:pl e @bias:pl.
+Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento por regressão linear.
+Espera-se que o modelo resultante possa gerar uma memória de @partida:pl mais significativa que o anterior.
+Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:treinamento.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    caption: [Ciclo de treinamento de um modelo do @alphazero, constituído das fases de geração da memória de @partida:pl e de alinhamento do modelo de @resnet.],
+    image(
+      width: 80%,
+      "/academic_work/assets/images/train.png",
+    ),
+  )<figure:treinamento>],
+)
+
+É interessante que, durante a fase de geração de memória de treinamento, o @agint tenha alguma orientação sobre quais @movimento:pl levam a melhores jogadas.
+Para esse objetivo, o método de @mcts se mostrou útil.
+Para otimizar sua aplicação, o método @alphazero removeu a etapa de simulação do ciclo de busca.
+Em vez dela, a etapa de predição solicita à @resnet uma estimativa da qualidade dos @movimento:pl e da qualidade da @partida, como mostrado na @figure:agent_guided_mcts_cycle.
+
+Outra alteração se dá na fase de expansão.
+No método adaptado, em vez de expandir um único @movimento por iteração e avaliar seu resultado, a @mcts guiada por @agint expande todos os @movimento:pl viáveis a partir do @estado atual.
+Para cada nó gerado, ela incrementa o contador de visitas e define um novo marcador de qualidade do @movimento, o qual é preenchido com a estimativa de qualidade dada pela rede para o @movimento que gera aquele nó.
+
+Sem que haja uma simulação da partida, não seria possível realizar a retro-propagação, uma vez que ela depende da análise da @pontuacao final dos @jogador:pl.
+Para adaptar essa questão, a retro-propagação é realizada a partir do nó selecionado e não mais a partir do filho expandido.
+O valor de qualidade da @partida utilizado como referência é aquele fornecido pela rede.
+
+Uma exceção a esse ciclo se dá quando o @estado selecionado pela iteração atual representa o fim do @jogo.
+Nesse caso, não se realiza predição nem expansão.
+Em vez disso, a @pontuacao dos @jogador:pl é utilizada para calcular a qualidade da @partida segundo a perspectiva do @jogador do turno atual.
+Então, a retro-propagação é feita a partir desse nó terminal com base na qualidade calculada.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    caption: [Ciclo da @mcts:long guiada por @agint:pl, conforme adaptação do @alphazero: suas quatro etapas são a seleção, a predição, a expansão e a retro-propagação.],
+    image(
+      width: 80%,
+      "/academic_work/assets/images/agent_guided_mcts_cycle.png",
+    ),
+  )<figure:agent_guided_mcts_cycle>],
+)
+
+#todo_note(note_from_gabriel[Continuar daqui])
+
+A definição de um novo marcador de qualidade em cada nó é relevante para realizar o cálculo de uma diretriz de @fitness adaptada.
+
+É relevante considerar como a @mcts utilizada pelo @alphazero representa um @estado do jogo.
+Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.
+O tabuleiro é salvo atribuindo um número a cada um dos @jogador:pl, que pode ser indexado pela lista de jogadores definida previamente pelo #text_in_english[designer] do @jogo.
+A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do Jogo da Velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
+O primeiro @jogador, de símbolo `X`, é representado pelo número $0$, ao passo que o segundo @jogador, de símbolo `O`, é representado pelo número $1$.
 As posições sem peças são definidas com o valor `null`.
-Outra informação armazenada é um marcador de qual @jogador deve jogar no @turno atual.
+Outra informação armazenada no @estado é um marcador de qual @jogador deve jogar no @turno atual.
 
 #describe_figure(
   placement: auto,
@@ -73,9 +208,8 @@ Outra informação armazenada é um marcador de qual @jogador deve jogar no @tur
   ),
 )
 
-O método @alphazero alinha a @mcts ao uso de uma @resnet, o que requer uma segunda codificação dos @estado:pl.
-Um determinado @estado deve ser representado como uma pilha de canais que contenham apenas valores binários ($0$ ou $1$).
-Esse método busca aproximar a representação daquela usada por imagens RGB, comumente fornecidas como entrada a @resnet:pl de reconhecimento de imagens.
+A entrada da @resnet utilizada pelo @agint requer que o @estado seja codificado como uma pilha de canais que contêm apenas valores binários ($0$ ou $1$).
+Essa técnica busca aproximar a representação do tabuleiro daquela usada por imagens RGB, comumente fornecidas como entrada a @resnet:pl de reconhecimento de imagens.
 
 No exemplo do Jogo da Velha, o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
 O primeiro, associado à cor vermelha, tem uma posição ativada quando o primeiro @jogador (representado pelo símbolo `X`) posiciona nela uma peça, como mostrado na @figure:canal_vermelho.
@@ -88,7 +222,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
     sticky: true,
     subpar.super(
       label: <figure:estado_codificado>,
-      caption: [Tabuleiro do Jogo da Velha e sua representação numérica.],
+      caption: [Estado do Jogo da Velha representado como canais binários.],
       grid(
         columns: (1fr, 1fr, 1fr),
         row-gutter: spacing_for_smaller_text,
@@ -96,7 +230,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 
         grid.cell()[
           #figure(
-            caption: [Tabuleiro do Jogo da Velha.],
+            caption: [Canal do @jogador `X`.],
             image(
               width: 4.5cm,
               "/academic_work/assets/images/red_channel.png",
@@ -105,14 +239,14 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
         ],
 
         grid.cell()[
-          #figure(caption: [Tabuleiro do Jogo da Velha representado numericamente.], image(
+          #figure(caption: [Canal do @jogador `O`.], image(
             width: 4.5cm,
             "/academic_work/assets/images/green_channel.png",
           ))<figure:canal_verde>
         ],
 
         grid.cell()[
-          #figure(caption: [Tabuleiro do Jogo da Velha representado numericamente.], image(
+          #figure(caption: [Canal de @casa:pl vazias.], image(
             width: 4.5cm,
             "/academic_work/assets/images/blue_channel.png",
           ))<figure:canal_azul>
@@ -122,17 +256,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
   ),
 )
 
-A utilização do modelo requer como entrada um dado @estado do tabuleiro.
-A @rn processa a entrada e retorna como saída dois valores: (1) um vetor que representa a qualidade atribuída a cada um dos @movimento:pl válidos naquele @estado; e (2) um escalar que representa a qualidade do resultado estimado para aquela @partida, sendo maior para uma expectativa de vitória e menor para uma de derrota.
-
-#describe_figure(
-  placement: auto,
-  sticky: true,
-  [#figure(
-    caption: [Ciclo da @mcts:long adaptada pelo @alphazero: suas quatro etapas são a seleção, a predição, a expansão e a retro-propagação.],
-    image(
-      width: 80%,
-      "/academic_work/assets/images/agent_guided_mcts_cycle.png",
-    ),
-  )<figure:agent_guided_mcts_cycle>],
-)
+Caso necessário, outras informações podem ser representadas por meio da adição de novos canais à pilha.
+Jogos de @jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
+Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
+Assim, um @estado do Jogo da Velha define todo esse canal como $0$ para o @jogador de símbolo `X`, e como $1$ para o @jogador de símbolo `O`.

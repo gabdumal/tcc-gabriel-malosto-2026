@@ -19,6 +19,19 @@
     group: "Computação",
   ),
   (
+    key: "machine_learning",
+    short: text_in_english[machine learning],
+    custom: [aprendizado de máquina],
+    description: [Em português, aprendizado de máquina. Área da @ia que desenvolve algoritmos capazes de aprender padrões a partir de dados sem programação explícita, melhorando seu desempenho através da experiência.],
+    group: "Computação",
+  ),
+  (
+    key: "softmax",
+    short: text_in_english[softmax],
+    description: [Função de ativação que converte um vetor de valores reais em uma distribuição de probabilidade, na qual cada elemento é transformado em um valor entre 0 e 1, e a soma de todos os elementos resulta em 1.],
+    group: "Computação",
+  ),
+  (
     key: "selfplay",
     short: text_in_english[self-play],
     custom: [autoaprendizado por simulação de partidas],
@@ -71,7 +84,7 @@
     group: "Computação",
   ),
   (
-    key: "peso",
+    key: "weight",
     short: text_in_english[weight],
     plural: text_in_english[weights],
     custom: [peso],
@@ -79,7 +92,7 @@
     group: "Computação",
   ),
   (
-    key: "vies",
+    key: "bias",
     short: text_in_english[bias],
     plural: text_in_english[biases],
     custom: [viés],

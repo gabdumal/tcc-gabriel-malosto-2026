@@ -58,9 +58,14 @@
     }
     #linebreak()
     #if note != none {
-      [
-        Nota: #note
-      ]
+      if type(note) == array {
+        for (index, item) in note.enumerate() {
+          [Nota #(index + 1): #item]
+          linebreak()
+        }
+      } else {
+        [Nota: #note]
+      }
     }
   ]
 }
