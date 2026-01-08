@@ -10,8 +10,8 @@ As #glossarium.gls(long: true, plural: true, "cnn") são uma classe de @rn:pl pr
 Seus usos se destacam na áreas de visão computacional, sobretudo para o reconhecimento de imagens.
 Aprimorando as @rn:pl tradicionais totalmente conectadas, as @cnn:pl utilizam operações de convolução que permitem capturar padrões espaciais e hierárquicos nos dados de entrada sem definição prévia dos elementos de interesse @li:2022:survey_convolutional_neural_networks.
 
-A arquitetura típica de uma @cnn consiste em camadas convolucionais, camadas de @agrupamento (#glossarium.gls-custom("agrupamento")) e camadas totalmente conectadas.
-As camadas convolucionais aplicam filtros que detectam características locais, como bordas e texturas, enquanto as camadas de @agrupamento reduzem a dimensionalidade espacial (#text_in_english[downsampling]), preservando as informações mais relevantes @li:2022:survey_convolutional_neural_networks.
+A arquitetura típica de uma @cnn consiste em camadas convolucionais, camadas de @pooling (#glossarium.gls-custom("pooling")) e camadas totalmente conectadas.
+As camadas convolucionais aplicam filtros que detectam características locais, como bordas e texturas, enquanto as camadas de @pooling reduzem a dimensionalidade espacial (#text_in_english[downsampling]), preservando as informações mais relevantes @li:2022:survey_convolutional_neural_networks.
 Dessa forma, essa classe de @rn:pl balanceia a precisão dos detalhes com a rapidez de convergência pelo processo de #text_in_english[downsampling].
 
 Seguindo os trabalhos na área, #cite(form: "prose", <he:2015:deep_residual_learning>) introduziram as #glossarium.gls(long: true, plural: true, "resnet") como uma evolução importante das @cnn:pl.

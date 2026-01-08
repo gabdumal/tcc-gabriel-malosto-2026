@@ -20,10 +20,10 @@ Os trabalhos conseguem reproduzir comportamentos de @jogador:pl humanos e avalia
 Sob a ótica de comunicação dos dados gerados ao #text_in_english[designer], #cite(form: "prose", <wallner:2019:aggregated_visualization_playtesting_data>) desenvolveram um sistema para traçar, em @jogo:pl digitais de plataforma, a trajetória de dados de partidas colhidas diretamente sobre os mapas do @jogo.
 Ele integra dados de fontes diferentes em uma única visualização capaz de representar o #text_in_english[feedback] dado pelos @jogador:pl, medidas fisiológicas colhidas e a rastreabilidade dos @movimento:pl em @jogo.
 
-#todo_note(note_from_gabriel[Reescrever este parágrafo])
 
 Os dados fisiológicos relacionados ao estímulo do @jogador são representados por mapas de cor ao dividir o espaço do @jogo em regiões; a movimentação por linhas que conectam essas regiões, com sua opacidade e espessura relacionadas à frequência; e os eventos discretos agrupados em ícones com o tamanho relacionado à sua frequência, relatando observações de comportamentos durante a partida.
 A abordagem diminui a poluição visual, compila um grande conjunto de de informações e provê um grande valor para avaliar um cenário em desenvolvimento.
+#todo_note(note_from_gabriel(margin: true)[Reescrever este parágrafo])
 
 Similarmente, #cite(form: "prose", <stahlke:2020:artificial_players_in_the_design_process>) investigam técnicas similares em @jogo:pl em três dimensões, apresentando os caminhos sobre superfícies para auxiliar no processo de projeto dos níveis.
 Registra-se também o uso de agentes para o projeto ou validação da economia interna dos @jogo:pl, mostrado nos resultados iniciais de #cite(form: "prose", <ranandeh:2023:beyond_equilibrium>).

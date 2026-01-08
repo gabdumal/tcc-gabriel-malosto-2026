@@ -5,7 +5,7 @@
 
 #let glossary_entries_about_computing = (
   (
-    key: "agrupamento",
+    key: "pooling",
     short: text_in_english[pooling],
     custom: [agrupamento],
     description: [Em português, agrupamento. Operação em @cnn:pl que reduz a dimensionalidade espacial dos dados, preservando as informações mais relevantes ao selecionar valores representativos de regiões locais.],
@@ -26,7 +26,7 @@
     group: "Computação",
   ),
   (
-    key: "exploracao",
+    key: "exploration",
     short: text_in_english[exploration],
     plural: text_in_english[explorations],
     custom: [exploração],
@@ -34,7 +34,7 @@
     group: "Computação",
   ),
   (
-    key: "aproveitamento",
+    key: "exploitation",
     short: text_in_english[exploitation],
     plural: text_in_english[exploitations],
     custom: [aproveitamento],
@@ -48,7 +48,7 @@
     group: "Computação",
   ),
   (
-    key: "avaliacao",
+    key: "fitness",
     short: text_in_english[fitness],
     plural: text_in_english[fitnesses],
     custom: [avaliação],
