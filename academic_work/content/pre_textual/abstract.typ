@@ -3,7 +3,7 @@
 
 #import "../../components/note.typ": note_from_gabriel
 #import "/template/academic_work/pages/pre_textual/abstract.typ": include_abstract
-#import "/template/common/components/note.typ": progress_note, todo_note
+#import "/template/common/components/note.typ": done_note, progress_note, todo_note
 #import "/template/common/packages.typ": glossarium
 
 #let abstract_in_main_language = {
@@ -18,13 +18,16 @@
     title: "Resumo",
     body: [
 
-      #progress_note(note_from_gabriel[Aprimorar resumo])
+      #done_note(note_from_gabriel[Aprimorar resumo])
       #todo_note(note_from_gabriel[Atualizar no sistema de monografia])
 
       O mercado em ascensão de @jogo:pl autorais requer métodos de apoio no processo de criação.
-      Nessa fase, um protótipo passa por @playtest (#glossarium.gls-custom("playtest")) repetidamente a fim de identificar desbalanços, o que exige tempo e recursos humanos.
-      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @selfplay (#glossarium.gls-custom("selfplay")) e reforço não supervisionado.
-      Este processo é inspirado pelo projeto @alphazero que utiliza os métodos de @mcts e de @resnet:pl.
+      Nessa fase, um protótipo passa por @playtest
+      repetidamente a fim de identificar desbalanceamentos, o que exige tempo e recursos humanos.
+      Por meio desta pesquisa exploratória, avaliamos o uso de @agint:pl treinados por métodos de @selfplay
+      e reforço não supervisionado.
+      Este processo é inspirado pelo projeto @alphazero, que utiliza os métodos de @mcts e de @resnet:pl.
+      A abordagem permitiu visualizar estados intermediários avaliados pelos agentes treinados, que podem servir como apoio ao projetista durante o desenvolvimento dos jogos.
 
     ],
   )

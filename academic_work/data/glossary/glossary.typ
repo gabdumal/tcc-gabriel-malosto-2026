@@ -19,10 +19,10 @@
     group: "Computação",
   ),
   (
-    key: "machine_learning",
-    short: text_in_english[machine learning],
-    custom: [aprendizado de máquina],
-    description: [Em português, aprendizado de máquina. Área da @ia que desenvolve algoritmos capazes de aprender padrões a partir de dados sem programação explícita, melhorando seu desempenho através da experiência.],
+    key: "aprendizado_maquina",
+    short: [aprendizado de máquina],
+    custom: text_in_english[machine learning],
+    description: [Em inglês, #text_in_english[machine learning]. Área da @ia que desenvolve algoritmos capazes de aprender padrões a partir de dados sem programação explícita, melhorando seu desempenho através da experiência.],
     group: "Computação",
   ),
   (

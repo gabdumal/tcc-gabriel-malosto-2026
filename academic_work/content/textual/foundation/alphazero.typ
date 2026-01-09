@@ -115,7 +115,7 @@ A primeira se denomina fase de geração de memória de treinamento, que utiliza
 Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
 No caso de jogos sem cálculo de @pontuacao, como o Jogo da Velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
 
-Segue-se então a fase de alinhamento do modelo, que utiliza @machine_learning para ajustar os @peso:pl e @vies:pl.
+Segue-se então a fase de alinhamento do modelo, que utiliza @aprendizado_maquina (#glossarium.gls-custom("aprendizado_maquina")) para ajustar os @peso:pl e @vies:pl.
 Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento por regressão linear.
 Espera-se que o modelo resultante possa gerar uma memória de @partida:pl mais significativa que o anterior.
 Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:treinamento.
