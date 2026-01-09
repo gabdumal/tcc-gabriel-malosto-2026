@@ -91,7 +91,7 @@ Tem-se o foco sobre os métodos de @ia, @mcts e @resnet, que se mostram promisso
 
 O presente trabalho está organizado em seis capítulos.
 Este #ref(<chapter:introducao>), de Introdução, apresenta o tema geral e a situação de mercado, delimita o problema de pesquisa e descreve a contribuição esperada.
-O #ref(<chapter:fundamentacao>), de Fundamentação Teórica, aborda conceitos fundamentais para a pesquisa segundo a literatura, apresentando estudos que abordam o tema proposto ou correlatos, a fim de situar o presente trabalho no contexto da pesquisa.
-Por sua vez, o #ref(<chapter:metodos>), de Material e Métodos, descreve a metodologia de pesquisa e desenvolvimento da solução proposta.
+O #ref(<chapter:fundamentacao>), de Fundamentação teórica, aborda conceitos fundamentais para a pesquisa segundo a literatura, apresentando estudos que abordam o tema proposto ou correlatos, a fim de situar o presente trabalho no contexto da pesquisa.
+Por sua vez, o #ref(<chapter:metodos>), de Material e métodos, descreve a metodologia de pesquisa e desenvolvimento da solução proposta.
 Segue o @chapter:resultados, de Resultados, que apresenta os resultados esperados e a análise dos dados coletados.
-Por fim, o @chapter:conclusao, de Considerações Finais, apresenta comentários acerca da pesquisa, suas limitações e as perspectivas para trabalhos futuros.
+Por fim, o @chapter:consideracoes, de Considerações finais, apresenta comentários acerca da pesquisa, suas limitações e as perspectivas para trabalhos futuros.

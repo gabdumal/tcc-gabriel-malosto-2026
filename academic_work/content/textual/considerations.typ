@@ -1,7 +1,7 @@
 #import "/academic_work/components/note.typ": note_from_gabriel
 #import "/template/common/components/note.typ": todo_note
 
-= Considerações finais <chapter:conclusao>
+= Considerações finais <chapter:consideracoes>
 
 #todo_note(note_from_gabriel[
   - Fazer um funil invertido

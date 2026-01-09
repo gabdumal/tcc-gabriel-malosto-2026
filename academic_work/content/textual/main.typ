@@ -5,6 +5,6 @@
 #include "foundation/main.typ"
 #include "method.typ"
 #include "results.typ"
-#include "conclusion.typ"
+#include "considerations.typ"
 
 // #include "./example/main.typ"
