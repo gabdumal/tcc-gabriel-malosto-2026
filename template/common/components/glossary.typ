@@ -7,20 +7,24 @@
 #import "./heading.typ": not_start_on_new_page
 
 #let glossary(
+  invisible: false,
   title: "Glossário",
   entries,
 ) = {
-  set text(
-    font: font_family_sans,
-  )
-  set heading(
-    numbering: none,
-    outlined: false,
-  )
-  heading(level: 1, title)
+  if invisible == false {
+    set text(
+      font: font_family_sans,
+    )
+    set heading(
+      numbering: none,
+      outlined: false,
+    )
+    heading(level: 1, title)
+  }
   glossarium.print-glossary(
-    entries,
     deduplicate-back-references: true,
     description-separator: ". ",
+    invisible: invisible,
+    entries,
   )
 }

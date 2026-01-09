@@ -1,8 +1,9 @@
 // # Academic Work. Trabalho Acadêmico.
 // NBR 14724:2024
 
-#import "./data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries
+#import "./data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries, terms_entries
 #import "/template/common/components/source.typ": print_source_for_content_created_by_authors
+#import "/template/common/components/glossary.typ": glossary
 #import "/template/common/packages.typ": glossarium
 #import "/template/template.typ": template
 
@@ -11,6 +12,8 @@
 #glossarium.register-glossary(abbreviations_entries)
 #glossarium.register-glossary(symbols_entries)
 #glossarium.register-glossary(glossary_entries)
+#glossarium.register-glossary(terms_entries)
+#glossary(invisible: true, terms_entries)
 
 // Template. Modelo.
 #show: it => template(

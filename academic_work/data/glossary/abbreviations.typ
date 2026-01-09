@@ -62,6 +62,15 @@
     longplural: "tecnologias de informação e comunicação",
     group: "Computação",
   ),
+  (
+    key: "sdk",
+    short: "SDK",
+    plural: "SDKs",
+    long: "kit de desenvolvimento de software",
+    longplural: "kits de desenvolvimento de software",
+    description: [Em inglês, #text_in_english[software development kit]. Conjunto de ferramentas, bibliotecas e documentação que facilita o desenvolvimento de aplicações para uma plataforma específica.],
+    group: "Computação",
+  ),
 )
 
 #let abbreviations_entries = (
@@ -85,5 +94,11 @@
     long: "Norma Brasileira",
     longplural: "Normas Brasileiras",
     group: "Normatização",
+  ),
+  (
+    key: "apts",
+    short: [APTS],
+    long: [Sistema de Teste de Jogabilidade Automatizado],
+    description: [Em inglês, #text_in_english[Auto Play-test System]. Sistema desenvolvido pelos autores que permite a modelagem de protótipos de @jogo:pl e cria @agint:pl que simulem @partida:pl.],
   ),
 )

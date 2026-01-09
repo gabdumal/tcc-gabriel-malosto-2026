@@ -99,6 +99,22 @@
     description: [Em inglês, #text_in_english[bias]. Parâmetro aditivo em um neurônio de @rn que ajusta o limiar de ativação, permitindo que o modelo se adapte melhor aos dados.],
     group: "Computação",
   ),
+  (
+    key: "thread",
+    short: text_in_english[thread],
+    plural: text_in_english[threads],
+    custom: [linha de execução],
+    description: [Em português, linha de execução. Unidade básica de processamento que executa instruções de forma independente dentro de um processo. Um programa que opera com mais de uma thread permite que múltiplas tarefas sejam executadas concorrentemente.],
+    group: "Computação",
+  ),
+  (
+    key: "linter",
+    short: text_in_english[linter],
+    plural: text_in_english[linters],
+    custom: [analisador estático de código],
+    description: [Em português, analisador estático de código. Ferramenta que analisa código-fonte para identificar e corrigir problemas de sintaxe, estilo e potenciais defeitos sem executar o programa.],
+    group: "Computação",
+  ),
 )
 
 #let glossary_entries_about_games = (
@@ -170,7 +186,7 @@
     short: "rodada",
     plural: "rodadas",
     custom: text_in_english[round],
-    description: [Em inglês, #text_in_english[round]. Ciclo completo de turnos no qual todos os @jogador:pl têm a oportunidade de agir uma vez.],
+    description: [Em inglês, #text_in_english[round]. Ciclo completo de @turno:pl no qual todos os @jogador:pl têm a oportunidade de agir uma vez.],
     group: "Jogos",
   ),
   (
