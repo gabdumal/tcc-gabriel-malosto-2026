@@ -71,6 +71,13 @@
     description: [Em inglês, #text_in_english[software development kit]. Conjunto de ferramentas, bibliotecas e documentação que facilita o desenvolvimento de aplicações para uma plataforma específica.],
     group: "Computação",
   ),
+  (
+    key: "json",
+    short: "JSON",
+    long: "notação de objetos JavaScript",
+    description: [Em inglês, #text_in_english[JavaScript object notation]. Formato simples de intercâmbio de dados baseado em texto. É fácil de ler e escrever para humanos e de analisar e gerar para máquinas.],
+    group: "Computação",
+  ),
 )
 
 #let abbreviations_entries = (

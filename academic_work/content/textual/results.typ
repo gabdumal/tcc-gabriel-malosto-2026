@@ -68,5 +68,7 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
   )<figure:modulos>],
 )
 
-O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para serem usadas por todos os demais módulos.
-Ele é constituído por apenas nove arquivos de código em @ts.
+O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
+Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
+Também estão disponíveis utilitários para a formatação de dados de tipos compostos e de descritores dos testes de unidade.
+O módulo também gerencia a codificação de dados para o formato @json e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar a memória de treinamento de modelos.

@@ -11,6 +11,13 @@
   title: "Glossário",
   entries,
 ) = {
+  let print_glossary = () => glossarium.print-glossary(
+    deduplicate-back-references: true,
+    description-separator: ". ",
+    invisible: invisible,
+    entries,
+  )
+
   if invisible == false {
     set text(
       font: font_family_sans,
@@ -20,11 +27,8 @@
       outlined: false,
     )
     heading(level: 1, title)
+    print_glossary()
+  } else {
+    print_glossary()
   }
-  glossarium.print-glossary(
-    deduplicate-back-references: true,
-    description-separator: ". ",
-    invisible: invisible,
-    entries,
-  )
 }
