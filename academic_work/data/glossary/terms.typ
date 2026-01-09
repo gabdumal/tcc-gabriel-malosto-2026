@@ -21,4 +21,20 @@
     key: "prettier",
     short: [Prettier],
   ),
+  (
+    key: "npm",
+    short: [NPM],
+  ),
+  (
+    key: "pnpm",
+    short: [PNPM],
+  ),
+  (
+    key: "turborepo",
+    short: [Turborepo],
+  ),
+  (
+    key: "vitest",
+    short: [Vitest],
+  ),
 )
