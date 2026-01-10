@@ -1,7 +1,7 @@
 // # Glossary. Glossário.
 // NBR 14724:2024 4.2.3.2
 
-#import "/template/common/util/text_in_english.typ": text_in_english
+#import "/template/common/util.typ": text_in_english
 
 #let glossary_entries_about_computing = (
   (
@@ -115,6 +115,14 @@
     description: [Em português, analisador estático de código. Ferramenta que analisa código-fonte para identificar e corrigir problemas de sintaxe, estilo e potenciais defeitos sem executar o programa.],
     group: "Computação",
   ),
+  (
+    key: "alias",
+    short: text_in_english[alias],
+    plural: text_in_english[aliases],
+    custom: [apelido],
+    description: [Em português, apelido. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
+    group: "Computação",
+  ),
 )
 
 #let glossary_entries_about_games = (
@@ -135,18 +143,18 @@
     group: "Jogos",
   ),
   (
+    key: "jogo_turno",
+    short: "jogo de turnos",
+    plural: "jogos de turnos",
+    custom: text_in_english[turn-based game],
+    description: [Em inglês, #text_in_english[turn-based game]. @Jogo em que os @jogador:pl atuam de forma alternada em @turno:pl sequenciais, fazendo o @estado avançar passo a passo. Neste tipo de @jogo, não são permitidos @movimento:pl simultâneos.],
+    group: "Jogos",
+  ),
+  (
     key: "playtest",
     short: text_in_english[play-test],
     custom: [teste de jogabilidade],
     description: [Em português, teste de jogabilidade. Avaliação prática de um @jogo com participantes para observar a experiência e coletar feedback de melhoria.],
-    group: "Jogos",
-  ),
-  (
-    key: "jogo_turno",
-    short: "jogo de turno",
-    plural: "jogos de turno",
-    custom: text_in_english[turn-based game],
-    description: [Em inglês, #text_in_english[turn-based game]. @Jogo em que os @jogador:pl atuam de forma alternada em @turno:pl sequenciais, fazendo o @estado avançar passo a passo. Neste tipo de @jogo, não são permitidos @movimento:pl simultâneos.],
     group: "Jogos",
   ),
   (

@@ -9,7 +9,7 @@
 #import "../../../common/style/style.typ": (
   font_family_sans, font_size_for_smaller_text, simple_leading_for_smaller_text, spacing_for_smaller_text,
 )
-#import "../../../common/util/gender.typ": get_gender_ending
+#import "../../../common/util.typ": get_gender_ending
 #import "../../components/examiner.typ": print_examiner
 #import "../../components/institutional_information.typ": print_institutional_information
 #import "../../components/nature.typ": print_nature

@@ -3,7 +3,7 @@
 
 #import "../../common/components/people.typ": print_person
 #import "../../common/style/style.typ": leading_for_common_text
-#import "../../common/util/text.typ": capitalize_first_letter
+#import "../../common/util.typ": capitalize_first_letter
 
 #let print_examiner(
   examiner: (

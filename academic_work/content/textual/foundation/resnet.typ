@@ -2,7 +2,7 @@
 #import "/template/common/components/figure.typ": describe_figure
 #import "/template/common/components/note.typ": todo_note
 #import "/template/common/packages.typ": glossarium
-#import "/template/common/util/text_in_english.typ": text_in_english
+#import "/template/common/util.typ": text_in_english
 
 == #glossarium.gls(capitalize: true, long: true, plural: true, "resnet") <section:resnet>
 

@@ -1,6 +1,8 @@
 #import "/academic_work/components/note.typ": note_from_gabriel
 #import "/template/common/components/figure.typ": describe_figure
 #import "/template/common/components/note.typ": todo_note
+#import "/template/common/packages.typ": glossarium
+#import "/template/common/util.typ": text_in_english
 
 = Resultados <chapter:resultados>
 
@@ -62,8 +64,8 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
   [#figure(
     caption: [Dependências entre os módulos do sistema e com pacotes externos.],
     image(
-      width: 60%,
-      "/academic_work/assets/images/modules.webp",
+      width: 55%,
+      "/academic_work/assets/images/modules_diagram.png",
     ),
   )<figure:modulos>],
 )
@@ -71,4 +73,50 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
 O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
 Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
 Também estão disponíveis utilitários para a formatação de dados de tipos compostos e de descritores dos testes de unidade.
-O módulo também gerencia a codificação de dados para o formato @json e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar a memória de treinamento de modelos.
+Além disso, o módulo gerencia a codificação de dados para o formato de @json e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar o histórico de @partida:pl para o treinamento de modelos.
+
+A fim de facilitar a compreensão de conceitos comuns ao domínio da aplicação, definimos por meio do @ts alguns tipos derivados, utilizados por todo o projeto.
+Os principais estão dispostos na @figure:diagrama_tipos.
+Ela também explicita os tipos concretos `string` e `number` da linguagem @js, que guardam, respectivamente, texto e números reais.
+O tipo `Char` foi um @alias (#glossarium.gls-custom("alias")) dado para campos de texto de apenas um caractere, como a marcação de uma peça em uma @casa do tabuleiro.
+Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchido apenas por um número inteiro, como por exemplo na indexação de dados em vetores.
+Essa lógica foi tão comumente utilizada na elaboração do sistema, que decidimos criar @alias:pl para a indexação de @movimento:pl (moves), @casa:pl (slots) e @jogador:pl (players).
+
+Outro dado relevante é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
+Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do @js.
+No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
+Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado o padrão de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: (
+    [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores.],
+  ),
+  [#figure(
+    caption: [Tipos de dados comuns utilizados pelo projeto.],
+    image(
+      width: 65%,
+      "/academic_work/assets/images/types_diagram.png",
+    ),
+  )<figure:diagrama_tipos>],
+)
+
+Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: (
+    [Os métodos abstratos são representados em itálico, ao passo em que os métodos estáticos são representados sublinhados.],
+    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores.],
+  ),
+  [#figure(
+    caption: [Dependências entre os módulos do sistema e com pacotes externos.],
+    image(
+      width: 100%,
+      "/academic_work/assets/images/simplified_class_diagram_of_package_game.png",
+    ),
+  )<figure:diagrama_classes_pacote_game>],
+)

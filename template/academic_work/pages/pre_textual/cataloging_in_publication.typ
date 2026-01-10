@@ -7,7 +7,7 @@
 #import "../../../common/components/people.typ": print_people, print_person
 #import "../../../common/components/title.typ": print_title
 #import "../../../common/style/style.typ": font_family_sans, font_size_for_smaller_text, simple_leading_for_smaller_text
-#import "../../../common/util/text.typ": capitalize_first_letter
+#import "../../../common/util.typ": capitalize_first_letter
 
 #let parameters = (
   authors: {

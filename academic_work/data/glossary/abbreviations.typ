@@ -1,7 +1,7 @@
 // # Abbreviations. Abreviaturas.
 // NBR 14724:2024 4.2.1.11
 
-#import "/template/common/util/text_in_english.typ": text_in_english
+#import "/template/common/util.typ": text_in_english
 
 #let abbreviations_entries_about_computing = (
   (
@@ -74,7 +74,7 @@
   (
     key: "json",
     short: "JSON",
-    long: "notação de objetos JavaScript",
+    long: "notação de objetos do JavaScript",
     description: [Em inglês, #text_in_english[JavaScript object notation]. Formato simples de intercâmbio de dados baseado em texto. É fácil de ler e escrever para humanos e de analisar e gerar para máquinas.],
     group: "Computação",
   ),

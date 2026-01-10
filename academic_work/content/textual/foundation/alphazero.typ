@@ -5,7 +5,7 @@
 #import "/template/common/components/note.typ": todo_note
 #import "/template/common/packages.typ": equate, glossarium, subpar
 #import "/template/common/style/style.typ": spacing_for_smaller_text
-#import "/template/common/util/text_in_english.typ": text_in_english
+#import "/template/common/util.typ": text_in_english
 
 == Modelo #glossarium.gls("alphazero") <section:alphazero>
 
