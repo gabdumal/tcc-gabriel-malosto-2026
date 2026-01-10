@@ -79,7 +79,7 @@ A fim de facilitar a compreensão de conceitos comuns ao domínio da aplicação
 Os principais estão dispostos na @figure:diagrama_tipos.
 Ela também explicita os tipos concretos `string` e `number` da linguagem @js, que guardam, respectivamente, texto e números reais.
 O tipo `Char` foi um @alias (#glossarium.gls-custom("alias")) dado para campos de texto de apenas um caractere, como a marcação de uma peça em uma @casa do tabuleiro.
-Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchido apenas por um número inteiro, como por exemplo na indexação de dados em vetores.
+Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchido apenas por um número inteiro, como por exemplo na indexação de dados em @vetor:pl.
 Essa lógica foi tão comumente utilizada na elaboração do sistema, que decidimos criar @alias:pl para a indexação de @movimento:pl (moves), @casa:pl (slots) e @jogador:pl (players).
 
 Outro dado relevante é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
@@ -126,18 +126,42 @@ Seus principais atributos e métodos, além das relações entre si, podem ser v
 A classe mais simples é a que representa uma @casa do tabuleiro, chamada de `Slot`.
 Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no Jogo da Velha ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
   Descrição disponível em: #link("https://boardgamegeek.com/boardgame/13230/gobblet-gobblers").
-] --- ou até mesmo uma carta específica dentro de uma mão.
+] --- ou até mesmo uma carta específica dentro de uma mão #footnote[
+  Apesar de termos determinado como limite do escopo desta pesquisa a investigação de @jogo_tabuleiro:pl, tentamos manter a implementação genérica para representar jogos de cartas futuramente.
+].
 Essa variabilidade não nos permite atribuir nenhum dado comum à classe.
 Dessa forma, cabe inteiramente ao projetista definir o conteúdo possível por meio de uma classe concreta que a implemente.
 
-Em seguida, implementamos a classe `Player`, que representa os dados fixos de um @jogador durante todo o período de duração da partida.
+Em seguida, implementamos a classe abstrata `Player`, que representa os dados fixos de um @jogador durante todo o período de duração da partida.
 Os dados comuns identificados foram acerca da distinção entre os @jogador:pl na interface de execução por linha de comando.
 Nesse sentido, quando o projetista for criar um objeto da classe `Player`, ele deve atribuir um nome por meio do atributo `name` e um símbolo por meio do atributo `symbol` --- como "primeiro" (1) e "segundo" (2), peças "brancas" (B) e "pretas" (P), ou (X) e (O), por exemplo.
 
-Para registrar as possibilidades de transição entre @estado:pl, criamos a classe `Move` que representa um @movimento.
+Para registrar as possibilidades de transição entre @estado:pl, criamos a classe abstrata `Move` que representa um @movimento.
 Por padrão, ela apenas guarda dados de identificação para a interface com o usuário, quais sejam o título com atributo `title` e sua descrição com atributo `description`.
 Para todas as classes abstratas, o projetista pode definir novos atributos caso sejam necessários para efetuar as regras do @jogo.
 
 A fim de permitir que os @agint:pl gerados possam avaliar as qualidade dos @movimento:pl, é necessário que o projetista descreva previamente ao início da @partida todos aqueles que são possíveis em qualquer momento.
 Por exemplo, #cite(form: "prose", <silver:2017:mastering_chess_shogi>) representam o Xadrez por meio de $4672$ @movimento:pl, por meio de uma matriz de $8$ @casa:pl na horizontal, $8$ @casa:pl na vertical e $73$ mudanças de estado que uma peça pode efetuar.
-Apesar dessa lista de opções ser extensa, ela é necessária porque a estrutura da @rn usada pelo agente atribui um valor de qualidade para todos os @movimento:pl do jogo, mesmo aqueles que não são válidos em um @estado específico.
+Apesar de essa lista de opções ser extensa, ela é necessária porque a estrutura da @rn usada pelo agente atribui um valor de qualidade para todos os @movimento:pl do @jogo, mesmo aqueles que não são válidos em um @estado específico.
+
+As classes descritas previamente têm a função de armazenar dados imutáveis no contexto de uma @partida.
+Para representar a disposição variável dos elementos em um @turno, isto é, um @estado, desenvolvemos a classe abstrata `State`.
+Seu objeto guarda uma referência para o @jogo cujas regras ele obedece por meio do atributo `game`.
+A principal característica de um @estado é guardar a disposição de peças nas @casa:pl do tabuleiro, o que é feito por meio do @vetor `slots`.
+Ele guarda objetos da classe `Slot` e deve ser indexado da mesma forma em todos os objetos da classe `State` para que o programa consiga fazer acesso aos componentes de forma direta.
+A decisão de como fazê-lo deve ser pensada no mesmo momento em que o projetista implementa o método abstrato `getEncodedState`, que organiza todas as informações relevantes num conjunto de canais a ser fornecido para a @rn.
+
+Outro atributo armazenado num objeto da classe `State` é o `indexOfPlayer`, que guarda a informação sobre qual dos @jogador:pl pode realizar um @movimento no @turno atual, usualmente chamada de "vez do @jogador".
+É comum que @jogo_turno:pl alternem sequencialmente entre os @jogador:pl a cada @rodada, mas é possível para o projetista definir as regras do @jogo de forma a levar um @jogador a jogar mais ou menos vezes a depender do @estado.
+A @pontuacao dos @jogador:pl também depende de como os @turno:pl decorreram, o que é salvo no atributo `score`.
+
+Para fins de organização do código-fonte e de abertura para expansão, criamos uma classe abstrata chamada `Score` para representar a @pontuacao de todos os @jogador:pl em um determinado @estado.
+Seu único atributo é o mapa `pointsOfEachPlayer`, que atribui um valor em pontos para cada jogador de acordo com o índice a esse atribuído pelo projetista.
+É relevante ressaltar que alguns @jogo_tabuleiro:pl, como o Xadrez, não utilizam sistema de @pontuacao, atribuindo apenas o resultado de vitória para um dos @jogador:pl.
+Nesses casos, recomendamos a implementação de forma que a quantidade de pontos permaneça como $0$ durante toda a partida e que, no @estado que representa fim de @jogo, esse marcador seja alterado para $1$ na entrada referente ao vencedor.
+
+Finalmente,
+
+#todo_note(
+  note_from_gabriel[Falar que era possível dividir um turno em mais de um estado, como feito pelo bg.io, mas que preferimos colocar essa limitação],
+)

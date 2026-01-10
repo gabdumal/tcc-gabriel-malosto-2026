@@ -59,11 +59,11 @@ Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
   )<figure:resnet>],
 )
 
-A primeira saída é construída pela camada de #text_in_english[policy head], que retorna um vetor de números reais.
+A primeira saída é construída pela camada de #text_in_english[policy head], que retorna um @vetor de números reais.
 Esses valores representam a qualidade atribuída a cada um dos @movimento:pl válidos a partir do @estado fornecido.
 Na verdade, devido à restrição de formato da saída da rede, o modelo atribuirá uma classificação para todos os movimentos possíveis de acordo com as regras do @jogo, sendo estes válidos ou não a partir do @estado atual.
-Dessa forma, é necessário que o #text_in_english[designer] do @jogo simulado descreva previamente a lista de todos os @movimento:pl e os guarde em um vetor.
-O algoritmo do @agint indexará as posições deste àquelas do vetor retornado pela rede.
+Dessa forma, é necessário que o #text_in_english[designer] do @jogo simulado descreva previamente a lista de todos os @movimento:pl e os guarde em um @vetor.
+O algoritmo do @agint indexará as posições deste àquelas do @vetor retornado pela rede.
 
 A segunda saída da @resnet é construída pela camada de #text_in_english[value head].
 Seu retorno é um valor escalar que representa a estimativa da qualidade do resultado da @partida a partir do @estado fornecido.

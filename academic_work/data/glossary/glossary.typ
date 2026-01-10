@@ -28,7 +28,7 @@
   (
     key: "softmax",
     short: text_in_english[softmax],
-    description: [Função de ativação que converte um vetor de valores reais em uma distribuição de probabilidade, na qual cada elemento é transformado em um valor entre 0 e 1, e a soma de todos os elementos resulta em 1.],
+    description: [Função de ativação que converte um @vetor de valores reais em uma distribuição de probabilidade, na qual cada elemento é transformado num valor entre $0$ e $1$, e a soma de todos os elementos resulta em $1$.],
     group: "Computação",
   ),
   (
@@ -57,7 +57,7 @@
   (
     key: "alphazero",
     short: text_in_english[AlphaZero],
-    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pela DeepMind.],
+    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pelo laboratório Google DeepMind.],
     group: "Computação",
   ),
   (
@@ -121,6 +121,14 @@
     plural: text_in_english[aliases],
     custom: [apelido],
     description: [Em português, apelido. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
+    group: "Computação",
+  ),
+  (
+    key: "vetor",
+    short: [vetor],
+    plural: [vetores],
+    custom: text_in_english[array],
+    description: [Em inglês, #text_in_english[array]. Estrutura de dados que armazena uma coleção ordenada de elementos acessíveis por índices numéricos sequenciais.],
     group: "Computação",
   ),
 )

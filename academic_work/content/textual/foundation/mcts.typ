@@ -90,7 +90,7 @@ Cada iteração levará à expansão de um único novo nó.
 Ao final de todos os ciclos, os filhos diretos do nó raiz terão os marcadores de visitas e de qualidade atualizados segundo o andamento das partidas.
 A partir desses dados, uma função deve calcular a probabilidade de jogar cada um dos @movimento:pl.
 Um exemplo de função que utiliza somente o contador de visitas a cada ramo para calcular as probabilidades é demonstrado na @figure:probabilidades_mcts.
-Dispondo do vetor de probabilidades, o método da seleção aleatória por roleta escolhe um dos @movimento:pl.
+Dispondo do @vetor de probabilidades, o método da seleção aleatória por roleta escolhe um dos @movimento:pl.
 
 #describe_figure(
   placement: auto,
