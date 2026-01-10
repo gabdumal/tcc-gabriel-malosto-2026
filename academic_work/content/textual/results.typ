@@ -104,6 +104,8 @@ Finalmente, o tipo `EncodedState` representa o formato de codificação de um es
 )
 
 Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
+Todos eles foram implementados por meio de classes abstratas, considerando que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
+Seus principais atributos e métodos, além das relações entre si, podem ser vistos na @figure:diagrama_classes_pacote_game.
 
 #describe_figure(
   placement: auto,
@@ -120,3 +122,22 @@ Seguindo a descrição modular do sistema, o módulo `game` é responsável por 
     ),
   )<figure:diagrama_classes_pacote_game>],
 )
+
+A classe mais simples é a que representa uma @casa do tabuleiro, chamada de `Slot`.
+Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no Jogo da Velha ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
+  Descrição disponível em: #link("https://boardgamegeek.com/boardgame/13230/gobblet-gobblers").
+] --- ou até mesmo uma carta específica dentro de uma mão.
+Essa variabilidade não nos permite atribuir nenhum dado comum à classe.
+Dessa forma, cabe inteiramente ao projetista definir o conteúdo possível por meio de uma classe concreta que a implemente.
+
+Em seguida, implementamos a classe `Player`, que representa os dados fixos de um @jogador durante todo o período de duração da partida.
+Os dados comuns identificados foram acerca da distinção entre os @jogador:pl na interface de execução por linha de comando.
+Nesse sentido, quando o projetista for criar um objeto da classe `Player`, ele deve atribuir um nome por meio do atributo `name` e um símbolo por meio do atributo `symbol` --- como "primeiro" (1) e "segundo" (2), peças "brancas" (B) e "pretas" (P), ou (X) e (O), por exemplo.
+
+Para registrar as possibilidades de transição entre @estado:pl, criamos a classe `Move` que representa um @movimento.
+Por padrão, ela apenas guarda dados de identificação para a interface com o usuário, quais sejam o título com atributo `title` e sua descrição com atributo `description`.
+Para todas as classes abstratas, o projetista pode definir novos atributos caso sejam necessários para efetuar as regras do @jogo.
+
+A fim de permitir que os @agint:pl gerados possam avaliar as qualidade dos @movimento:pl, é necessário que o projetista descreva previamente ao início da @partida todos aqueles que são possíveis em qualquer momento.
+Por exemplo, #cite(form: "prose", <silver:2017:mastering_chess_shogi>) representam o Xadrez por meio de $4672$ @movimento:pl, por meio de uma matriz de $8$ @casa:pl na horizontal, $8$ @casa:pl na vertical e $73$ mudanças de estado que uma peça pode efetuar.
+Apesar dessa lista de opções ser extensa, ela é necessária porque a estrutura da @rn usada pelo agente atribui um valor de qualidade para todos os @movimento:pl do jogo, mesmo aqueles que não são válidos em um @estado específico.
