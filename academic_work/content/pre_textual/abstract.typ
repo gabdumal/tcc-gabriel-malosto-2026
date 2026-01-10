@@ -10,10 +10,10 @@
   (
     keywords_title: "Palavras-chave",
     keywords: (
-      "agentes inteligentes",
+      "game design",
+      "play-test automático",
       "AlphaZero",
-      "play-test",
-      "self-play",
+      "redes neurais artificiais",
     ),
     title: "Resumo",
     body: [
@@ -43,10 +43,10 @@
   (
     keywords_title: "Keywords",
     keywords: (
-      "intelligent agents",
+      "game design",
+      "automated play-test",
       "AlphaZero",
-      "play-test",
-      "self-play",
+      "artificial neural networks",
     ),
     title: "Abstract",
     body: [
@@ -55,7 +55,16 @@
         region: "us",
       )[
 
-        #todo_note(note_from_gabriel[Traduzir resumo])
+        *Introduction:* The market for original board games shows continuous growth, with thousands of games published annually at the world's largest fairs.
+        This growth creates a demand for improvements in tools supporting the creation phase.
+        In this phase, a prototype undergoes play-test repeatedly to identify imbalances and dominant strategies, which requires significant time and human resources.
+        *Objectives:* This research seeks to explore ways to alleviate the need for the play-test team to exhaustively explore the game's systems using intelligent agents.
+        Thus, it is expected that humans focus on the aspects of the game experience rather than stress testing.
+        *Methods:* This is an exploratory research in which the use of intelligent agents trained by self-play methods and unsupervised reinforcement is evaluated, inspired by the AlphaZero project, which is based on MCTS and ResNet methods.
+        A set of turn-based games was implemented, as well as the training and evaluation environment for states.
+        Data collected during and after the training process are used to raise observations about the emerging behavior of the game rules.
+        *Results:* With synthetic matches, the development team now has a set of thousands of matches to evaluate, instead of a few dozen.
+        The approach allowed visualization of intermediate states evaluated by the trained agents, which can serve as support for the designer during game development.
 
       ]
     ],

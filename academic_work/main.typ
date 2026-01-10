@@ -4,7 +4,7 @@
 #import "./data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries, terms_entries
 #import "/template/common/components/source.typ": print_source_for_content_created_by_authors
 #import "/template/common/components/glossary.typ": glossary
-#import "/template/common/packages.typ": glossarium
+#import "/template/common/packages.typ": drafting, glossarium
 #import "/template/template.typ": template
 
 // Glossary. Glossário.
@@ -21,6 +21,8 @@
   number_pages: true,
   consider_only_odd_pages: true,
 )
+
+// #drafting.set-margin-note-defaults(hidden: true)
 
 // External elements. Elementos externos.
 #include "content/external/main.typ"

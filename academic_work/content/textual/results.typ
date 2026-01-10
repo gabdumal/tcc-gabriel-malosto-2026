@@ -63,7 +63,7 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
     caption: [Dependências entre os módulos do sistema e com pacotes externos.],
     image(
       width: 60%,
-      "/academic_work/assets/images/modules.svg",
+      "/academic_work/assets/images/modules.webp",
     ),
   )<figure:modulos>],
 )
