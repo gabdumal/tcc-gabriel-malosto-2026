@@ -221,14 +221,14 @@ Seu retorno é um valor escalar que representa a estimativa da qualidade do resu
 Esse valor será maior para quando houver uma expectativa de vitória e menor para quando a expectativa for de derrota.
 
 Esses retornos são exemplificados pela @figure:predicao, que utiliza valores fictícios.
-O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador `X` que será o próximo a jogar.
+O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador "X" que será o próximo a jogar.
 O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[policy head]
 #footnote[
   Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
   No algoritmo, isso seria realizado por uma função de @softmax.
 ].
 As @casa:pl já preenchidas por peças têm qualidade $0$ atribuída, uma vez que nelas não são permitidos mais @movimento:pl.
-A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador `X`.
+A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador "X".
 As demais casas apresentam qualidades pouco significativas.
 Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela #text_in_english[value head].
 Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
@@ -251,7 +251,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
     ],
   ),
   [#figure(
-    caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador `X`.],
+    caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador "X".],
     image(
       width: 80%,
       "../../assets/images/resnet/prediction.png",
@@ -349,7 +349,7 @@ Já como componente de @exploracao, a política alinha dois fatores: como numera
 Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.
 O tabuleiro é salvo atribuindo um número a cada um dos @jogador:pl, que pode ser indexado pela lista de jogadores definida previamente pelo #text_in_english[designer] do @jogo.
 A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do @jogo_velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
-O primeiro @jogador, de símbolo `X`, é representado pelo número $0$, ao passo que o segundo @jogador, de símbolo `O`, é representado pelo número $1$.
+O primeiro @jogador, de símbolo "X", é representado pelo número $0$, ao passo que o segundo @jogador, de símbolo "O", é representado pelo número $1$.
 As posições sem peças são definidas com o valor `null`.
 Outra informação armazenada no @estado é um marcador de qual @jogador deve jogar no @turno atual.
 
@@ -394,8 +394,8 @@ A entrada da @resnet utilizada pelo @agint requer que o @estado seja codificado 
 Essa técnica busca aproximar a representação do tabuleiro daquela usada por imagens RGB, comumente fornecidas como entrada a @resnet:pl de reconhecimento de imagens.
 
 No exemplo do @jogo_velha, o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
-O primeiro, associado à cor vermelha, tem uma posição ativada quando o primeiro @jogador (representado pelo símbolo `X`) posiciona nela uma peça, como mostrado na @figure:canal_vermelho.
-Similarmente, o segundo canal, associado à cor verde, representa as @casa:pl marcadas pelo segundo @jogador (representado pelo símbolo `O`), como mostrado na @figure:canal_verde.
+O primeiro, associado à cor vermelha, tem uma posição ativada quando o primeiro @jogador (representado pelo símbolo "X") posiciona nela uma peça, como mostrado na @figure:canal_vermelho.
+Similarmente, o segundo canal, associado à cor verde, representa as @casa:pl marcadas pelo segundo @jogador (representado pelo símbolo "O"), como mostrado na @figure:canal_verde.
 Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à cor azul, como mostrado na @figure:canal_azul.
 
 #describe_figure(
@@ -412,7 +412,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 
         grid.cell()[
           #figure(
-            caption: [Canal do @jogador `X`.],
+            caption: [Canal do @jogador "X".],
             image(
               width: 3.5cm,
               "../../assets/images/state/red_channel.png",
@@ -421,7 +421,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
         ],
 
         grid.cell()[
-          #figure(caption: [Canal do @jogador `O`.], image(
+          #figure(caption: [Canal do @jogador "O".], image(
             width: 3.5cm,
             "../../assets/images/state/green_channel.png",
           ))<figure:canal_verde>
@@ -441,7 +441,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 Caso necessário, outras informações podem ser representadas por meio da adição de novos canais à pilha.
 Jogos de @jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
 Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
-Assim, um @estado do @jogo_velha define todo esse canal como $0$ para o @jogador de símbolo `X`, e como $1$ para o @jogador de símbolo `O`.
+Assim, um @estado do @jogo_velha define todo esse canal como $0$ para o @jogador de símbolo "X", e como $1$ para o @jogador de símbolo "O".
 
 
 == Trabalhos relacionados <section:related_works>

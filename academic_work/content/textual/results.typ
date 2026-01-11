@@ -53,8 +53,9 @@ Ela permite definir casos de teste e executá-los para entradas variadas, o que 
 
 == Arquitetura do projeto
 
-O projeto da aplicação desenvolvida a divide em cinco módulos, quais sejam: `core`, `game`, `search`, `games` e `interface`.
+O projeto da aplicação desenvolvida a divide em cinco módulos --- ou pacotes, segundo a terminologia da ferramenta @turborepo ---, quais sejam: `core`, `game`, `search`, `games` e `interface`.
 A @figure:modulos representa as relações de dependência entre tais módulos e com os pacotes externos `ts-graphviz` e `tensorflow`.
+Esta seção discute a responsabilidade e a implementação de cada um dos módulos internos.
 
 #describe_figure(
   placement: auto,
@@ -95,7 +96,7 @@ Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchid
   )<figure:diagrama_pacote_core_tipos>],
 )
 
-=== Componentes fundamentais de um @jogo
+=== Componentes fundamentais de um @jogo <subsection:componentes_fundamentais>
 
 Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
 Primeiramente, definimos tipos úteis para esse pacote e para seus dependentes, como apresentado na @figure:diagrama_pacote_game_tipos.
@@ -208,8 +209,55 @@ Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da 
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
 
-== Implementação de um jogo
+== Implementação do jogo @ligue4
 
-A fim de executar o experimento desta pesquisa, implementamos os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
-Utilizamos o @ligue4 para realizar o experimento porque ele é um jogo de informação completa entre dois jogadores que apresenta um tamanho de tabuleiro razoável e uma quantidade pequena de @movimento:pl possíveis.
-Descrevemos neste capítulo sua implementação.
+A fim de executar o experimento desta pesquisa, implementamos, no módulo `games`, os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
+Criamos um conjunto de objetos para cada um desses jogos, de forma a permitir ao usuário do sistema jogá-los.
+Uma parte representativa desses objetos foram selecionados para realizar testes de unidade, a fim de garantir que suas regras estavam bem definidas antes de prosseguir com a execução dos métodos de busca.
+
+Escolhemos o @ligue4 para realizar o experimento porque ele é um jogo de informação completa entre dois jogadores que apresenta um tamanho de tabuleiro razoável e uma quantidade pequena de @movimento:pl possíveis.
+Dessa forma, realizamos com atenção a implementação dos objetos relacionados a esse @jogo descritos no módulo `games` e também naqueles dos módulos mais derivados, conforme dispostos na @figure:modulos.
+
+O @ligue4 é jogado em um tabuleiro vertical de $6$ linhas e $7$ colunas, o que resulta em $42$ @casa:pl.
+As peças são discos de mesmo tamanho divididas igualmente entre cada um dos @jogador:pl, que recebe todas as peças de uma das duas cores disponíveis.
+Dentro de um @turno, o jogador atual deve escolher uma colunas que já não tenha sido completamente preenchida para colocar sua peça.
+No tabuleiro vertical, ela cairá até a linha mais baixa ainda não preenchida naquela coluna.
+Após colocada, uma peça não pode mais ser removida naquela @partida.
+
+Então, a @rodada passa a vez para o segundo @jogador, que deve escolher seu @movimento da mesma forma que o primeiro.
+Um @jogador vence caso ele posicione $4$ de suas peças de forma adjacente na mesma linha, coluna ou diagonal.
+Configura um empate o caso em que todas as @casa:pl tenham sido preenchidas e nenhum @jogador tenha marcado um dos formatos especificados.
+Essas regras fazem com que haja mais de 4.5 trilhões de combinações possíveis de peças no tabuleiro, mesmo que o jogo permita no máximo $7$ @movimento:pl em qualquer @turno @cahn:2024:connect4.
+
+Nesta seção, descrevemos o processo de implementação do jogo @ligue4, destacando os conceitos fundamentais discutidos na @subsection:componentes_fundamentais.
+Em relação à pré-implementação das classes abstratas, poucas adaptações foram necessárias.
+Todas as classes concretas seguiram a convenção de iniciar seus nomes com o termo `ConnectFour` seguido do nome da classe que ela implementa.
+Conforme visto na @figure:diagrama_classes_pacote_games, as classes `Slot` e `Move` foram acrescidas de novos atributos.
+Além disso, observamos a necessidade de criar uma nova estrutura de dados abstrata para representar os formatos considerados para levar à vitória, o que foi feito pelo tipo `ConnectFourShape`.
+Ele permite definir linhas de um tamanho arbitrário --- embora tenhamos escolhido $4$ peças conforme a descrição padrão do jogo --- e a direção de marcação --- se horizontal, vertical ou em uma diagonal principal ou secundária.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
+  [#figure(
+    caption: [Classes concretas alteradas na implementação do @ligue4 e tipo utilitário nela definido.],
+    image(
+      width: 70%,
+      "../../assets/images/uml/games/simplified_class_diagram_of_package_games.png",
+    ),
+  )<figure:diagrama_classes_pacote_games>],
+)
+
+A primeira classe concreta implementada foi a `ConnectFourPlayer`, referente aos dados imutáveis de cada @jogador.
+O @ligue4 não guarda nenhuma informação relevante sobre um @jogador exceto aquelas necessárias para a sua distinção na interface com o usuário.
+Assim, não foi necessária nenhuma alteração na classe.
+Ao criar seus objetos, escolhemos arbitrariamente o nome @alice:long e o símbolo @alice:short para o @jogador de índice $0$ e o nome @bruno:long e símbolo @bruno:short para o @jogador de índice $1$.
+Tais valores não representam nomes reais de pessoas, mas servem apenas como facilitadores de distinção entre esses objetos para os desenvolvedores do protótipo.
+
+Em seguida, implementamos a classe `ConnectFourSlot`, que representa o conteúdo guardado em uma @casa do tabuleiro.
+O @ligue4 utiliza peças simples, cuja única diferença é a cor, que é associada a cada um dos @jogador:pl.
+Por isso, a única informação relevante para cada @casa é se ela está vazia ou, caso não esteja, qual @jogador a preencheu.
+Então, acrescentamos o atributo `indexOfOccupyingPlayer`, que pode ser assinalado com o índice $0$ caso o @jogador @alice tenha marcado uma peça, com o índice $1$ caso o @jogador @bruno o tenha feito, ou com o valor `null` se a @casa estiver vazia.
+Quanto aos objetos utilizados pelo experimento, criamos todas as $49$ @casa:pl, definindo o atributo de jogador ocupante como `null` e nomeando-as com a convenção "rXcY", em que os termos "X" representam o índice da linha que ela ocupa e o termo "Y" representa o da coluna.
+Para os testes de unidade, também criamos novos objetos preenchidos em diferentes combinações.

@@ -45,4 +45,14 @@
     key: "ligue4",
     short: [Ligue-4],
   ),
+  (
+    key: "alice",
+    short: ["X"],
+    long: ["Alice"],
+  ),
+  (
+    key: "bruno",
+    short: ["O"],
+    long: ["Bruno"],
+  ),
 )
