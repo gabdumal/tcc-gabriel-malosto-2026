@@ -70,6 +70,8 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
   )<figure:modulos>],
 )
 
+=== Utilitários
+
 O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
 Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
 Também estão disponíveis utilitários para a formatação de dados de tipos compostos e de descritores dos testes de unidade.
@@ -85,7 +87,7 @@ Essa lógica foi tão comumente utilizada na elaboração do sistema, que decidi
 Outro dado relevante é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
 Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do @js.
 No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
-Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado o padrão de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
+Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
 
 #describe_figure(
   placement: auto,
@@ -103,6 +105,8 @@ Finalmente, o tipo `EncodedState` representa o formato de codificação de um es
   )<figure:diagrama_tipos>],
 )
 
+=== Componentes fundamentais de um @jogo
+
 Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
 Todos eles foram implementados por meio de classes abstratas, considerando que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
 Seus principais atributos e métodos, além das relações entre si, podem ser vistos na @figure:diagrama_classes_pacote_game.
@@ -111,8 +115,8 @@ Seus principais atributos e métodos, além das relações entre si, podem ser v
   placement: auto,
   sticky: true,
   note: (
-    [Os métodos abstratos são representados em itálico, ao passo em que os métodos estáticos são representados sublinhados.],
-    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores.],
+    [Os métodos abstratos são representados em itálico.],
+    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
   ),
   [#figure(
     caption: [Dependências entre os módulos do sistema e com pacotes externos.],
@@ -145,23 +149,52 @@ Por exemplo, #cite(form: "prose", <silver:2017:mastering_chess_shogi>) represent
 Apesar de essa lista de opções ser extensa, ela é necessária porque a estrutura da @rn usada pelo agente atribui um valor de qualidade para todos os @movimento:pl do @jogo, mesmo aqueles que não são válidos em um @estado específico.
 
 As classes descritas previamente têm a função de armazenar dados imutáveis no contexto de uma @partida.
-Para representar a disposição variável dos elementos em um @turno, isto é, um @estado, desenvolvemos a classe abstrata `State`.
-Seu objeto guarda uma referência para o @jogo cujas regras ele obedece por meio do atributo `game`.
-A principal característica de um @estado é guardar a disposição de peças nas @casa:pl do tabuleiro, o que é feito por meio do @vetor `slots`.
-Ele guarda objetos da classe `Slot` e deve ser indexado da mesma forma em todos os objetos da classe `State` para que o programa consiga fazer acesso aos componentes de forma direta.
-A decisão de como fazê-lo deve ser pensada no mesmo momento em que o projetista implementa o método abstrato `getEncodedState`, que organiza todas as informações relevantes num conjunto de canais a ser fornecido para a @rn.
+Para representar um @estado --- o qual sintetiza a disposição variável dos elementos em um @turno ---, desenvolvemos a classe abstrata `State`.
+Ela deve manter, por meio do atributo `game`, uma referência para a classe que representa um @jogo a fim de ter acesso às suas regras e a outros dados invariáveis.
 
-Outro atributo armazenado num objeto da classe `State` é o `indexOfPlayer`, que guarda a informação sobre qual dos @jogador:pl pode realizar um @movimento no @turno atual, usualmente chamada de "vez do @jogador".
-É comum que @jogo_turno:pl alternem sequencialmente entre os @jogador:pl a cada @rodada, mas é possível para o projetista definir as regras do @jogo de forma a levar um @jogador a jogar mais ou menos vezes a depender do @estado.
-A @pontuacao dos @jogador:pl também depende de como os @turno:pl decorreram, o que é salvo no atributo `score`.
+Outra característica de um @estado é manter a disposição de peças nas @casa:pl do tabuleiro, o que é feito por meio do @vetor `slots`.
+Ele guarda objetos da classe `Slot` e deve ser indexado da mesma forma em todos os @estado:pl para que o programa consiga acessar os componentes de forma direta.
+O método concreto `getSlot` oferece uma facilidade ao desenvolvedor por implementar uma busca de uma @casa naquele vetor dado o seu índice.
+Por isso, a decisão de como organizar os objetos naquele @vetor deve ser pensada no mesmo momento em que o projetista implementa o método abstrato `getEncodedState`, o qual sintetiza todas as informações relevantes num conjunto de canais a ser fornecido para a @rn.
 
+Outro atributo armazenado em cada objeto da classe `State` é o `indexOfPlayer`, que guarda a informação sobre qual dos @jogador:pl pode realizar um @movimento no @turno atual, usualmente chamada de "vez do @jogador".
+A @pontuacao dos @jogador:pl também depende de como os @turno:pl decorreram durante a @partida, o que é salvo no atributo `score`.
 Para fins de organização do código-fonte e de abertura para expansão, criamos uma classe abstrata chamada `Score` para representar a @pontuacao de todos os @jogador:pl em um determinado @estado.
-Seu único atributo é o mapa `pointsOfEachPlayer`, que atribui um valor em pontos para cada jogador de acordo com o índice a esse atribuído pelo projetista.
+
+O único atributo dessa classe é o mapa `pointsOfEachPlayer`, que atribui um valor em pontos para cada jogador de acordo com o índice a esse atribuído pelo projetista.
 É relevante ressaltar que alguns @jogo_tabuleiro:pl, como o Xadrez, não utilizam sistema de @pontuacao, atribuindo apenas o resultado de vitória para um dos @jogador:pl.
 Nesses casos, recomendamos a implementação de forma que a quantidade de pontos permaneça como $0$ durante toda a partida e que, no @estado que representa fim de @jogo, esse marcador seja alterado para $1$ na entrada referente ao vencedor.
 
-Finalmente,
+Finalmente, a classe abstrata `Game` representa as regras do @jogo e guarda os conjuntos de dados imutáveis durante uma @partida.
+Para representá-lo em interfaces com o usuário, o atributo `name` requer que o projetista o nomeie.
+Então, no atributo `slots`, o projetista deve fornecer a lista de @casa:pl organizada previamente.
+O mesmo deve ser feito em relação ao argumento `moves` para a lista de @movimento:pl e em relação ao atributo `players` para a lista de @jogador:pl.
+A classe oferece métodos auxiliares que buscam por um @movimento ou por um @jogador em seu respectivo @vetor dado o seu índice.
 
-#todo_note(
-  note_from_gabriel[Falar que era possível dividir um turno em mais de um estado, como feito pelo bg.io, mas que preferimos colocar essa limitação],
-)
+Em relação aos métodos abstratos da classe `Game`, destacamos os `getQuantityOfRows`, `getQuantityOfColumns` e `getQuantityOfChannels` que respectivamente definem a a quantidade de linhas, de colunas e de canais da matriz que representa um @estado codificado.
+Esses dados devem ser definidos previamente e ser imutáveis para um @jogo porque eles são usados na construção da arquitetura da @resnet que orienta o @agint.
+
+Outro método que deve ser determinístico é o `constructInitialState`, em que o projetista descreve a forma como o @estado inicial da @partida é construído.
+Por exemplo, no Jogo da Velha, ele se iniciaria com um tabuleiro vazio.
+Já no Xadrez, as @casa:pl de um lado do tabuleiro e do outro devem estar preenchidas pelas devidas peças de cada um dos @jogador:pl.
+O comportamento dos quatro últimos métodos citados seria melhor representado por métodos estáticos.
+Entretanto, a linguagem @js não permite a definição desse tipo de método numa classe abstrata.
+
+Agora tratando dos métodos dinâmicos da classe `State`, destacamos a responsabilidade do método `getIndexesOfValidMoves`.
+Sua função é determinar, a partir de um certo @estado fornecido, quais são os @movimento:pl que o @jogador daquele turno poderá executar.
+Para fins de otimização de memória, seu retorno deve ser um conjunto sem repetição de índices referentes aos @movimento:pl válidos de acordo com a ordem dada pelo @vetor salvo na classe `Game`.
+Esse comportamento é obtido pela estrutura de dados `Set`, implementada na linguagem @js.
+Esse conjunto de jogadas válidas é utilizado, entre outros, para filtrar o @vetor de qualidades atribuídas pelo modelo de @resnet e apresentar apenas os adequados ao @agint.
+
+Com uma lógica de implementação similar, o método `getIndexOfNextPlayer` deve determinar de qual @jogador será a vez no próximo @turno.
+É comum que os @jogador:pl se alternem sequencialmente a cada @turno durante uma @rodada, mas é possível para o projetista definir as regras do @jogo de forma que um @jogador deixe de jogar por um @turno ou que tenha nele mais de um @movimento.
+O retorno desse método deve ser o índice do @jogador escolhido conforme o @vetor salvo na classe `Game`.
+
+Com o auxílio do último método, o projetista pode descrever as regras para atualizar um dado @estado.
+Uma vez que seguimos a convenção de que os objetos representantes de conceitos do @jogo devem ser imutáveis, o método `play`, responsável por essa atualização, retorna um novo objeto da classe `State`.
+Seus argumentos são o @estado do @turno atual e o índice do @movimento a ser realizado.
+O projetista deve codificar a lógica para descrever a lista de @casa:pl atualizada, incrementar ou decrementar as @pontuacao:pl e definir próximo @jogador.
+
+Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da @partida.
+O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
+Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
