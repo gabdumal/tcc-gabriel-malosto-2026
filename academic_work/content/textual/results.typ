@@ -255,9 +255,64 @@ Assim, não foi necessária nenhuma alteração na classe.
 Ao criar seus objetos, escolhemos arbitrariamente o nome @alice:long e o símbolo @alice:short para o @jogador de índice $0$ e o nome @bruno:long e símbolo @bruno:short para o @jogador de índice $1$.
 Tais valores não representam nomes reais de pessoas, mas servem apenas como facilitadores de distinção entre esses objetos para os desenvolvedores do protótipo.
 
-Em seguida, implementamos a classe `ConnectFourSlot`, que representa o conteúdo guardado em uma @casa do tabuleiro.
+Em seguida, implementamos a classe concreta `ConnectFourSlot`, que representa o conteúdo guardado em uma @casa do tabuleiro.
 O @ligue4 utiliza peças simples, cuja única diferença é a cor, que é associada a cada um dos @jogador:pl.
 Por isso, a única informação relevante para cada @casa é se ela está vazia ou, caso não esteja, qual @jogador a preencheu.
 Então, acrescentamos o atributo `indexOfOccupyingPlayer`, que pode ser assinalado com o índice $0$ caso o @jogador @alice tenha marcado uma peça, com o índice $1$ caso o @jogador @bruno o tenha feito, ou com o valor `null` se a @casa estiver vazia.
 Quanto aos objetos utilizados pelo experimento, criamos todas as $49$ @casa:pl, definindo o atributo de jogador ocupante como `null` e nomeando-as com a convenção "rXcY", em que os termos "X" representam o índice da linha que ela ocupa e o termo "Y" representa o da coluna.
 Para os testes de unidade, também criamos novos objetos preenchidos em diferentes combinações.
+
+Diferentemente do @jogo_velha, em que cada @movimento tem relação direta com uma única @casa do tabuleiro, o @ligue4 precisa calcular a posição onde marcar uma peça a depender de dois fatores: o índice da coluna escolhida pelo @jogador e a disposição de peças já marcadas nela.
+Percebe-se então que esse índice deve ser armazenado no atributo `indexOfColumnInWhichPlacePiece` da classe concreta `ConnectFourMove`.
+Implementamos também o método auxiliar `getIndexOfSlotInWhichPlacePiece`, responsável por acessar, de baixo para cima, cada @casa da coluna para encontrar a primeira que esteja vazia no @estado fornecido.
+Depois, criamos um objeto para cada uma das colunas, cujo índice guardamos no atributo discutido e cujos títulos e descrições foram dados em relação ao seu número ordinal.
+
+A verificação acerca da marcação dos formatos de linha foi implementada por funções no arquivo nomeado `ConnectFourShape`.
+A lógica desses utilitários é sintetizada no @code:get_index_of_player_who_is_occupying_shape, que determina se um formato iniciado em dada @casa está sendo ocupado por algum jogador e, caso esteja, qual é o seu índice.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    supplement: "Algoritmo",
+    caption: [Código-fonte simplificado da função `getIndexOfPlayerWhoIsOccupyingShape`.],
+    ```js
+    function getIndexOfPlayerWhoIsOccupyingShape(
+        indexOfFirstSlot: IndexOfSlot, shape: Shape
+    ): IndexOfPlayer | null {
+        const slots = getSlotsThatFormShape(indexOfFirstSlot, shape);
+        let indexOfPlayerOccupyingPreviousSlot = null
+
+        for (const slot of slots) {
+            const indexOfPlayer = slot.getIndexOfOccupyingPlayer();
+            if (indexOfPlayerOccupyingPreviousSlot === null) {
+                indexOfPlayerOccupyingPreviousSlot = indexOfPlayer;
+            } else if (indexOfPlayer !== indexOfPlayerOccupyingPreviousSlot) {
+                return null;
+            }
+            indexOfPlayerOccupyingPreviousSlot = indexOfPlayer;
+        }
+
+        return indexOfPlayerOccupyingPreviousSlot;
+    }
+    ```,
+  )<code:get_index_of_player_who_is_occupying_shape>],
+)
+
+Essa função é utilizada na classe concreta `ConnectFourScore`, que representa e oferece métodos para calcular a @pontuacao dos @jogador:pl.
+Quando seus objetos são inicializados, todos os @jogador:pl têm atribuído o valor de $0$ pontos.
+Por meio de seu método auxiliar `getUpdatedScore`, o programa verifica, para cada uma das @casa:pl, se houve marcação de qualquer uma das linhas de $4$ peças adjacentes.
+Caso positivo, a função retorna um objeto `Score` em que o @jogador vencedor é marcado com $1$ ponto.
+
+Então, a classe concreta `ConnectFourGame` utiliza todos os dados discutidos para representar as regras do @jogo.
+Ao criar seu objeto, o projetista deve fornecer as listas de @jogador:pl, @movimento:pl e @casa:pl previamente instanciadas.
+Um primeiro método de destaque dessa classe é o `getIndexesOfValidMoves`, cuja implementação recebe um @estado e retorna os índices das colunas do tabuleiro em que alguma de suas @casa:pl ainda esteja vazia.
+Após selecionar um @movimento, o @jogador deve executar o método `play`, que retorna o @estado atualizado com a marcação da peça na posição escolhida, além da eventual @pontuacao nova caso tenha sido uma jogada vitoriosa.
+Em seguida, o algoritmo utiliza o método `isFinal` para determinar se a @partida chegou ao fim com o novo @estado, o que ocorre quando todas as @casa:pl estão preenchidas ou quando um dos @jogador:pl marcou um ponto.
+Caso a @partida continue, o método `getIndexOfNextPlayer` é responsável por passar a vez para o oponente.
+
+Outra responsabilidade da implementação da classe `Game` é estabelecer a quantidade de linhas, de colunas e de canais do @estado codificado.
+Decidimos utilizar a mesma dimensão do tabuleiro ($6$ linhas e $7$ colunas) para a codificação e empilhar sobre ela $4$ canais de dados, inicializados com o valor $0$.
+Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seus valores definido como $1$ se a @casa correspondente por estiver marcada pelo jogador @alice.
+Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
+Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.

@@ -413,25 +413,49 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
         grid.cell()[
           #figure(
             caption: [Canal do @jogador "X".],
-            image(
-              width: 3.5cm,
-              "../../assets/images/state/red_channel.png",
+            block(
+              width: 4cm,
+              align(
+                center + horizon,
+                image(
+                  width: 3.5cm,
+                  "../../assets/images/state/red_channel.png",
+                ),
+              ),
             ),
           )<figure:canal_vermelho>
         ],
 
         grid.cell()[
-          #figure(caption: [Canal do @jogador "O".], image(
-            width: 3.5cm,
-            "../../assets/images/state/green_channel.png",
-          ))<figure:canal_verde>
+          #figure(
+            caption: [Canal do @jogador "O".],
+            block(
+              width: 4cm,
+              align(
+                center + horizon,
+                image(
+                  width: 3.5cm,
+                  "../../assets/images/state/green_channel.png",
+                ),
+              ),
+            ),
+          )<figure:canal_verde>
         ],
 
         grid.cell()[
-          #figure(caption: [Canal de @casa:pl vazias.], image(
-            width: 3.5cm,
-            "../../assets/images/state/blue_channel.png",
-          ))<figure:canal_azul>
+          #figure(
+            caption: [Canal de @casa:pl vazias.],
+            block(
+              width: 4cm,
+              align(
+                center + horizon,
+                image(
+                  width: 3.5cm,
+                  "../../assets/images/state/blue_channel.png",
+                ),
+              ),
+            ),
+          )<figure:canal_azul>
         ],
       ),
     ),
