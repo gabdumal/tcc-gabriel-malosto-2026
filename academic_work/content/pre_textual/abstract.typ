@@ -1,10 +1,10 @@
 // # Abstract. Resumo.
 // NBR 14724:2024 4.2.1.7, NBR 14724:2024 4.2.1.8
 
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
-#import "/template/academic_work/pages/pre_textual/abstract.typ": include_abstract
-#import "/template/common/components/note.typ": done_note, progress_note, todo_note
-#import "/template/common/packages.typ": glossarium
+#import "/academic_work/components/note.typ": note_from_gabriel, note_from_igor
+#import "/template/academic_work/pages.typ": include_abstract
+#import "/template/common/components.typ": done_note, progress_note, todo_note
+#import "/template/packages.typ": glossarium
 
 #let abstract_in_main_language = {
   (

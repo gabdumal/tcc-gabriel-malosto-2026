@@ -1,11 +1,162 @@
-#import "/academic_work/components/note.typ": note_from_gabriel
-#import "/template/common/components/equation.typ": equation
-#import "/template/common/components/figure.typ": describe_figure
-#import "/template/common/components/information_footer.typ": information_footer
-#import "/template/common/components/note.typ": todo_note
-#import "/template/common/packages.typ": equate, glossarium, subpar
+#import "../../components/note.typ": note_from_gabriel
+#import "/template/common/components.typ": describe_figure, equation, information_footer, todo_note
+#import "/template/packages.typ": equate, glossarium, subpar
 #import "/template/common/style/style.typ": spacing_for_smaller_text
 #import "/template/common/util.typ": text_in_english
+
+= Fundamentação teórica <chapter:fundamentacao>
+
+A fim de atingir os objetivos propostos, o presente trabalho investiga duas técnicas para a construção de @jogador:pl digitais autônomos para @jogo:pl de mesa, sendo elas a @mcts e as @resnet:pl, de acordo com os usos que o @alphazero faz delas.
+Este capítulo faz a revisão desses métodos, bem como elenca os trabalhos relacionados a uso de @agint:pl como ferramentas de @playtest.
+
+
+== #glossarium.Gls(long: true, "mcts") <section:mcts>
+
+O método de @mcts:long (@mcts:short) é um algoritmo de decisão em que cada nó de uma árvore representa dado @estado de um @jogo @kocsis:2006:bandit_based_mcts_planning@coulom:2006:efficient_selectivity_backup_operators.
+Além disso, cada nó guarda um contador de visitas e um marcador referente à qualidade daquele nó para a @partida.
+Os nós se relacionam por arestas entre nó pai e nó filho.
+Uma dada aresta representa um @movimento tomado por um @jogador, que conduz uma transição entre os @estado:pl representados.
+
+O nó raiz da árvore representa o primeiro @turno, em que está disposto o @estado inicial do @jogo.
+O @jogador inicial escolhe um dentre todos os @movimento:pl disponíveis, segundo as regras do @jogo.
+Essa jogada leva à criação de um novo @estado, que é colocado no segundo nível da árvore.
+Para o caso de um @jogo entre dois @jogador:pl, o segundo @jogador escolherá um dentre os @movimento:pl possíveis, o que levará novamente ao @turno do primeiro @jogador, posicionado no terceiro nível da árvore.
+
+Os níveis irão alternadamente representar as jogadas de cada um dos @jogador:pl.
+Essa estrutura possibilita ao algoritmo jogar como cada um dos @jogador:pl, de forma a explorar o próximo @movimento realizado pelo oponente.
+Dessa forma, o método busca prever a melhor ação futura segundo o histórico disponível a cada iteração @swiechowski:2022:monte_carlo_tree_search.
+
+O processo de @mcts:long tem o objetivo de encontrar as melhores sequências de jogadas, que conduzam a uma vitória do @jogador.
+Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-propagação, as quais são representas na @figure:ciclo_mcts @swiechowski:2022:monte_carlo_tree_search[p. 2504].
+
+#describe_figure(
+  placement: auto,
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2504]).],
+  sticky: true,
+  [#figure(
+    caption: [Ciclo da @mcts:long: suas quatro etapas são a seleção, a expansão, a simulação e a retro-propagação.],
+    image(
+      width: 70%,
+      "/academic_work/assets/images/mcts_cycle.png",
+    ),
+  )<figure:ciclo_mcts>],
+)
+
+A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folha a explorar, orientada por uma diretriz de busca.
+A mais frequentemente utilizada nas implementações de referência é chamada de @uct @kocsis:2006:bandit_based_mcts_planning.
+Essa política atribui contadores de visita e de vitória a cada nó.
+Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao (#glossarium.gls-custom("exploracao")) e @aproveitamento (#glossarium.gls-custom("aproveitamento")) do espaço de busca.
+A @eq:uct_teorica apresenta como escolher uma ação.
+
+#equation(
+  placement: auto,
+)[
+  $
+    m^* = max_(m in M(s))
+    (
+      Q(s, m) +
+      C * sqrt(
+        (ln(V(s)))
+        /
+        (V(s,m))
+      )
+    )
+  $ <eq:uct_teorica>
+
+  Na qual:
+  - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+  - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+  - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+  - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+  - $V(s,a)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+  - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+
+  #information_footer(
+    source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
+  )
+]
+
+Havendo sido selecionado um nó folha e não sendo este um nó que represente o fim do @jogo, então se executa a fase de expansão.
+Ela escolhe aleatoriamente um @movimento dentre aqueles disponíveis para o @estado atual segundo as regras do @jogo.
+Então o @estado resultante é criado, o qual é armazenado em um novo nó, definido como filho daquele que fora selecionado.
+
+A partir do nó criado, realiza-se a fase de simulação.
+Nela se sucedem @turno:pl entre os @jogador:pl, em que os @movimento:pl são aleatoriamente selecionados.
+A simulação se encerra quando é atingido um @estado que represente o fim da @partida.
+Uma função de @fitness (#glossarium.gls-custom("fitness")) quantifica a qualidade da @partida com o objetivo de aferir a influência do @movimento escolhido na @pontuacao dos @jogador:pl.
+
+Por fim, na fase de retro-propagação, os nós do ramo selecionado são atualizados com os dados gerados.
+O contador de visitas é aumentado em $1$, ao passo em que o marcador de qualidade é incrementado pelo valor de @fitness calculado.
+
+#todo_note(note_from_gabriel[Conferir as referências para citá-las mais frequentemente nesses parágrafos])
+
+Para executar o ciclo de busca, deve-se definir o número de iterações desejado.
+Cada iteração levará à expansão de um único novo nó.
+Ao final de todos os ciclos, os filhos diretos do nó raiz terão os marcadores de visitas e de qualidade atualizados segundo o andamento das partidas.
+A partir desses dados, uma função deve calcular a probabilidade de jogar cada um dos @movimento:pl.
+Um exemplo de função que utiliza somente o contador de visitas a cada ramo para calcular as probabilidades é demonstrado na @figure:probabilidades_mcts.
+Dispondo do @vetor de probabilidades, o método da seleção aleatória por roleta escolhe um dos @movimento:pl.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: [Neste exemplo, o cálculo das probabilidades dos três @movimento:pl válidos a partir do @estado inicial utilizou apenas a quantidade de visitas a cada um dos ramos iniciados pelo respectivo movimento.],
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
+  [#figure(
+    caption: [Uso da @mcts para calcular as probabilidades de jogar cada um dos @movimento:pl válidos a partir de um @estado inicial.],
+    image(
+      width: 50%,
+      "/academic_work/assets/images/mcts_probabilities.png",
+    ),
+  )<figure:probabilidades_mcts>],
+)
+
+#todo_note(
+  note_from_gabriel[Deve-se descrever nos resultados as experiências de utilizar diferentes funções de cálculo de probabilidade. Por exemplo, uma função que usa apenas a quantidade de visitas tende a ser boa na exploração da árvore, mas ela tende a nunca selecionar estados próximos do estado terminal, uma vez que não se pode visitar um estado terminal mais de uma vez],
+)
+
+A descrição do método de @mcts permite concluir que apresenta boas soluções para problemas nos quais o espaço de busca não pode ser percorrido completamente em tempo hábil.
+Isso se dá porque a política de seleção (@uct) privilegia os ramos com maior relevância e deixa de gastar recursos explorando aqueles que não tendem a gerar dados relevantes.
+O método também diminui a necessidade de uma heurística prévia sobre o domínio para operar, embora existam trabalhos que buscam defini-la para melhora o desempenho.
+
+
+== #glossarium.gls(capitalize: true, long: true, plural: true, "resnet") <section:resnet>
+
+As #glossarium.gls(long: true, plural: true, "cnn") são uma classe de @rn:pl profundas especialmente projetadas para processar dados estruturados em grade.
+Seus usos se destacam na áreas de visão computacional, sobretudo para o reconhecimento de imagens.
+Aprimorando as @rn:pl tradicionais totalmente conectadas, as @cnn:pl utilizam operações de convolução que permitem capturar padrões espaciais e hierárquicos nos dados de entrada sem definição prévia dos elementos de interesse @li:2022:survey_convolutional_neural_networks.
+
+A arquitetura típica de uma @cnn consiste em camadas convolucionais, camadas de @pooling (#glossarium.gls-custom("pooling")) e camadas totalmente conectadas.
+As camadas convolucionais aplicam filtros que detectam características locais, como bordas e texturas, enquanto as camadas de @pooling reduzem a dimensionalidade espacial (#text_in_english[downsampling]), preservando as informações mais relevantes @li:2022:survey_convolutional_neural_networks.
+Dessa forma, essa classe de @rn:pl balanceia a precisão dos detalhes com a rapidez de convergência pelo processo de #text_in_english[downsampling].
+
+Seguindo os trabalhos na área, #cite(form: "prose", <he:2015:deep_residual_learning>) introduziram as #glossarium.gls(long: true, plural: true, "resnet") como uma evolução importante das @cnn:pl.
+Seu principal objetivo era resolver o problema de degradação em redes muito profundas.
+Quando @rn:pl convencionais se tornam excessivamente profundas, sua acurácia tende a saturar e depois degradar, não devido ao @overfitting (#glossarium.gls-custom("overfitting")), mas à dificuldade de otimização @he:2015:deep_residual_learning.
+
+A inovação fundamental das @resnet:pl é a introdução de conexões residuais (#text_in_english[shortcut connections]), que permitem que o gradiente flua diretamente através da rede durante o treinamento @he:2015:deep_residual_learning@liang:2020:image_classification_resnet.
+
+Tais conexões são incorporadas em uma estrutura padrão chamada bloco residual, como se pode observar na @figure:residual_block.
+Em vez de aprender uma transformação direta $H(x)$, cada bloco aprende uma função residual $F(x) = H(x) - x$, onde $x$ é a entrada do bloco.
+A saída final do bloco é então $F(x) + x$, combinando a transformação aprendida com a entrada original @he:2015:deep_residual_learning.
+Essa estrutura permite que a rede aprenda transformações incrementais enquanto preserva informações da entrada @liang:2020:image_classification_resnet.
+
+#describe_figure(
+  placement: auto,
+  source: [#cite(<he:2015:deep_residual_learning>, form: "prose").],
+  sticky: true,
+  [#figure(
+    caption: [Estrutura de um bloco residual usado em uma @resnet.],
+    image(
+      width: 45%,
+      "/academic_work/assets/images/residual_block.webp",
+    ),
+  )<figure:residual_block>],
+)
+
+O formato de uma @resnet consiste de sucessivos blocos residuais, cada um composto por camadas convolucionais e normalizações, nas quais a função de ativação utilizada é a @relu, detalhada nos trabalhos de #cite(form: "prose", <nair:2010:rectified_linear_units>).
+Essa arquitetura possibilita a construção de redes extremamente profundas mantendo alta precisão e facilitando o treinamento @he:2015:deep_residual_learning.
+
 
 == Modelo #glossarium.gls("alphazero") <section:alphazero>
 
@@ -291,3 +442,32 @@ Caso necessário, outras informações podem ser representadas por meio da adiç
 Jogos de @jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
 Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
 Assim, um @estado do Jogo da Velha define todo esse canal como $0$ para o @jogador de símbolo `X`, e como $1$ para o @jogador de símbolo `O`.
+
+
+== Trabalhos relacionados <section:related_works>
+
+#cite(form: "prose", <zook:2019:automatic_playtesting>) reforçam as vantagens da substituição de @jogador:pl humanos em partes bem específicas do processo de @playtest.
+O principal destaque é no ajuste de parâmetros e de dificuldade quando os sistemas do @jogo já estão definidos mas se busca uma melhor experiência para o público alvo do @jogo.
+
+Ademais, os autores desenvolvem um estudo combinando técnicas de regressão e classificação para realizar uma aprendizagem ativa @cohn:1994:improving_generalization_with_active_learning de um @jogo #text_in_english[shoot'em up].
+A mecânica desse @jogo é bem definida, mas os parâmetros --- como velocidades de jogador, inimigos e tiros --- são ajustados através de testes exaustivos.
+Nesse trabalho, eles foram substituídos pelo @playtest automatizado.
+
+Nos trabalhos de #cite(form: "prose", <gudmundsson:2018:human_like_playtesting>)#cite(form: "prose", <zook:2019:automatic_playtesting>), a @mcts é utilizada junto a #glossarium.gls(plural: true, long: true, "cnn").
+Elas são treinadas através de um massivo conjunto de dados de @jogador:pl reais para prever a dificuldade de missões em @jogo:pl digitais #text_in_english[match-3] --- respectivamente #text_in_english[Candy Crush] e #text_in_english[Jewels Star Story].
+Neste tipo de @jogo, o @jogador deve mover figuras em uma grade, buscando colocar três ou mais figuras iguais adjacentes, que são retiradas do tabuleiro e podem gerar outras remoções em cadeia.
+Os trabalhos conseguem reproduzir comportamentos de @jogador:pl humanos e avaliar a dificuldade do nível proposto pelo #text_in_english[game designer] para uma melhor experiência de @jogo.
+
+Sob a ótica de comunicação dos dados gerados ao #text_in_english[designer], #cite(form: "prose", <wallner:2019:aggregated_visualization_playtesting_data>) desenvolveram um sistema para traçar, em @jogo:pl digitais de plataforma, a trajetória de dados de partidas colhidas diretamente sobre os mapas do @jogo.
+Ele integra dados de fontes diferentes em uma única visualização capaz de representar o #text_in_english[feedback] dado pelos @jogador:pl, medidas fisiológicas colhidas e a rastreabilidade dos @movimento:pl em @jogo.
+
+
+Os dados fisiológicos relacionados ao estímulo do @jogador são representados por mapas de cor ao dividir o espaço do @jogo em regiões; a movimentação por linhas que conectam essas regiões, com sua opacidade e espessura relacionadas à frequência; e os eventos discretos agrupados em ícones com o tamanho relacionado à sua frequência, relatando observações de comportamentos durante a partida.
+A abordagem diminui a poluição visual, compila um grande conjunto de de informações e provê um grande valor para avaliar um cenário em desenvolvimento.
+#todo_note(note_from_gabriel(margin: true)[Reescrever este parágrafo])
+
+Similarmente, #cite(form: "prose", <stahlke:2020:artificial_players_in_the_design_process>) investigam técnicas similares em @jogo:pl em três dimensões, apresentando os caminhos sobre superfícies para auxiliar no processo de projeto dos níveis.
+Registra-se também o uso de agentes para o projeto ou validação da economia interna dos @jogo:pl, mostrado nos resultados iniciais de #cite(form: "prose", <ranandeh:2023:beyond_equilibrium>).
+
+Apesar de os trabalhos de testes serem em sua maioria referentes a @jogo:pl digitais --- normalmente modelados sistemas em tempo contínuo ---, acreditamos que as mesmas técnicas podem ser aplicadas a @jogo:pl físicos e modelados por sistemas discretos.
+A escassez de trabalhos nesta indústria nos motiva a realizar esta investigação, buscando avaliar as limitações ou ajustes necessários para sua implantação.

@@ -5,7 +5,7 @@
   address, advisors, area_of_concentration, authors, custom_nature, degree, degree_topic, organization, program,
   subtitle, title, type_of_work, volume_number, year,
 )
-#import "/template/academic_work/pages/pre_textual/title_page.typ": include_title_page
+#import "/template/academic_work/pages.typ": include_title_page
 
 #include_title_page(
   address: address,

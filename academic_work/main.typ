@@ -1,10 +1,10 @@
 // # Academic Work. Trabalho Acadêmico.
 // NBR 14724:2024
 
-#import "./data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries, terms_entries
-#import "/template/common/components/source.typ": print_source_for_content_created_by_authors
-#import "/template/common/components/glossary.typ": glossary
-#import "/template/common/packages.typ": drafting, glossarium
+#import "data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries, terms_entries
+#import "/template/common/components.typ": print_source_for_content_created_by_authors
+#import "/template/common/components.typ": glossary
+#import "/template/packages.typ": drafting, glossarium
 #import "/template/template.typ": template
 
 // Glossary. Glossário.

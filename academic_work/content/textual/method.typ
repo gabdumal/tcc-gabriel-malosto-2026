@@ -1,6 +1,6 @@
-#import "/academic_work/components/note.typ": note_from_gabriel
-#import "/template/common/components/note.typ": progress_note, todo_note
-#import "/template/common/packages.typ": glossarium
+#import "../../components/note.typ": note_from_gabriel
+#import "/template/common/components.typ": progress_note, todo_note
+#import "/template/packages.typ": glossarium
 
 = Material e métodos <chapter:metodos>
 

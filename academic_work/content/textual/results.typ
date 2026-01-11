@@ -1,7 +1,6 @@
-#import "/academic_work/components/note.typ": note_from_gabriel
-#import "/template/common/components/figure.typ": describe_figure
-#import "/template/common/components/note.typ": todo_note
-#import "/template/common/packages.typ": glossarium
+#import "../../components/note.typ": note_from_gabriel
+#import "/template/common/components.typ": describe_figure, todo_note
+#import "/template/packages.typ": glossarium
 #import "/template/common/util.typ": text_in_english
 
 = Resultados <chapter:resultados>
@@ -198,3 +197,5 @@ O projetista deve codificar a lógica para descrever a lista de @casa:pl atualiz
 Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da @partida.
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
+
+== Search

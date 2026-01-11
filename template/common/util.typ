@@ -1,3 +1,6 @@
+// # Util. Utilitários.
+
+
 // ## Gender. Gênero.
 
 #let get_gender_ending(
@@ -21,6 +24,7 @@
   }
 }
 
+
 // ## Text in english. Texto em inglês.
 
 #let text_in_english = it => emph(
@@ -30,6 +34,7 @@
     it,
   ),
 )
+
 
 // ## Text. Texto.
 

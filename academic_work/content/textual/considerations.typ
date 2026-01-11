@@ -1,5 +1,5 @@
-#import "/academic_work/components/note.typ": note_from_gabriel
-#import "/template/common/components/note.typ": todo_note
+#import "../../components/note.typ": note_from_gabriel
+#import "/template/common/components.typ": todo_note
 
 = Considerações finais <chapter:consideracoes>
 

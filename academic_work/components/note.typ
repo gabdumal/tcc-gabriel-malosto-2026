@@ -1,6 +1,6 @@
 // Note. Nota.
 
-#import "/template/common/components/note.typ": note_from_person
+#import "/template/common/components.typ": note_from_person
 
 #let note_from_gabriel = (margin: false, it) => note_from_person(
   author: "Gabriel",

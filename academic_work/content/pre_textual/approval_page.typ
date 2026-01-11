@@ -5,7 +5,7 @@
   address, advisors, approval_date, area_of_concentration, authors, custom_nature, degree, degree_topic,
   examination_committee, organization, program, subtitle, title, type_of_work, volume_number, year,
 )
-#import "/template/academic_work/pages/pre_textual/approval_page.typ": include_approval_page
+#import "/template/academic_work/pages.typ": include_approval_page
 
 #include_approval_page(
   address: address,

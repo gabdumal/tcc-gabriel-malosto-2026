@@ -5,10 +5,7 @@
   address, advisors, authors, degree, institution, organization, program, subtitle, title, type_of_work, volume_number,
   year,
 )
-#import "/template/academic_work/pages/pre_textual/cataloging_in_publication.typ": include_cataloging_in_publication
-#import "/template/academic_work/pages/pre_textual/custom_cataloging_in_publication.typ": (
-  include_custom_cataloging_in_publication,
-)
+#import "/template/academic_work/pages.typ": include_cataloging_in_publication, include_custom_cataloging_in_publication
 #import "abstract.typ": abstract_in_main_language
 
 #let keywords_in_main_language = abstract_in_main_language.keywords

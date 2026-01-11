@@ -4,7 +4,7 @@
 #import "../../data/main.typ": (
   address, authors, institution, organization, program, subtitle, title, volume_number, year,
 )
-#import "/template/academic_work/pages/external/cover.typ": include_cover
+#import "/template/academic_work/pages.typ": include_cover
 
 #include_cover(
   address: address,

@@ -1,7 +1,7 @@
 #import "../../components/note.typ": note_from_gabriel, note_from_igor
-#import "/template/common/components/note.typ": progress_note, todo_note
-#import "/template/common/packages.typ": glossarium
+#import "/template/common/components.typ": progress_note, todo_note
 #import "/template/common/util.typ": text_in_english
+#import "/template/packages.typ": glossarium
 
 = Introdução <chapter:introducao>
 

@@ -1,18 +1,13 @@
-#import "./common/components/bibliography.typ": format_bibliography
-#import "./common/components/footnote.typ": format_footnote_entry
-#import "./common/components/heading.typ": format_heading
-#import "./common/components/note.typ": set_default_notes
-#import "./common/components/page.typ": (
-  consider_only_odd_pages as consider_only_odd_pages_state, format_header, should_count_this_page,
-  should_number_this_page,
+#import "common/components.typ": (
+  consider_only_odd_pages as consider_only_odd_pages_state, format_bibliography, format_footnote_entry, format_header,
+  format_heading, format_quote, set_default_notes,
 )
-#import "./common/components/quote.typ": format_quote
-#import "./common/packages.typ": drafting, subpar
-#import "./common/style/style.typ": (
+#import "common/style/style.typ": (
   font_family_math, font_family_mono, font_family_sans, font_family_serif, font_size_for_common_text,
   font_size_for_smaller_text, leading_for_common_text, margin_bottom, margin_end, margin_start, margin_top, paper_size,
   simple_leading_for_smaller_text, simple_spacing_for_smaller_text, spacing_for_common_text,
 )
+#import "packages.typ": drafting, subpar
 
 #let template(
   doc,

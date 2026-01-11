@@ -1,7 +1,7 @@
 // # Epigraph. Epígrafe.
 // NBR 14724:2024 4.2.1.6
 
-#import "/template/common/pages/epigraph.typ": include_epigraph
+#import "/template/common/pages.typ": include_epigraph
 
 #include_epigraph(
   quote(
