@@ -73,11 +73,11 @@
   // Secondary (and following) headings should be separated by a dot after the number
   set heading(numbering: "1.1")
 
-  show heading.where(level: 1): set heading(supplement: [capítulo])
-  show heading.where(level: 2): set heading(supplement: [seção])
-  show heading.where(level: 3): set heading(supplement: [subseção])
-  show heading.where(level: 4): set heading(supplement: [subsubseção])
-  show heading.where(level: 5): set heading(supplement: [subsubsubseção])
+  show heading.where(level: 1): set heading(supplement: [Capítulo])
+  show heading.where(level: 2): set heading(supplement: [Seção])
+  show heading.where(level: 3): set heading(supplement: [Subseção])
+  show heading.where(level: 4): set heading(supplement: [Subsubseção])
+  show heading.where(level: 5): set heading(supplement: [Subsubsubseção])
 
   // ### Format. Formatação.
   show heading: it => {

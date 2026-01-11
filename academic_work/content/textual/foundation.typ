@@ -1,5 +1,5 @@
-#import "../../components/note.typ": note_from_gabriel
-#import "/template/common/components.typ": describe_figure, equation, information_footer, todo_note
+#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "/template/common/components.typ": describe_figure, done_note, equation, information_footer, todo_note
 #import "/template/packages.typ": equate, glossarium, subpar
 #import "/template/common/style/style.typ": spacing_for_smaller_text
 #import "/template/common/util.typ": text_in_english
@@ -42,11 +42,15 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
   )<figure:ciclo_mcts>],
 )
 
+#done_note[#note_from_igor[É bom colocar aqui a expansão do UCT para não obrigar o leitor a ir no glossário ter que ler o termo em inglês de onde a sigla veio]]
+
 A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folha a explorar, orientada por uma diretriz de busca.
-A mais frequentemente utilizada nas implementações de referência é chamada de @uct @kocsis:2006:bandit_based_mcts_planning.
+A mais frequentemente utilizada nas implementações de referência é chamada de @uct --- ou #glossarium.gls-custom("uct"), em inglês --- @kocsis:2006:bandit_based_mcts_planning.
 Essa política atribui contadores de visita e de vitória a cada nó.
 Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao (#glossarium.gls-custom("exploracao")) e @aproveitamento (#glossarium.gls-custom("aproveitamento")) do espaço de busca.
-A @eq:uct_teorica apresenta como escolher uma ação.
+A @eq:uct_teorica apresenta essa diretriz utilizada para  escolher uma ação, que será detalhada no restante desta seção.
+
+#todo_note[#note_from_igor[Tive que alterar a frase final  do parágrafo acima com a referência à Equação 1 porque ficou parecendo que ela chegou muito cedo e ficou no ar. Pode ser interessante reforçar a sua relação com os próximos parágrafos fazendo menções a ela novamente.]]
 
 #equation(
   placement: auto,
@@ -118,6 +122,7 @@ Dispondo do @vetor de probabilidades, o método da seleção aleatória por role
 A descrição do método de @mcts permite concluir que apresenta boas soluções para problemas nos quais o espaço de busca não pode ser percorrido completamente em tempo hábil.
 Isso se dá porque a política de seleção (@uct) privilegia os ramos com maior relevância e deixa de gastar recursos explorando aqueles que não tendem a gerar dados relevantes.
 O método também diminui a necessidade de uma heurística prévia sobre o domínio para operar, embora existam trabalhos que buscam defini-la para melhora o desempenho.
+#todo_note[#note_from_igor[Se menciona trabalhos que trazem a especialização do MCTS, tem que ter referência para eles.]]
 
 
 == #glossarium.gls(capitalize: true, long: true, plural: true, "resnet") <section:resnet>
@@ -183,8 +188,6 @@ Esse processo de lapidação dos @peso:pl e @vies:pl por meio de @selfplay é co
 O método foi então generalizado para permitir a criação de modelos capazes de aprender qualquer @jogo de tabuleiro dadas apenas as suas regras, ao que se denominou @alphazero.
 Os principais destaques foram os @jogo:pl Go, Shogi e Xadrez @silver:2018:general_reinforcement_learning_algorithm.
 
-#todo_note(note_from_gabriel[Citar referências para os parágrafos seguintes])
-
 Um dos objetivos do método @alphazero é reduzir o custo computacional de @agint:pl que atuam como @jogador:pl.
 Essa preocupação se torna mais evidente ao considerar a complexidade das árvores de busca para jogos que apresentam muitos @movimento:pl.
 Com esse foco, os pesquisadores propuseram substituir as buscas por modelos de @ia:long baseados em @rn:pl.
@@ -225,31 +228,24 @@ O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador "X" que 
 O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[policy head]
 #footnote[
   Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
-  No algoritmo, isso seria realizado por uma função de @softmax.
+  O retorno da @rn na verdade é composto por valores reais não normalizados.
+  No algoritmo, eles devem passar por uma função de @softmax para poderem ser sorteados pelo método da roleta.
 ].
 As @casa:pl já preenchidas por peças têm qualidade $0$ atribuída, uma vez que nelas não são permitidos mais @movimento:pl.
 A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador "X".
 As demais casas apresentam qualidades pouco significativas.
 Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela #text_in_english[value head].
-Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
+Uma vez que o @estado analisado está a um @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
+
+
+#done_note[#note_from_igor[A série de notas na Figura 5 está exagerada. Essa informação deveria vir no texto em parágrafo próprio e ali um compilado.]]
 
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: (
-    [
-      O @estado do @jogo_velha elencado, ao ser informado para a @resnet, deve ser convertido para a representação em canais.
-    ],
-    [
-      As predições de qualidade de cada @movimento são representadas como uma matriz de probabilidades para facilitar a visualização.
-      Na verdade, o resultado gerado pelo modelo é um vetor de números reais, em que cada posição é referente a um @movimento na lista de @movimento:pl previamente definida pelo @jogo.
-      Esses valores devem passar por uma função de @softmax para se tornarem probabilidades.
-    ],
-    [
-      A estimativa de qualidade da @partida é mostrada como uma probabilidade para facilitar a visualização.
-      Na verdade, o retorno se trata de um escalar similar aos retornados pela predição de qualidades de @movimento:pl.
-    ],
-  ),
+  note: [
+    As predições de qualidade são representadas como probabilidades para facilitar a visualização, mas seus valores são números reais sem normalização.
+  ],
   [#figure(
     caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador "X".],
     image(
@@ -260,6 +256,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
 )
 
 #todo_note(note_from_gabriel[Verificar se de fato estamos usando regressão linear])
+#todo_note[#note_from_igor[Creio que sim, pois não é um caso de classificação.]]
 
 O processo de treinamento de um modelo é feito em duas fases.
 A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
@@ -463,7 +460,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 )
 
 Caso necessário, outras informações podem ser representadas por meio da adição de novos canais à pilha.
-Jogos de @jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
+@Jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
 Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
 Assim, um @estado do @jogo_velha define todo esse canal como $0$ para o @jogador de símbolo "X", e como $1$ para o @jogador de símbolo "O".
 

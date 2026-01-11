@@ -1,19 +1,23 @@
-#import "../../components/note.typ": note_from_gabriel
+#import "../../components/note.typ": note_from_gabriel, note_from_igor
 #import "/template/common/components.typ": describe_figure, todo_note
 #import "/template/packages.typ": glossarium
 #import "/template/common/util.typ": text_in_english
 
-= Resultados <chapter:resultados>
+= Desenvolvimento <chapter:resultados>
 
-Este trabalho é precursor no desenvolvimento do sistema @apts, realizado por meio de código-livre e publicado em um repositório público @malosto:2026:apts.
+Este capítulo descreve o desenvolvimento do sistema @apts, realizado como um projeto de código-livre em um repositório público
+#footnote[
+  Acesso em: #link("https://github.com/ufjf-gamelab/apts").
+]
+@malosto:2026:apts.
 Essa aplicação permite a uma pessoa projetista de um @jogo_tabuleiro descrever as regras de um protótipo de @jogo.
-Então, o programa oferece métodos para gerar e treinar modelos de @ia:long que atuam como @agint:pl para simular @partida:pl.
-
-As simulações geram conjuntos de dados acerca de quais @movimento:pl tomados levam a melhores resultados.
+Então, o programa oferece métodos para gerar e treinar modelos de @ia:long que atuam como @agint:pl para simular @partida:pl. As simulações geram conjuntos de dados acerca de quais @movimento:pl tomados levam a melhores resultados.
 Espera-se que, por meio deles, o projetista possa gerar informações estatísticas acerca das regras implementadas.
 Isso tem o objetivo de diminuir o esforço humano nas etapas de @playtest, sobretudo aquelas que envolvem testes de estresse e balanceamento, em que a experiência do jogador não é a variável principal.
 
 == Ambiente de execução
+
+#todo_note[#note_from_igor[esta parte toda está mais para material]]
 
 Os autores têm a expectativa de que o @apts possa ser acessado por meio de programas navegadores da internet, dispondo de uma interface de usuário satisfatória para usuários não familiarizados com programação.
 Entretanto, concluiu-se que seria vantajoso desenvolver scripts de teste de software para verificar sua qualidade durante as versões iniciais de desenvolvimento.
@@ -26,6 +30,8 @@ Essa linguagem também pode ser utilizada em um ambiente de execução de linha 
 Ele utiliza o motor de @js V8, o que garante o desempenho para programas. Apesar de rodar em uma só @thread, o ciclo de processamento trata eventos assíncronas por meio de operações primitivas @node:2025:introduction.
 
 == Ambiente de desenvolvimento
+
+#todo_note[#note_from_igor[esta parte toda está mais para material]]
 
 O ambiente de desenvolvimento do projeto foi configurado utilizando o gerenciador de pacotes @pnpm
 #footnote[Acesso em: #link("https://pnpm.io/motivation").].
@@ -52,6 +58,8 @@ Finalmente, utilizamos a biblioteca de testes de unidade @vitest
 Ela permite definir casos de teste e executá-los para entradas variadas, o que se provou útil sobretudo para garantir que as regras dos @jogo:pl modelados de fato levem às alterações esperadas nos @estado:pl.
 
 == Arquitetura do projeto
+
+#todo_note[#note_from_igor[esta parte toda ótima para ser a primeira seção do cap 4. Não precisa mencionar o turborepo se as duas forem enviadas para o material ]]
 
 O projeto da aplicação desenvolvida a divide em cinco módulos --- ou pacotes, segundo a terminologia da ferramenta @turborepo ---, quais sejam: `core`, `game`, `search`, `games` e `interface`.
 A @figure:modulos representa as relações de dependência entre tais módulos e com os pacotes externos `ts-graphviz` e `tensorflow`.

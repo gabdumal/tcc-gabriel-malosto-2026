@@ -25,6 +25,7 @@
     short: "UCT",
     long: "limite superior de confiança aplicado a árvores",
     longplural: "limites superiores de confiança aplicados a árvores",
+    custom: text_in_english[Upper Confidence bounds applied to Trees],
     description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e em um termo de confiança (UCB).],
     group: "Computação",
   ),

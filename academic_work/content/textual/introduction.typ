@@ -1,5 +1,5 @@
 #import "../../components/note.typ": note_from_gabriel, note_from_igor
-#import "/template/common/components.typ": progress_note, todo_note
+#import "/template/common/components.typ": done_note, progress_note, todo_note
 #import "/template/common/util.typ": text_in_english
 #import "/template/packages.typ": glossarium
 
@@ -30,7 +30,7 @@ que registra mais de 140 mil itens entre @jogo:pl, suas reimplementações e sua
 Uma grande parcela desses @jogo:pl se destaca pelo seu perfil tático ou estratégico durante as @partida:pl, com uma série de reações em cadeia oriundas dos @movimento:pl escolhidos pelas decisões dos @jogador:pl, ocasionando diversas dinâmicas sociais e complexidade emergente.
 Estes @jogo:pl são também conhecidos como #text_in_english[designer's games], ou @jogo:pl autorais, por trazerem o nome do autor na capa.
 Eles são fruto de uma organização de criadores que proporciona uma série de benefícios para um mercado baseado em novidades @woods:2012:eurogame_design_culture_play.
-Anualmente, acima de 1000 novos @jogo:pl são apresentados nas maiores convenções do meio, contando de reimpressões, reedições expansões de conteúdo e jogabilidade @boardgamegeek:2025:spiel25_preview.
+Anualmente, acima de 1000 novos @jogo:pl são apresentados nas maiores convenções do meio, além de reimpressões, reedições expansões de conteúdo e jogabilidade @boardgamegeek:2025:spiel25_preview.
 
 #progress_note[#note_from_gabriel[Escrever sobre @playtest]]
 
@@ -88,6 +88,12 @@ Etapas relevantes desse processo incluem a geração de massa de dados sobre as 
 Tem-se o foco sobre os métodos de @ia, @mcts e @resnet, que se mostram promissores para orientar @agint:pl em @partida:pl simuladas de @jogo_tabuleiro:pl.
 
 #progress_note[#note_from_gabriel[Escrever sobre a estrutura]]
+
+
+#done_note[#note_from_igor[#underline[C]apitulo 1, #underline[C]apítulo 2...]]
+#done_note(
+  note_from_gabriel[A atualização mais nova da ABNT pede que as referências a capítulos, seções, figuras, etc. sejam feitas em letra minúscula, mas eu não consegui garantir isso pra todos os tipos de referências. É mais fácil padronizar em letra maiúscula, mas estaria desrespeitando a norma.],
+)
 
 O presente trabalho está organizado em seis capítulos.
 Este #ref(<chapter:introducao>), de Introdução, apresenta o tema geral e a situação de mercado, delimita o problema de pesquisa e descreve a contribuição esperada.
