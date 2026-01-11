@@ -64,7 +64,7 @@ A @figure:modulos representa as relações de dependência entre tais módulos e
     caption: [Dependências entre os módulos do sistema e com pacotes externos.],
     image(
       width: 55%,
-      "/academic_work/assets/images/modules_diagram.png",
+      "../../assets/images/uml/modules_diagram.png",
     ),
   )<figure:modulos>],
 )
@@ -77,57 +77,67 @@ Também estão disponíveis utilitários para a formatação de dados de tipos c
 Além disso, o módulo gerencia a codificação de dados para o formato de @json e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar o histórico de @partida:pl para o treinamento de modelos.
 
 A fim de facilitar a compreensão de conceitos comuns ao domínio da aplicação, definimos por meio do @ts alguns tipos derivados, utilizados por todo o projeto.
-Os principais estão dispostos na @figure:diagrama_tipos.
-Ela também explicita os tipos concretos `string` e `number` da linguagem @js, que guardam, respectivamente, texto e números reais.
+Os principais estão dispostos na @figure:diagrama_pacote_core_tipos.
+Ela explicita os tipos concretos `string` e `number` da linguagem @js, que guardam, respectivamente, texto e números reais.
 O tipo `Char` foi um @alias (#glossarium.gls-custom("alias")) dado para campos de texto de apenas um caractere, como a marcação de uma peça em uma @casa do tabuleiro.
 Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchido apenas por um número inteiro, como por exemplo na indexação de dados em @vetor:pl.
-Essa lógica foi tão comumente utilizada na elaboração do sistema, que decidimos criar @alias:pl para a indexação de @movimento:pl (moves), @casa:pl (slots) e @jogador:pl (players).
-
-Outro dado relevante é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
-Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do @js.
-No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
-Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
 
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: (
-    [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
-    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores.],
-  ),
+  note: [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
   [#figure(
-    caption: [Tipos de dados comuns utilizados pelo projeto.],
+    caption: [Tipos de dados comuns definidos pelo pacote `core`.],
     image(
       width: 65%,
-      "/academic_work/assets/images/types_diagram.png",
+      "../../assets/images/uml/core/types_diagram_of_package_core.png",
     ),
-  )<figure:diagrama_tipos>],
+  )<figure:diagrama_pacote_core_tipos>],
 )
 
 === Componentes fundamentais de um @jogo
 
 Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
-Todos eles foram implementados por meio de classes abstratas, considerando que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
-Seus principais atributos e métodos, além das relações entre si, podem ser vistos na @figure:diagrama_classes_pacote_game.
+Primeiramente, definimos tipos úteis para esse pacote e para seus dependentes, como apresentado na @figure:diagrama_pacote_game_tipos.
+Uma vez que utilizamos @vetor:pl extensamente pelo projeto, decidimos criar @alias:pl para nomear os índices de @movimento:pl (moves), de @casa:pl (slots) e de @jogador:pl (players).
 
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: (
-    [Os métodos abstratos são representados em itálico.],
-    [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
-  ),
+  note: [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
   [#figure(
-    caption: [Dependências entre os módulos do sistema e com pacotes externos.],
+    caption: [Tipos de dados comuns definidos pelo pacote `game`.],
+    image(
+      width: 65%,
+      "../../assets/images/uml/game/types_diagram_of_package_game.png",
+    ),
+  )<figure:diagrama_pacote_game_tipos>],
+)
+
+Outro dado comumente referenciado é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
+Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do @js.
+No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
+Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
+
+Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo.
+O fizemos por meio de classes abstratas, uma vez que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
+Os principais atributos e métodos de cada classe, além das relações entre elas, podem ser vistos na @figure:diagrama_classes_pacote_game.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
+  [#figure(
+    caption: [Classes definidas pelo pacote `game`.],
     image(
       width: 100%,
-      "/academic_work/assets/images/simplified_class_diagram_of_package_game.png",
+      "../../assets/images/uml/game/simplified_class_diagram_of_package_game.png",
     ),
   )<figure:diagrama_classes_pacote_game>],
 )
 
 A classe mais simples é a que representa uma @casa do tabuleiro, chamada de `Slot`.
-Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no Jogo da Velha ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
+Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no @jogo_velha ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
   Descrição disponível em: #link("https://boardgamegeek.com/boardgame/13230/gobblet-gobblers").
 ] --- ou até mesmo uma carta específica dentro de uma mão #footnote[
   Apesar de termos determinado como limite do escopo desta pesquisa a investigação de @jogo_tabuleiro:pl, tentamos manter a implementação genérica para representar jogos de cartas futuramente.
@@ -174,7 +184,7 @@ Em relação aos métodos abstratos da classe `Game`, destacamos os `getQuantity
 Esses dados devem ser definidos previamente e ser imutáveis para um @jogo porque eles são usados na construção da arquitetura da @resnet que orienta o @agint.
 
 Outro método que deve ser determinístico é o `constructInitialState`, em que o projetista descreve a forma como o @estado inicial da @partida é construído.
-Por exemplo, no Jogo da Velha, ele se iniciaria com um tabuleiro vazio.
+Por exemplo, no @jogo_velha, ele se iniciaria com um tabuleiro vazio.
 Já no Xadrez, as @casa:pl de um lado do tabuleiro e do outro devem estar preenchidas pelas devidas peças de cada um dos @jogador:pl.
 O comportamento dos quatro últimos métodos citados seria melhor representado por métodos estáticos.
 Entretanto, a linguagem @js não permite a definição desse tipo de método numa classe abstrata.
@@ -198,4 +208,8 @@ Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da 
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
 
-== Search
+== Implementação de um jogo
+
+A fim de executar o experimento desta pesquisa, implementamos os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
+Utilizamos o @ligue4 para realizar o experimento porque ele é um jogo de informação completa entre dois jogadores que apresenta um tamanho de tabuleiro razoável e uma quantidade pequena de @movimento:pl possíveis.
+Descrevemos neste capítulo sua implementação.

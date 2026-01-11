@@ -37,7 +37,7 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
     caption: [Ciclo da @mcts:long: suas quatro etapas são a seleção, a expansão, a simulação e a retro-propagação.],
     image(
       width: 70%,
-      "/academic_work/assets/images/mcts_cycle.png",
+      "../../assets/images/mcts/mcts_cycle.png",
     ),
   )<figure:ciclo_mcts>],
 )
@@ -106,7 +106,7 @@ Dispondo do @vetor de probabilidades, o método da seleção aleatória por role
     caption: [Uso da @mcts para calcular as probabilidades de jogar cada um dos @movimento:pl válidos a partir de um @estado inicial.],
     image(
       width: 50%,
-      "/academic_work/assets/images/mcts_probabilities.png",
+      "../../assets/images/mcts/mcts_probabilities.png",
     ),
   )<figure:probabilidades_mcts>],
 )
@@ -149,7 +149,7 @@ Essa estrutura permite que a rede aprenda transformações incrementais enquanto
     caption: [Estrutura de um bloco residual usado em uma @resnet.],
     image(
       width: 45%,
-      "/academic_work/assets/images/residual_block.webp",
+      "../../assets/images/resnet/residual_block.webp",
     ),
   )<figure:residual_block>],
 )
@@ -205,7 +205,7 @@ Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
     caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma #text_in_english[backbone] e camadas de saída #text_in_english[policy head] e #text_in_english[value head].],
     image(
       width: 80%,
-      "/academic_work/assets/images/resnet.png",
+      "../../assets/images/resnet/resnet.png",
     ),
   )<figure:resnet>],
 )
@@ -221,7 +221,7 @@ Seu retorno é um valor escalar que representa a estimativa da qualidade do resu
 Esse valor será maior para quando houver uma expectativa de vitória e menor para quando a expectativa for de derrota.
 
 Esses retornos são exemplificados pela @figure:predicao, que utiliza valores fictícios.
-O exemplo considera um @estado vantajoso no Jogo da Velha para o @jogador `X` que será o próximo a jogar.
+O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador `X` que será o próximo a jogar.
 O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[policy head]
 #footnote[
   Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
@@ -238,7 +238,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
   sticky: true,
   note: (
     [
-      O @estado do Jogo da Velha elencado, ao ser informado para a @resnet, deve ser convertido para a representação em canais.
+      O @estado do @jogo_velha elencado, ao ser informado para a @resnet, deve ser convertido para a representação em canais.
     ],
     [
       As predições de qualidade de cada @movimento são representadas como uma matriz de probabilidades para facilitar a visualização.
@@ -254,7 +254,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
     caption: [Predição de um modelo de @resnet para as qualidades estimadas de cada @movimento do @jogo e para a expectativa de qualidade da @partida a partir de um @estado do tabuleiro no @turno do @jogador `X`.],
     image(
       width: 80%,
-      "/academic_work/assets/images/prediction.png",
+      "../../assets/images/resnet/prediction.png",
     ),
   )<figure:predicao>],
 )
@@ -264,7 +264,7 @@ Uma vez que o @estado analisado está a $1$ @movimento de levar à vitória, a p
 O processo de treinamento de um modelo é feito em duas fases.
 A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
 Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
-No caso de jogos sem cálculo de @pontuacao, como o Jogo da Velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
+No caso de jogos sem cálculo de @pontuacao, como o @jogo_velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
 
 Segue-se então a fase de alinhamento do modelo, que utiliza @aprendizado_maquina (#glossarium.gls-custom("aprendizado_maquina")) para ajustar os @peso:pl e @vies:pl.
 Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento por regressão linear.
@@ -278,7 +278,7 @@ Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:t
     caption: [Ciclo de treinamento de um modelo do @alphazero, constituído das fases de geração da memória de @partida:pl e de alinhamento do modelo de @resnet.],
     image(
       width: 50%,
-      "/academic_work/assets/images/train.png",
+      "../../assets/images/resnet/train.png",
     ),
   )<figure:treinamento>],
 )
@@ -308,7 +308,7 @@ Então, a retro-propagação é feita a partir desse nó terminal com base na qu
     caption: [Ciclo da @mcts:long guiada por @agint:pl, conforme adaptação do @alphazero: suas quatro etapas são a seleção, a predição, a expansão e a retro-propagação.],
     image(
       width: 70%,
-      "/academic_work/assets/images/agent_guided_mcts_cycle.png",
+      "../../assets/images/mcts/agent_guided_mcts_cycle.png",
     ),
   )<figure:agent_guided_mcts_cycle>],
 )
@@ -348,7 +348,7 @@ Já como componente de @exploracao, a política alinha dois fatores: como numera
 É relevante considerar como a @mcts utilizada pelo @alphazero representa um @estado do jogo.
 Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.
 O tabuleiro é salvo atribuindo um número a cada um dos @jogador:pl, que pode ser indexado pela lista de jogadores definida previamente pelo #text_in_english[designer] do @jogo.
-A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do Jogo da Velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
+A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do @jogo_velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
 O primeiro @jogador, de símbolo `X`, é representado pelo número $0$, ao passo que o segundo @jogador, de símbolo `O`, é representado pelo número $1$.
 As posições sem peças são definidas com o valor `null`.
 Outra informação armazenada no @estado é um marcador de qual @jogador deve jogar no @turno atual.
@@ -362,7 +362,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
       sticky: true,
       subpar.super(
         label: <figure:tabuleiro_jogo_da_velha_e_estado>,
-        caption: [Tabuleiro do Jogo da Velha e sua representação numérica.],
+        caption: [Tabuleiro do @jogo_velha e sua representação numérica.],
         grid(
           columns: (1fr, 1fr),
           row-gutter: spacing_for_smaller_text,
@@ -370,18 +370,18 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
 
           grid.cell()[
             #figure(
-              caption: [Tabuleiro do Jogo da Velha.],
+              caption: [Tabuleiro do @jogo_velha.],
               image(
                 width: 3.5cm,
-                "/academic_work/assets/images/tabletop.png",
+                "../../assets/images/state/tabletop.png",
               ),
             )<figure:tabuleiro_jogo_da_velha>
           ],
 
           grid.cell()[
-            #figure(caption: [Tabuleiro do Jogo da Velha representado numericamente.], image(
+            #figure(caption: [Tabuleiro do @jogo_velha representado numericamente.], image(
               width: 3.5cm,
-              "/academic_work/assets/images/state.png",
+              "../../assets/images/state/state.png",
             ))<figure:estado_jogo_da_velha>
           ],
         ),
@@ -393,7 +393,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
 A entrada da @resnet utilizada pelo @agint requer que o @estado seja codificado como uma pilha de canais que contêm apenas valores binários ($0$ ou $1$).
 Essa técnica busca aproximar a representação do tabuleiro daquela usada por imagens RGB, comumente fornecidas como entrada a @resnet:pl de reconhecimento de imagens.
 
-No exemplo do Jogo da Velha, o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
+No exemplo do @jogo_velha, o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
 O primeiro, associado à cor vermelha, tem uma posição ativada quando o primeiro @jogador (representado pelo símbolo `X`) posiciona nela uma peça, como mostrado na @figure:canal_vermelho.
 Similarmente, o segundo canal, associado à cor verde, representa as @casa:pl marcadas pelo segundo @jogador (representado pelo símbolo `O`), como mostrado na @figure:canal_verde.
 Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à cor azul, como mostrado na @figure:canal_azul.
@@ -404,7 +404,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
     sticky: true,
     subpar.super(
       label: <figure:estado_codificado>,
-      caption: [Estado do Jogo da Velha representado como canais binários.],
+      caption: [Estado do @jogo_velha representado como canais binários.],
       grid(
         columns: (1fr, 1fr, 1fr),
         row-gutter: spacing_for_smaller_text,
@@ -415,7 +415,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
             caption: [Canal do @jogador `X`.],
             image(
               width: 3.5cm,
-              "/academic_work/assets/images/red_channel.png",
+              "../../assets/images/state/red_channel.png",
             ),
           )<figure:canal_vermelho>
         ],
@@ -423,14 +423,14 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
         grid.cell()[
           #figure(caption: [Canal do @jogador `O`.], image(
             width: 3.5cm,
-            "/academic_work/assets/images/green_channel.png",
+            "../../assets/images/state/green_channel.png",
           ))<figure:canal_verde>
         ],
 
         grid.cell()[
           #figure(caption: [Canal de @casa:pl vazias.], image(
             width: 3.5cm,
-            "/academic_work/assets/images/blue_channel.png",
+            "../../assets/images/state/blue_channel.png",
           ))<figure:canal_azul>
         ],
       ),
@@ -441,7 +441,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 Caso necessário, outras informações podem ser representadas por meio da adição de novos canais à pilha.
 Jogos de @jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
 Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
-Assim, um @estado do Jogo da Velha define todo esse canal como $0$ para o @jogador de símbolo `X`, e como $1$ para o @jogador de símbolo `O`.
+Assim, um @estado do @jogo_velha define todo esse canal como $0$ para o @jogador de símbolo `X`, e como $1$ para o @jogador de símbolo `O`.
 
 
 == Trabalhos relacionados <section:related_works>

@@ -37,4 +37,12 @@
     key: "vitest",
     short: [Vitest],
   ),
+  (
+    key: "jogo_velha",
+    short: [Jogo da Velha],
+  ),
+  (
+    key: "ligue4",
+    short: [Ligue-4],
+  ),
 )

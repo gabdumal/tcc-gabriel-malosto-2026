@@ -22,6 +22,6 @@ Após o alinhamento, o @agint pode ser aprimorado ao voltar ao primeiro passo do
 
 #todo_note(note_from_gabriel[Deve descrever a forma de avaliação])
 
-A avaliação da solução proposta foi realizada de forma qualitativa por meio da comparação entre a atuação de diferentes @agint:pl em jogos clássicos e de informação completa, como o Jogo da Velha e o Ligue-4.
+A avaliação da solução proposta foi realizada de forma qualitativa por meio da comparação entre a atuação de diferentes @agint:pl em jogos clássicos e de informação completa, como o @jogo_velha e o @ligue4.
 Cada agente foi preparado com variação na quantidade de épocas de treinamento.
 O foco do experimento é verificar se o processo de treinamento de modelos de @ia:long é capaz de gerar @agint:pl viáveis para realizar a etapa de @playtest na prototipagem de @jogo:pl, o que visa a reduzir o uso de recursos humanos.

@@ -2,8 +2,7 @@
 // NBR 14724:2024
 
 #import "data/glossary/main.typ": abbreviations_entries, glossary_entries, symbols_entries, terms_entries
-#import "/template/common/components.typ": print_source_for_content_created_by_authors
-#import "/template/common/components.typ": glossary
+#import "/template/common/components.typ": glossary, not_number_page, print_source_for_content_created_by_authors
 #import "/template/packages.typ": drafting, glossarium
 #import "/template/template.typ": template
 
@@ -37,4 +36,6 @@
 #include "content/post_textual/main.typ"
 
 // Bibliography. Referências.
-#bibliography("data/bibliography.bib")
+#not_number_page(
+  bibliography("data/bibliography.bib"),
+)
