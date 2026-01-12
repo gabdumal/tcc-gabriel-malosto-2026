@@ -1,5 +1,7 @@
 #import "../../components/note.typ": note_from_gabriel, note_from_igor
-#import "/template/common/components.typ": describe_figure, todo_note
+#import "/template/common/components.typ": (
+  describe_figure, equation, information_footer, print_source_for_content_created_by_authors, todo_note,
+)
 #import "/template/packages.typ": glossarium
 #import "/template/common/util.typ": text_in_english
 
@@ -94,7 +96,7 @@ Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchid
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
   [#figure(
     caption: [Tipos de dados comuns definidos pelo pacote `core`.],
     image(
@@ -113,7 +115,7 @@ Uma vez que utilizamos @vetor:pl extensamente pelo projeto, decidimos criar @ali
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: [O pacote `Primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
   [#figure(
     caption: [Tipos de dados comuns definidos pelo pacote `game`.],
     image(
@@ -128,8 +130,12 @@ Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de
 No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
 Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
 
-Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo.
-O fizemos por meio de classes abstratas, uma vez que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
+Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo, que foram inspirados pela descrição dada pela documentação do projeto boardgame.io
+#footnote[
+  Acesso em: #link("https://boardgame.io/documentation/#/").
+]
+@boardgameio:2022:concepts.
+Os implementamos por meio de classes abstratas, uma vez que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
 Os principais atributos e métodos de cada classe, além das relações entre elas, podem ser vistos na @figure:diagrama_classes_pacote_game.
 
 #describe_figure(
@@ -324,3 +330,79 @@ Decidimos utilizar a mesma dimensão do tabuleiro ($6$ linhas e $7$ colunas) par
 Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seus valores definido como $1$ se a @casa correspondente por estiver marcada pelo jogador @alice.
 Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
 Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.
+
+== Busca e predição
+
+Havendo devidamente representado o @jogo @ligue4, passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
+A lógica de construção de suas principais classes foi inspirada pela implementação de referência de #cite(form: "prose", <forster:2023:alphazero>).
+
+Primeiramente definimos tipos úteis para a melhor descrição de conceitos comuns, como mostrado na @figure:diagrama_pacote_search_tipos.
+Todos eles são @alias:pl do tipo primitivo `number`, que representa números reais.
+Seus significados são descritos nesta seção, conforme a discussão acerca de seus usos.
+
+#describe_figure(
+  sticky: true,
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  [#figure(
+    caption: [Tipos de dados comuns definidos pelo pacote `search`.],
+    image(
+      width: 65%,
+      "../../assets/images/uml/search/types_diagram_of_package_search.png",
+    ),
+  )<figure:diagrama_pacote_search_tipos>],
+)
+
+O primeiro elemento necessário para implementar a @mcts é a classe abstrata `TreeNode`, cujo diagrama é apresentado na @figure:diagrama_classes_pacote_search_mostrando_classe_tree_node.
+Ela tem a função de implementar um nó da árvore de busca, o qual representa um @estado da @partida simulada e que é guardado em seu atributo `state`.
+Também são importantes os dados sobre o histórico que levou até esse @estado.
+Por isso, armazenamos no atributo `indexOfPlayedMove` o índice do @movimento jogado no @turno anterior e no atributo `indexOfPlayerWhoPlayedMove` o índice do @jogador que o efetuou.
+O caso em que esses dois marcadores estarão vazios é no início da partida, que corresponde ao nó raiz da árvore.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  note: [As propriedades com visibilidade privada e protegida têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
+  [#figure(
+    caption: [Classe `TreeNode` definida no pacote `search`.],
+    image(
+      width: 90%,
+      "../../assets/images/uml/search/simplified_class_diagram_of_package_search_showing_class_tree_node.png",
+    ),
+  )<figure:diagrama_classes_pacote_search_mostrando_classe_tree_node>],
+)
+
+Para representar a transição entre os nós e permitir realizar a fase de retro-propagação da busca, salvamos em cada nó a referência para seu nó pai por meio do atributo `parentNode`, que estará vazio apenas para a raiz da árvore.
+Uma vez que um @estado pode levar a múltiplas configurações da @partida por meio de cada um de seus @movimento:pl válidos, decidimos representar, no atributo `childrenNodes`, as transições do nó para seus filhos por meio de um mapa indexado, em que cada entrada marca o @movimento escolhido e o nó que ele gerou.
+
+Como discutido na @section:mcts sobre a diretriz de @fitness da @mcts, a cada ciclo de busca, a etapa de retro-propagação incrementa o contador de visitas e atualiza a expectativa de qualidade da @partida para todos os nós do ramo selecionado.
+Esses dois marcadores são armazenados nos atributos `quantityOfVisits` e `qualityOfMatch`, respectivamente.
+
+Quanto aos métodos da classe `TreeNode`, destacamos o `getQualityOfMatchFromScore`, que converte a @pontuacao final dos jogadores em um número do tipo `QualityOfMatch`, representante da qualidade da @partida para o @jogador atual.
+Esse dado é retro-propagado recursivamente até o nó raiz por meio do método `updateQualityOfMatchAndQuantityOfVisitsOnBranch`, incrementando-o nos turnos do @jogador vencedor e decrementando-o para os demais.
+
+Já a etapa de seleção é gerenciada pelo método `selectBestChildNode`, que calcula o valor de @fitness para cada nó já expandido e escolhe o melhor.
+Para isso, é chamado o método `calculateFitnessOfChild`, que soma os componentes de @aproveitamento e de @exploracao da equação de @uct, equilibrando-os por meio da constante de @exploracao fornecida.
+Uma vez que a @mcts clássica e a adaptada pelo @alphazero calculam o valor de @fitness de forma diferente, utilizamos os métodos abstratos para defini-los.
+
+Finalmente, o método `qualityOfMove` é responsável por classificar os @movimento:pl válidos a partir do @estado inicial da árvore.
+A forma de avaliação utilizada pela implementação de referência @forster:2023:alphazero prioriza os @movimento:pl que levaram a ramos com o maior número de visitas.
+Essa lógica se justifica porque se entende que um @estado muito visitado foi aquele mais selecionado pela diretriz de busca.
+Entretanto, percebemos que, quando realizamos a busca a partir de um @estado próximo de levar a uma vitória, essa heurística se prova falha.
+Isso ocorre porque o @estado vitorioso não gera mais filhos e, dessa forma, não pode mais ser visitado pela busca.
+Assim, o algoritmo é obrigado a visitar seus vizinhos, o que os torna melhor classificados.
+Para resolver esse problema, decidimos alterar o cálculo da qualidade de um @movimento para a @equation:qualidade_do_movimento, que alinha a qualidade estimada da @partida e a quantidade de visitas ao dado ramo.
+
+#equation[
+  $
+    F(n) = Q(n) + root(4, V(n))
+  $ <equation:qualidade_do_movimento>
+
+  Na qual:
+  - $F(s)$ é a qualidade do @movimento representado pelo nó $n$;
+  - $Q(n)$ é a qualidade da @partida calculada por meio de simulações a partir do nó $n$;
+  - $V(s)$ é quantidade de vezes em que o nó $n$ foi visitado nas iterações anteriores.
+
+  #information_footer(
+    source: print_source_for_content_created_by_authors(),
+  )
+]

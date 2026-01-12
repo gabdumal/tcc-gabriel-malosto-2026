@@ -21,5 +21,9 @@
 )
 
 #todo_note(
+  note_from_gabriel[Elencar como limitação que não conseguimos definir uma seed para o treinamento de modelos por causa da função shuffle],
+)
+
+#todo_note(
   note_from_gabriel[Colocar como trabalho futuro jogos de cartas],
 )

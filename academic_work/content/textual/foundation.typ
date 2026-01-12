@@ -48,7 +48,7 @@ A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folh
 A mais frequentemente utilizada nas implementações de referência é chamada de @uct --- ou #glossarium.gls-custom("uct"), em inglês --- @kocsis:2006:bandit_based_mcts_planning.
 Essa política atribui contadores de visita e de vitória a cada nó.
 Com base nesses dados, ela calcula uma equação cujo resultado alinha @exploracao (#glossarium.gls-custom("exploracao")) e @aproveitamento (#glossarium.gls-custom("aproveitamento")) do espaço de busca.
-A @eq:uct_teorica apresenta essa diretriz utilizada para  escolher uma ação, que será detalhada no restante desta seção.
+A @equation:uct_teorica apresenta essa diretriz utilizada para  escolher uma ação, que será detalhada no restante desta seção.
 
 #todo_note[#note_from_igor[Tive que alterar a frase final  do parágrafo acima com a referência à Equação 1 porque ficou parecendo que ela chegou muito cedo e ficou no ar. Pode ser interessante reforçar a sua relação com os próximos parágrafos fazendo menções a ela novamente.]]
 
@@ -65,7 +65,7 @@ A @eq:uct_teorica apresenta essa diretriz utilizada para  escolher uma ação, q
         (V(s,m))
       )
     )
-  $ <eq:uct_teorica>
+  $ <equation:uct_teorica>
 
   Na qual:
   - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
