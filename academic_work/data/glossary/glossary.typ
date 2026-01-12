@@ -131,6 +131,13 @@
     description: [Em inglês, #text_in_english[array]. Estrutura de dados que armazena uma coleção ordenada de elementos acessíveis por índices numéricos sequenciais.],
     group: "Computação",
   ),
+  (
+    key: "seed",
+    short: text_in_english[seed],
+    custom: [semente],
+    description: [Em português, semente. Valor inicial fornecido a um gerador de números pseudo-aleatórios para garantir reprodutibilidade dos resultados.],
+    group: "Computação",
+  ),
 )
 
 #let glossary_entries_about_games = (

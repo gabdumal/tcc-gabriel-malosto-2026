@@ -331,7 +331,7 @@ Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seu
 Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
 Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.
 
-== Busca e predição
+== Algoritmos de busca
 
 Havendo devidamente representado o @jogo @ligue4, passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
 A lógica de construção de suas principais classes foi inspirada pela implementação de referência de #cite(form: "prose", <forster:2023:alphazero>).
@@ -406,3 +406,26 @@ Para resolver esse problema, decidimos alterar o cálculo da qualidade de um @mo
     source: print_source_for_content_created_by_authors(),
   )
 ]
+
+A @mcts:long é gerenciada pela classe abstrata `Search`, cujo diagrama é mostrado na @figure:diagrama_classes_pacote_search_mostrando_classe_search.
+Ela armazena dados relevantes para executar o algoritmo, como o coeficiente de exploração e a quantidade de ciclos a serem realizados, o que é guardado no atributo `quantityOfExpansions`, além de um objeto da classe auxiliar `Random` que realiza operações pseudo-aleatórias a partir da mesma @seed informada ao programa.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    caption: [Classe `Search` definida no pacote `search`.],
+    image(
+      width: 60%,
+      "../../assets/images/uml/search/simplified_class_diagram_of_package_search_showing_class_search.png",
+    ),
+  )<figure:diagrama_classes_pacote_search_mostrando_classe_search>],
+)
+
+O método abstrato `expandTree` da classe `Search` executa o ciclo de busca, utilizando o método `selectNextNode` para realizar a etapa de seleção e o método `simulateMatch` para implementar a etapa de simulação da @mcts clássica ou de predição da @mcts adaptada pelo @alphazero.
+Esse primeiro algoritmo foi implementado nas classes concretas `CommonSearch` e `CommonTreeNode`.
+Essa define a etapa de expansão por um método chamado `expand`, que recebe o @movimento a expandir e gera um único novo nó.
+
+Já em relação à @mcts adaptada, a classe concreta `AgentGuidedSearch` implementa a busca e define um novo atributo chamado `predictionModel`, que guarda o modelo de @resnet responsável por orientar a etapa de predição.
+Em seguida, durante a etapa de expansão, os valores estimados por sua #text_in_english[policy head] geram todos os @movimento:pl válidos para o @estado atual.
+Essa fase é implementada pelo método `expand` da classe concreta `AgentGuidedTreeNode`, que recebe aquele @vetor e guarda a qualidade estimada no novo atributo `qualityOfMoveAttributedByModel` de cada nó filho.
