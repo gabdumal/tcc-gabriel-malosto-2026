@@ -25,5 +25,9 @@
 )
 
 #todo_note(
+  note_from_gabriel[Discutir se deveríamos colocar a flag de penalidade de movimento inválido como algum valor maior que zero],
+)
+
+#todo_note(
   note_from_gabriel[Colocar como trabalho futuro jogos de cartas],
 )

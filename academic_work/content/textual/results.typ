@@ -62,7 +62,7 @@ Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchid
   )<figure:diagrama_pacote_core_tipos>],
 )
 
-== Descrição de @jogo:pl <subsection:descricao_jogos>
+== Descrição de @jogo:pl <section:descricao_jogos>
 
 Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes necessários para descrever um @jogo_turno digitalmente.
 Primeiramente, definimos tipos úteis para esse pacote e para seus dependentes, como apresentado na @figure:diagrama_pacote_game_tipos.
@@ -386,7 +386,7 @@ Em seguida, durante a etapa de expansão, os valores estimados por sua @policy_h
 Essa fase é implementada pelo método `expand` da classe concreta `AgentGuidedTreeNode`, que recebe aquele @vetor e guarda a qualidade estimada no novo atributo `qualityOfMoveAttributedByModel` de cada nó filho.
 Por fim, a predição da qualidade da partida é utilizada para orientar a fase de retro-propagação.
 
-== Construção da @resnet:long
+== Construção da @resnet:long <section:construcao_resnet>
 
 Considerando a variação de complexidade entre diferentes @jogo:pl e seguindo a recomendação da implementação de referência @forster:2023:alphazero, possibilitamos ao projetista de um protótipo definir parâmetros da arquitetura da @resnet:long utilizada pelos @agint:pl.
 Para isso, criamos a classe `ResidualNeuralNetwork`, que recebe os seguintes dados: (1) #glossarium.gls("seed", display: `seed`), usado para inicializar os @peso:pl e @vies:pl da @rn; (2) `quantityOfResidualBlocks`, para definir a quantidade de blocos residuais a serem criados na @backbone da rede; e (3) `quantityOfHiddenChannels`, referente à quantidade de canais usada nas camadas internas de processamento da rede.
@@ -401,7 +401,7 @@ O alinhamento dos @peso:pl e @vies:pl é realizado pelo método `fit` do objeto 
 Para a @policy_head, selecionamos a função de @perda de @entropia_cruzada_categorica (#glossarium.gls-custom("entropia_cruzada_categorica")), ao passo em que escolhemos a função de @erro_quadratico_medio (#glossarium.gls-custom("erro_quadratico_medio")) para calcular a @perda da @value_head.
 Quanto à execução do programa, permitimos que o usuário escolha os seguintes parâmetros: (1) `quantityOfEpochs`, para definir a quantidade de épocas de treinamento; e (2) `sizeOfBatch`, para ajustar o tamanho do conjunto de entradas e saídas usado a cada passo de alinhamento.
 
-== Geração de memórias para os @agint:pl
+== Geração de memórias para os @agint:pl <section:geracao_memorias>
 
 Com o fim de encapsular o uso da @resnet e de relacioná-la com um @jogo implementado, criamos uma nova classe no módulo `search` chamada `PredictionModel`.
 Seu método mais relevante é denominado `predict`, que recebe um @estado e retorna dois elementos: (1) o @vetor das qualidades atribuídas a cada @movimento listado para aquele @jogo; e (2) a qualidade estimada para a @partida a partir do turno atual.
@@ -478,7 +478,8 @@ Ele recebe um objeto do tipo `AgentGuidedSearch`, que realiza a @mcts:long adapt
 )
 
 A inicialização do processo de geração de memória define a variável que armazenará o histórico de @turno:pl, além dos marcadores auxiliares do @estado atual e do @jogador que realizou o último movimento na @partida.
-Então, o algoritmo utiliza a @mcts para obter as qualidades atribuídas a cada um dos @movimento:pl possíveis.
+Então, o algoritmo utiliza a @mcts para obter as qualidades atribuídas a cada um dos @movimento:pl.
+Uma vez que a @resnet precisa receber o @vetor completo de todos os @movimento:pl possíveis no @jogo, as posições referentes aos @movimento:pl inválidos são preenchidas com o número especial que representa infinito negativo no @js.
 Em seguida, os dois marcadores, o @vetor de qualidades e o @estado codificado são armazenados no histórico.
 
 O algoritmo dá prosseguimento ao turno, ao utilizar o método pseudo-aleatório da roleta para selecionar um @movimento.
@@ -496,7 +497,50 @@ Por sua vez, o segundo, `policies`, armazena os @vetor:pl de qualidade de @movim
 Finalmente, o terceiro, `values`, é obtido pelo uso do método auxiliar `calculateQualityOfMatch`, que usa a @pontuacao e o marcador de @jogador atual em cada turno para calcular a qualidade da @partida.
 Esses três @vetor:pl são retornados num objeto do tipo `TrainingMemory`.
 
-== Interface com a aplicação
+== Interface com o usuário
 
 As funcionalidades criadas e discutidas requeriam uma interface padronizada para que aplicações as acessassem sem interagir com os detalhes de implementação.
-Para isso, organizamos no pacote `search`...
+Para isso, organizamos no pacote `interface` um conjunto de ações disponíveis ao usuário.
+Elas foram implementadas como comandos de terminal em um outro pacote do projeto chamado `node`, que utilizou para isso a biblioteca @commander.
+Os comandos de maior destaque são discutidos nesta seção.
+
+Inicialmente, oferecemos uma forma de visualização da árvore de busca gerada pelo método de @mcts:short.
+Para isso, o usuário fornece os seguintes dados: (1) a estratégia de busca --- se a clássica ou a adaptada pelo @alphazero ---; (1a) o modelo de predição, caso o usuário escolha a versão adaptada; (2) o coeficiente de exploração para cálculo da diretriz @uct; (3) a quantidade de ciclos iterados pela @mcts; (4) o coeficiente de suavização para calcular as probabilidades atribuídas a cada @movimento; (5) uma @seed para calcular os valores pseudo-aleatórios; e (6) o @estado sobre o qual se quer descobrir os melhores @movimento:pl viáveis.
+O programa executará a busca, calculará as qualidades e probabilidades dos @movimento:pl e os imprimirá, juntamente com um arquivo SVG da árvore de busca montada, o qual é gerado pelo programa @graphviz.
+
+Caso o usuário queira obter apenas a avaliação de um modelo de predição sobre um determinado @estado, ele pode informá-los a outro comando, que também requer o coeficiente de suavização.
+Ela solicitará a predição ao modelo e imprimirá as qualidades dos @movimento:pl retornadas e probabilidades calculadas.
+
+O programa também oferece ambientes de execução de @partida:pl entre dois @jogador:pl humanos, que interajam pelo mesmo terminal.
+Ele requer que se informe o @estado do @jogo sobre o qual se deseja iniciar a @partida.
+Então, inicia um laço de repetição até que a  @partida chegue a um @estado de fim de @jogo.
+A cada iteração, o algoritmo obtém por meio das regras quais são os @movimento:pl válidos a partir do @estado atual.
+Em seguida, mostra essa lista ao usuário por meio da biblioteca @inquirer e requer que ele escolha um @movimento.
+O programa o efetua, marca o @estado gerado como o atual e verifica se ele representa o fim da @partida.
+
+Laços similares são implementados para as ações em que o usuário decide jogar contra o computador ou quando ele inicia um jogo entre dois @agint:pl.
+Nesses casos, em vez de solicitar a seleção de movimentos para o @jogador, o algoritmo utiliza a @mcts para obter as probabilidades dos @movimento:pl ou apenas solicita essas predições para um modelo de @resnet, a depender da estratégia selecionada pelo usuário.
+Então, o @movimento efetuado é escolhido pseudo-aleatoriamente pelo método da roleta.
+
+Acerca da geração de @agint:pl, o programa oferece três comandos relevantes.
+O primeiro é o `constuct-model`, que gera um modelo de @resnet segundo os parâmetros informados e o exporta em dois arquivos de descrição do @tensorflow.
+O primeiro é um arquivo @json que descreve toda a estrutura da @rn, ao passo em que o segundo é um arquivo binário que salva os @peso:pl e @vies:pl aleatoriamente gerados.
+Ao usá-lo, o usuário deve fornecer os dados acerca: (1) do @jogo a ser simulado; (2) da quantidade de blocos residuais; (3) da largura em canais da @backbone da rede; e (4) da @seed usada para inicializar as conexões.
+
+Esse primeiro modelo gerado não estará apto a orientar um @agint.
+Antes disso, é necessário sujeitá-lo ao processo de treinamento.
+O primeiro passo para isso é gerar a memória de @partida:pl.
+Com esse objetivo, o comando `build-training-memory` gera um @vetor do tipo `MemoryOfMatch` por meio da função `buildMemoryOfMatches` discutida na @section:geracao_memorias e o salva em um arquivo de tipo @json.
+Em seguida, o programa converte a memória num objeto do tipo `TrainingMemory` e também o salva em outro arquivo de tipo @json.
+
+Finalmente, o comando `train` pode ser chamado para alinhar um modelo ao histórico gerado.
+Para isso, o algoritmo utiliza o método `train` discutido na @section:construcao_resnet.
+Um parâmetro novo que esse comando requer é chamado `valueToReplaceInfinity`, que tem o objetivo de substituir o marcador de @movimento impossível nos @vetor:pl de qualidade salvos na memória de @partida:pl.
+Isso é necessário para que o @tensorflow consiga realizar operações sobre os valores de entrada dentro de seu limite de representação de bits.
+Dessa forma, o valor fornecido para o comando de treinamento atua como uma penalidade para os @movimento:pl inválidos.
+Contudo, alguns testes preliminares não mostraram diferença significativa nas métricas de acurácia do processo de alinhamento ao utilizar diferentes valores, o que nos motivou a definir a penalidade como $0$.
+
+Além da aplicação @apts, elaboramos também um script em linguagem fish que realiza o ciclo de treinamento automaticamente.
+Ele se inicia na pasta em que um modelo havia sido exportado, e chama o comando `build-training-memory` com argumentos especificados.
+Então, o algoritmo acessa a pasta de memórias e executa o comando `train`, para gerar um novo modelo de @rn.
+Outro ciclo se inicia quando o script abre a pasta desse novo modelo e gera memórias de treinamento utilizando-o para orientar o @agint durante as @partida:pl.

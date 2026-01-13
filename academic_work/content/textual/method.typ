@@ -71,19 +71,19 @@ Isso foi necessário porque a função disponibilizada pela linguagem @js para g
 Outro pacote utilizado foi o ts-graphviz
 #footnote[
   Acesso em: #link("https://ts-graphviz.github.io/").
-], que disponibiliza uma @api para o uso do programa Graphviz
+], que disponibiliza uma @api para o uso do programa @graphviz
 #footnote[
   Acesso em: #link("https://graphviz.org/").
 ], em conjunto com uma aplicação em @js.
 Esse projeto descreve uma linguagem de representação de grafos e redes e oferece algoritmos que geram imagens a partir das descrições.
 Os autores utilizaram-no para exibir para o usuário as árvores de busca construídas ao executar o método de @mcts.
 
-Finalmente, para elaborar a aplicação de linha de comando, os autores dispuseram da biblioteca Commander.js
+Finalmente, para elaborar a aplicação de linha de comando, os autores dispuseram da biblioteca @commander
 #footnote[
   Acesso em: #link("https://github.com/tj/commander.js").
 ], que facilita a definição de comandos e argumentos.
 Ela gerencia o tratamento de dados recebidos do terminal e exibe mensagens de auxílio ao usuário sobre como preenchê-los.
-Já para permitir ao usuário selecionar dentre opções de interface já dentro da execução de um comando, os autores escolheram a biblioteca Inquirer.js
+Já para permitir ao usuário selecionar dentre opções de interface já dentro da execução de um comando, os autores escolheram a biblioteca @inquirer
 #footnote[
   Acesso em: #link("https://github.com/SBoudrias/Inquirer.js/").
 ].

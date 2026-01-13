@@ -40,6 +40,18 @@
     short: [Vitest],
   ),
   (
+    key: "graphviz",
+    short: [Graphviz],
+  ),
+  (
+    key: "commander",
+    short: [Commander.js],
+  ),
+  (
+    key: "inquirer",
+    short: [Inquirer.js],
+  ),
+  (
     key: "jogo_velha",
     short: [Jogo da Velha],
   ),
