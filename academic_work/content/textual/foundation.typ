@@ -10,7 +10,7 @@ A fim de atingir os objetivos propostos, o presente trabalho investiga duas téc
 Este capítulo faz a revisão desses métodos, bem como elenca os trabalhos relacionados a uso de @agint:pl como ferramentas de @playtest.
 
 
-== #glossarium.Gls(long: true, "mcts") <section:mcts>
+== #glossarium.gls("mcts", display: [Busca em árvore de Monte Carlo]) <section:mcts>
 
 O método de @mcts:long (@mcts:short) é um algoritmo de decisão em que cada nó de uma árvore representa dado @estado de um @jogo @kocsis:2006:bandit_based_mcts_planning@coulom:2006:efficient_selectivity_backup_operators.
 Além disso, cada nó guarda um contador de visitas e um marcador referente à qualidade daquele nó para a @partida.
@@ -125,7 +125,7 @@ O método também diminui a necessidade de uma heurística prévia sobre o domí
 #todo_note[#note_from_igor[Se menciona trabalhos que trazem a especialização do MCTS, tem que ter referência para eles.]]
 
 
-== #glossarium.gls(capitalize: true, long: true, plural: true, "resnet") <section:resnet>
+== #glossarium.gls("resnet", display: [Redes neurais residuais]) <section:resnet>
 
 As #glossarium.gls(long: true, plural: true, "cnn") são uma classe de @rn:pl profundas especialmente projetadas para processar dados estruturados em grade.
 Seus usos se destacam na áreas de visão computacional, sobretudo para o reconhecimento de imagens.
@@ -198,14 +198,14 @@ Em vez de simular uma @partida para calcular a qualidade de cada @movimento, o @
 A arquitetura da @resnet aplicada no @alphazero é representada na @figure:resnet.
 Ela se inicia pela recepção do @estado do @jogo cujos @movimento:pl viáveis se deseja analisar.
 Esse @estado passa por uma camada de adaptação, que transforma a entrada em um formato adequado para realizar as sucessivas convoluções.
-Em seguida, inicia-se a construção da cadeia profunda de blocos residuais, ao que se denomina #text_in_english[backbone].
+Em seguida, inicia-se a construção da cadeia profunda de blocos residuais, ao que se denomina @backbone.
 Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
 
 #describe_figure(
   placement: auto,
   sticky: true,
   [#figure(
-    caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma #text_in_english[backbone] e camadas de saída #text_in_english[policy head] e #text_in_english[value head].],
+    caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma @backbone e camadas de saída @policy_head e @value_head.],
     image(
       width: 80%,
       "../../assets/images/resnet/resnet.png",
@@ -213,19 +213,19 @@ Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
   )<figure:resnet>],
 )
 
-A primeira saída é construída pela camada de #text_in_english[policy head], que retorna um @vetor de números reais.
+A primeira saída é construída pela camada de @policy_head, que retorna um @vetor de números reais.
 Esses valores representam a qualidade atribuída a cada um dos @movimento:pl válidos a partir do @estado fornecido.
 Na verdade, devido à restrição de formato da saída da rede, o modelo atribuirá uma classificação para todos os movimentos possíveis de acordo com as regras do @jogo, sendo estes válidos ou não a partir do @estado atual.
 Dessa forma, é necessário que o #text_in_english[designer] do @jogo simulado descreva previamente a lista de todos os @movimento:pl e os guarde em um @vetor.
 O algoritmo do @agint indexará as posições deste àquelas do @vetor retornado pela rede.
 
-A segunda saída da @resnet é construída pela camada de #text_in_english[value head].
+A segunda saída da @resnet é construída pela camada de @value_head.
 Seu retorno é um valor escalar que representa a estimativa da qualidade do resultado da @partida a partir do @estado fornecido.
 Esse valor será maior para quando houver uma expectativa de vitória e menor para quando a expectativa for de derrota.
 
 Esses retornos são exemplificados pela @figure:predicao, que utiliza valores fictícios.
 O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador "X" que será o próximo a jogar.
-O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[policy head]
+O primeiro retorno se refere às qualidades atribuídas pela @policy_head
 #footnote[
   Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
   O retorno da @rn na verdade é composto por valores reais não normalizados.
@@ -234,7 +234,7 @@ O primeiro retorno se refere às qualidades atribuídas pela #text_in_english[po
 As @casa:pl já preenchidas por peças têm qualidade $0$ atribuída, uma vez que nelas não são permitidos mais @movimento:pl.
 A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador "X".
 As demais casas apresentam qualidades pouco significativas.
-Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela #text_in_english[value head].
+Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela @value_head.
 Uma vez que o @estado analisado está a um @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
 
 
@@ -255,16 +255,13 @@ Uma vez que o @estado analisado está a um @movimento de levar à vitória, a pr
   )<figure:predicao>],
 )
 
-#todo_note(note_from_gabriel[Verificar se de fato estamos usando regressão linear])
-#todo_note[#note_from_igor[Creio que sim, pois não é um caso de classificação.]]
-
 O processo de treinamento de um modelo é feito em duas fases.
 A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
 Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
 No caso de jogos sem cálculo de @pontuacao, como o @jogo_velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
 
 Segue-se então a fase de alinhamento do modelo, que utiliza @aprendizado_maquina (#glossarium.gls-custom("aprendizado_maquina")) para ajustar os @peso:pl e @vies:pl.
-Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento por regressão linear.
+Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento.
 Espera-se que o modelo resultante possa gerar uma memória de @partida:pl mais significativa que o anterior.
 Assim, entende-se o treinamento como um ciclo, conforme demonstrado na @figure:treinamento.
 

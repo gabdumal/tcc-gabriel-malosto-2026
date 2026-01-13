@@ -12,7 +12,7 @@ Ele busca, através de uma abordagem qualitativa, aplicar os métodos de #glossa
 
 == Material <section:material>
 
-Foi desenvolvida neste trabalho uma aplicação de linha de comando *APTS* capaz de representar @jogo:pl discretos e gerar @agint:pl que simulem @partida:pl conforme o método de @selfplay @malosto:2026:apts.
+Foi desenvolvida neste trabalho a aplicação de linha de comando *APTS*, capaz de representar @jogo:pl discretos e gerar @agint:pl que simulem @partida:pl conforme o método de @selfplay @malosto:2026:apts.
 As simulações coletam dados sobre as @partida:pl para prover ao projetista do @jogo informações estatísticas usadas para orientar testes de estresse e de balanceamento, que focam em aspectos técnicos em vez de tratar da experiência do @jogador.
 
 
@@ -21,7 +21,7 @@ As simulações coletam dados sobre as @partida:pl para prover ao projetista do 
 )
 
 
-O APTS é desenvolvido em TypeScript XX, com as bibliotecas de X, Y e Z para ... . O núcleo que realizar a simulação dos métodos MCTS e Alfazero foram desenvolvidos complemtamente pelo autor, enquanto as redes usam TensorFlow,js....
+O APTS é desenvolvido em TypeScript XX, com as bibliotecas de X, Y e Z para ... . O núcleo que realizar a simulação dos métodos MCTS e Alfazero foram desenvolvidos complemtamente pelo autor, enquanto as redes usam @tensorflow_js ...
 
 == Métodos <section:metodo>
 

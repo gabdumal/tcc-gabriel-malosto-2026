@@ -10,14 +10,14 @@
     plural: "IAs",
     long: "inteligência artificial",
     longplural: "inteligências artificiais",
-    description: "Campo da computação dedicado a criar sistemas capazes de perceber, aprender e agir de forma autônoma.",
+    description: [Campo da computação dedicado a criar sistemas capazes de perceber, aprender e agir de forma autônoma, inspirados pela inteligência humana @geeksforgeeks:2025:what_is_ai.],
     group: "Computação",
   ),
   (
     key: "mcts",
     short: "MCTS",
     long: "busca em árvore de Monte Carlo",
-    description: [Em inglês, #text_in_english[Monte Carlo tree search]. Algoritmo de busca por simulação usado para explorar espaços de decisão em jogos.],
+    description: [Em inglês, #text_in_english[Monte Carlo tree search]. Algoritmo de busca por simulação usado para explorar espaços de decisão em jogos @geeksforgeeks:2025:monte_carlo_tree_search.],
     group: "Computação",
   ),
   (
@@ -26,7 +26,7 @@
     long: "limite superior de confiança aplicado a árvores",
     longplural: "limites superiores de confiança aplicados a árvores",
     custom: text_in_english[Upper Confidence bounds applied to Trees],
-    description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e em um termo de confiança (UCB).],
+    description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e na quantidade de visitas aos nós @geeksforgeeks:2025:upper_confidence_bound.],
     group: "Computação",
   ),
   (
@@ -35,7 +35,7 @@
     plural: "ResNets",
     long: "rede neural residual",
     longplural: "redes neurais residuais",
-    description: [Em inglês, #text_in_english[residual neural network]. Arquitetura de rede neural profunda com conexões de atalho para facilitar o treinamento de camadas muito profundas.],
+    description: [Em inglês, #text_in_english[residual neural network]. Arquitetura de rede neural profunda com conexões de atalho para facilitar o treinamento de camadas muito profundas @geeksforgeeks:2025:resnet_deep_learning.],
     group: "Computação",
   ),
   (
@@ -44,7 +44,7 @@
     plural: "CNNs",
     long: "rede neural convolucional",
     longplural: "redes neurais convolucionais",
-    description: [Em inglês, #text_in_english[convolutional neural network]. Arquitetura de rede neural especializada em processar dados com estrutura de grade, como imagens, usando camadas convolucionais para extrair características.],
+    description: [Em inglês, #text_in_english[convolutional neural network]. Arquitetura de rede neural especializada em processar dados com estrutura de grade, como imagens, usando camadas convolucionais para extrair características @geeksforgeeks:2025:introduction_cnn.],
     group: "Computação",
   ),
   (
@@ -52,7 +52,7 @@
     short: "ReLU",
     long: "unidade linear retificada",
     longplural: "unidades lineares retificadas",
-    description: [Em inglês, #text_in_english[rectified linear unit]. Função de ativação não-linear que retorna o valor de entrada se positivo, ou zero caso contrário.],
+    description: [Em inglês, #text_in_english[rectified linear unit]. Função de ativação não-linear que retorna o valor de entrada se positivo, ou zero caso contrário @geeksforgeeks:2025:relu_activation_function.],
     group: "Computação",
   ),
   (

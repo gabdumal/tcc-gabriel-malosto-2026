@@ -223,7 +223,7 @@ Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da 
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
 
-== Implementação do jogo @ligue4
+=== Implementação do jogo @ligue4
 
 A fim de executar o experimento desta pesquisa, implementamos, no módulo `games`, os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
 Criamos um conjunto de objetos para cada um desses jogos, de forma a permitir ao usuário do sistema jogá-los.
@@ -331,7 +331,7 @@ Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seu
 Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
 Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.
 
-== Algoritmos de busca
+=== Elaboração dos algoritmos de busca
 
 Havendo devidamente representado o @jogo @ligue4, passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
 A lógica de construção de suas principais classes foi inspirada pela implementação de referência de #cite(form: "prose", <forster:2023:alphazero>).
@@ -427,5 +427,23 @@ Esse primeiro algoritmo foi implementado nas classes concretas `CommonSearch` e 
 Essa define a etapa de expansão por um método chamado `expand`, que recebe o @movimento a expandir e gera um único novo nó.
 
 Já em relação à @mcts adaptada, a classe concreta `AgentGuidedSearch` implementa a busca e define um novo atributo chamado `predictionModel`, que guarda o modelo de @resnet responsável por orientar a etapa de predição.
-Em seguida, durante a etapa de expansão, os valores estimados por sua #text_in_english[policy head] geram todos os @movimento:pl válidos para o @estado atual.
+Em seguida, durante a etapa de expansão, os valores estimados por sua @policy_head geram todos os @movimento:pl válidos para o @estado atual.
 Essa fase é implementada pelo método `expand` da classe concreta `AgentGuidedTreeNode`, que recebe aquele @vetor e guarda a qualidade estimada no novo atributo `qualityOfMoveAttributedByModel` de cada nó filho.
+Por fim, a predição da qualidade da partida é utilizada para orientar a fase de retro-propagação.
+
+=== Construção da @resnet:long
+
+Considerando a variação de complexidade entre diferentes @jogo:pl e seguindo a recomendação da implementação de referência @forster:2023:alphazero, possibilitamos ao projetista de um protótipo definir parâmetros da arquitetura da @resnet:long utilizada pelos @agint:pl.
+Para isso, criamos a classe `ResidualNeuralNetwork`, que recebe os seguintes dados: (1) #glossarium.gls("seed", display: `seed`), usado para inicializar os @peso:pl e @vies:pl da @rn; (2) `quantityOfResidualBlocks`, para definir a quantidade de blocos residuais a serem criados na @backbone da rede; e (3) `quantityOfHiddenChannels`, referente à quantidade de canais usada nas camadas internas de processamento da rede.
+
+A classe construtora de modelos de @rn e as operações sobre tensores foram disponibilizadas pelo pacote do projeto @tensorflow_js.
+Ele disponibiliza algumas formas de construir a arquitetura da rede, dentre as quais selecionamos a de #text_in_english[LayersModel].
+Tomamos o cuidado de encapsular o uso do @tensorflow dentro dessa classe, a fim de permitir sua substituição se necessário sem requerer a refatoração de outros componentes do projeto.
+Então, definimos funções auxiliares para a construção das camadas de adaptação da entrada, de blocos residuais e de saída para a @policy_head e para a @value_head.
+
+Acerca do treinamento, o método `train` dessa mesma classe recebe os conjuntos de @estado:pl codificados e de saídas esperadas para a @policy_head e para a @value_head.
+O alinhamento dos @peso:pl e @vies:pl é realizado pelo método `fit` do objeto de `LayersModel`, utilizando o otimizador @adam.
+Para a @policy_head, selecionamos a função de @perda de @entropia_cruzada_categorica (#glossarium.gls-custom("entropia_cruzada_categorica")), ao passo em que escolhemos a função de @erro_quadratico_medio (#glossarium.gls-custom("erro_quadratico_medio")) para calcular a @perda da @value_head.
+Quanto à execução do programa, permitimos que o usuário escolha os seguintes parâmetros: (1) `quantityOfEpochs`, para definir a quantidade de épocas de treinamento; e (2) `sizeOfBatch`, para ajustar o tamanho do conjunto de entradas e saídas usado a cada passo de alinhamento.
+
+=== Geração de @agint:pl

@@ -1,5 +1,7 @@
 // # Terms. Termos.
 
+#import "/template/common/util.typ": text_in_english
+
 #let terms_entries = (
   (
     key: "js",
@@ -54,5 +56,25 @@
     key: "bruno",
     short: ["O"],
     long: ["Bruno"],
+  ),
+  (
+    key: "tensorflow",
+    short: [TensorFlow],
+  ),
+  (
+    key: "tensorflow_js",
+    short: [TensorFlow.js],
+  ),
+  (
+    key: "policy_head",
+    short: text_in_english[policy head],
+  ),
+  (
+    key: "value_head",
+    short: text_in_english[value head],
+  ),
+  (
+    key: "backbone",
+    short: text_in_english[backbone],
   ),
 )
