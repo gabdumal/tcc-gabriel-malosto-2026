@@ -9,6 +9,10 @@
 ])
 
 #todo_note(
+  note_from_gabriel[Acho que deveríamos comentar sobre a separação de conceitos fundamentais de um jogo na fundamentação teórica],
+)
+
+#todo_note(
   note_from_gabriel[Falar que era possível dividir um turno em mais de um estado, como feito pelo bg.io, mas que preferimos colocar essa limitação],
 )
 

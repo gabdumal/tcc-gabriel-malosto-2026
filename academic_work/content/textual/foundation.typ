@@ -52,33 +52,36 @@ A @equation:uct_teorica apresenta essa diretriz utilizada para  escolher uma aç
 
 #todo_note[#note_from_igor[Tive que alterar a frase final  do parágrafo acima com a referência à Equação 1 porque ficou parecendo que ela chegou muito cedo e ficou no ar. Pode ser interessante reforçar a sua relação com os próximos parágrafos fazendo menções a ela novamente.]]
 
-#equation(
-  placement: auto,
+#describe_figure(
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
+)[#figure(
+  supplement: "Equação",
+  kind: "equation",
+  caption: [Cálculo de @fitness da diretriz de @uct usada pela @mcts clássica.],
 )[
-  $
-    m^* = max_(m in M(s))
-    (
-      Q(s, m) +
-      C * sqrt(
-        (ln(V(s)))
-        /
-        (V(s,m))
+  #equation[
+    $
+      m^* = max_(m in M(s))
+      (
+        Q(s, m) +
+        C * sqrt(
+          (ln(V(s)))
+          /
+          (V(s,m))
+        )
       )
-    )
-  $ <equation:uct_teorica>
+    $ <equation:uct_teorica>
 
-  Na qual:
-  - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
-  - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
-  - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
-  - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
-  - $V(s,a)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
-  - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+    Na qual:
+    - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+    - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+    - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+    - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+    - $V(s,a)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+    - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+  ]
+]]
 
-  #information_footer(
-    source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
-  )
-]
 
 Havendo sido selecionado um nó folha e não sendo este um nó que represente o fim do @jogo, então se executa a fase de expansão.
 Ela escolhe aleatoriamente um @movimento dentre aqueles disponíveis para o @estado atual segundo as regras do @jogo.
@@ -311,33 +314,34 @@ A definição do novo marcador de qualidade em cada nó é relevante para realiz
 A @uct passa a considerar como componente de @aproveitamento apenas a qualidade da @partida simulada pelas iterações.
 Já como componente de @exploracao, a política alinha dois fatores: como numerador, a predição do modelo para o sucesso do @movimento representado; e como denominador, a quantidade de visitas realizadas ao nó resultante da aplicação do @movimento, que é somada ao número $1$ para garantir que o resultado não seja indefinido.
 
-#equation(
+#describe_figure(
+  source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505])#cite(<silver:2016:mastering_game_go>, form: "prose", supplement: [p. 486]).],
+)[#figure(
+  supplement: "Equação",
+  kind: "equation",
+  caption: [Cálculo de @fitness da diretriz de @uct usada pela @mcts adaptada pelo @alphazero.],
   placement: auto,
 )[
-  #equate.equate(sub-numbering: true)[
-    $
-      m^* = max(m in M(s)) = Q(s,a) + X(s,a)\
-      X(s,a) = C times
-      P(s,a) / (V(s,a) + 1)
-    $ <equation:uct_adaptada>
+  #equation[
+    #equate.equate(sub-numbering: true)[
+      $
+        m^* = max(m in M(s)) = Q(s,a) + X(s,a)\
+        X(s,a) = C times
+        P(s,a) / (V(s,a) + 1)
+      $ <equation:uct_adaptada>
 
-    Na qual:
-    - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
-    - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
-    - $X(s,m)$ é o componente de @exploracao (#glossarium.gls-custom("exploracao")) calculado ao jogar o @movimento $m$ no @estado $s$;
-    - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
-    - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
-    - $V(s,m)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
-    - $P(s,m)$ é a qualidade previamente atribuída pelo modelo de @resnet para jogar o @movimento $m$ no estado $s$;
-    - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+      Na qual:
+      - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
+      - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
+      - $X(s,m)$ é o componente de @exploracao (#glossarium.gls-custom("exploracao")) calculado ao jogar o @movimento $m$ no @estado $s$;
+      - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+      - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
+      - $V(s,m)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
+      - $P(s,m)$ é a qualidade previamente atribuída pelo modelo de @resnet para jogar o @movimento $m$ no estado $s$;
+      - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
+    ]
   ]
-
-  #information_footer(
-    source: [
-      Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505])#cite(<silver:2016:mastering_game_go>, form: "prose", supplement: [p. 486]).
-    ],
-  )
-]
+]]
 
 É relevante considerar como a @mcts utilizada pelo @alphazero representa um @estado do jogo.
 Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.

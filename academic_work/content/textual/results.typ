@@ -378,7 +378,8 @@ Como discutido na @section:mcts sobre a diretriz de @fitness da @mcts, a cada ci
 Esses dois marcadores são armazenados nos atributos `quantityOfVisits` e `qualityOfMatch`, respectivamente.
 
 Quanto aos métodos da classe `TreeNode`, destacamos o `getQualityOfMatchFromScore`, que converte a @pontuacao final dos jogadores em um número do tipo `QualityOfMatch`, representante da qualidade da @partida para o @jogador atual.
-Esse dado é retro-propagado recursivamente até o nó raiz por meio do método `updateQualityOfMatchAndQuantityOfVisitsOnBranch`, incrementando-o nos turnos do @jogador vencedor e decrementando-o para os demais.
+Uma vez que esse comportamento é necessário em outras partes do projeto, a maior parte do seu processamento é, na verdade, realizado por um método auxiliar chamado `calculateQualityOfMatch`, que recebe as @pontuacao:pl e o índice do @jogador:pl atual.
+Esse dado de qualidade é retro-propagado recursivamente até o nó raiz por meio do método `updateQualityOfMatchAndQuantityOfVisitsOnBranch`, incrementando-o nos turnos do @jogador vencedor e decrementando-o para os demais.
 
 Já a etapa de seleção é gerenciada pelo método `selectBestChildNode`, que calcula o valor de @fitness para cada nó já expandido e escolhe o melhor.
 Para isso, é chamado o método `calculateFitnessOfChild`, que soma os componentes de @aproveitamento e de @exploracao da equação de @uct, equilibrando-os por meio da constante de @exploracao fornecida.
@@ -392,20 +393,22 @@ Isso ocorre porque o @estado vitorioso não gera mais filhos e, dessa forma, nã
 Assim, o algoritmo é obrigado a visitar seus vizinhos, o que os torna melhor classificados.
 Para resolver esse problema, decidimos alterar o cálculo da qualidade de um @movimento para a @equation:qualidade_do_movimento, que alinha a qualidade estimada da @partida e a quantidade de visitas ao dado ramo.
 
-#equation[
-  $
-    F(n) = Q(n) + root(4, V(n))
-  $ <equation:qualidade_do_movimento>
+#describe_figure[#figure(
+  supplement: "Equação",
+  kind: "equation",
+  caption: [Cálculo da qualidade de um @movimento a partir da árvore de busca construída pelo método de @mcts.],
+)[
+  #equation[
+    $
+      F(n) = Q(n) + root(4, V(n))
+    $ <equation:qualidade_do_movimento>
 
-  Na qual:
-  - $F(s)$ é a qualidade do @movimento representado pelo nó $n$;
-  - $Q(n)$ é a qualidade da @partida calculada por meio de simulações a partir do nó $n$;
-  - $V(s)$ é quantidade de vezes em que o nó $n$ foi visitado nas iterações anteriores.
-
-  #information_footer(
-    source: print_source_for_content_created_by_authors(),
-  )
-]
+    Na qual:
+    - $F(s)$ é a qualidade do @movimento representado pelo nó $n$;
+    - $Q(n)$ é a qualidade da @partida calculada por meio de simulações a partir do nó $n$;
+    - $V(s)$ é quantidade de vezes em que o nó $n$ foi visitado nas iterações anteriores.
+  ]
+]]
 
 A @mcts:long é gerenciada pela classe abstrata `Search`, cujo diagrama é mostrado na @figure:diagrama_classes_pacote_search_mostrando_classe_search.
 Ela armazena dados relevantes para executar o algoritmo, como o coeficiente de exploração e a quantidade de ciclos a serem realizados, o que é guardado no atributo `quantityOfExpansions`, além de um objeto da classe auxiliar `Random` que realiza operações pseudo-aleatórias a partir da mesma @seed informada ao programa.
@@ -446,4 +449,97 @@ O alinhamento dos @peso:pl e @vies:pl é realizado pelo método `fit` do objeto 
 Para a @policy_head, selecionamos a função de @perda de @entropia_cruzada_categorica (#glossarium.gls-custom("entropia_cruzada_categorica")), ao passo em que escolhemos a função de @erro_quadratico_medio (#glossarium.gls-custom("erro_quadratico_medio")) para calcular a @perda da @value_head.
 Quanto à execução do programa, permitimos que o usuário escolha os seguintes parâmetros: (1) `quantityOfEpochs`, para definir a quantidade de épocas de treinamento; e (2) `sizeOfBatch`, para ajustar o tamanho do conjunto de entradas e saídas usado a cada passo de alinhamento.
 
-=== Geração de @agint:pl
+=== Geração de memórias para os @agint:pl
+
+Com o fim de encapsular o uso da @resnet e de relacioná-la com um @jogo implementado, criamos uma nova classe no módulo `search` chamada `PredictionModel`.
+Seu método mais relevante é denominado `predict`, que recebe um @estado e retorna dois elementos: (1) o @vetor das qualidades atribuídas a cada @movimento listado para aquele @jogo; e (2) a qualidade estimada para a @partida a partir do turno atual.
+
+Definimos também a função auxiliar `calculateProbabilityOfPlayingEachMove`, que recebe o @vetor de qualidades mencionado, o conjunto dos índices dos movimentos válidos naquele estado e um valor do tipo `SofteningCoefficient`, o qual é definido pelo usuário do programa.
+Essa função aplica uma transformação de @softmax, utilizando o coeficiente citado para ajustar a proporção em que os @movimento:pl mais bem avaliados devem se destacar entre as probabilidades calculadas.
+Essas são retornadas na estrutura de um mapa que contém apenas entradas para os @movimento:pl válidos.
+
+Criamos então, na classe auxiliar `Random`, o método `pickMoveConsideringItsQuality`, que usa essas probabilidades para ordenar a lista de @movimento:pl válidos e sorteia um número aleatório para selecionar um deles.
+Dessa forma, aqueles com maiores probabilidades associadas têm mais chance de serem selecionados na roleta.
+
+Para implementar o ciclo de treinamento do modelo, que envolve gerar uma memória de @partida:pl simuladas e alinhar os @peso:pl e @vies:pl da @rn aos resultados dos @turno:pl, descrevemos os tipos de dados mostrados na @figure:diagrama_pacote_search_tipos_memoria.
+
+#describe_figure(
+  sticky: true,
+  placement: auto,
+  [#figure(
+    caption: [Tipos de dados relacionados à criação de uma memória de @partida:pl definidos pelo pacote `search`.],
+    image(
+      width: 95%,
+      "../../assets/images/uml/search/types_diagram_of_package_search_showing_file_memory.png",
+    ),
+  )<figure:diagrama_pacote_search_tipos_memoria>],
+)
+
+O uso dos tipos `MemoryOfTurn` e `MemoryOfMatch` estão associados ao algoritmo de @selfplay, implementado pela função `buildMemoryOfMatch`, cujo código-fonte simplificado é mostrado no @code:build_memory_of_match.
+Ele recebe um objeto do tipo `AgentGuidedSearch`, que realiza a @mcts:long adaptada pelo projeto @alphazero.
+
+#describe_figure(
+  placement: auto,
+  sticky: true,
+  [#figure(
+    supplement: "Algoritmo",
+    caption: [Código-fonte simplificado da função `buildMemoryOfMatch`.],
+    ```js
+    function buildMemoryOfMatch(
+        search: AgentGuidedSearch
+    ): MemoryOfTurn[] {
+        const game = search.getGame();
+        const memoryOfTurns: MemoryOfTurn[] = [];
+
+        let currentState = game.constructInitialState();
+        let indexOfPlayerWhoPlayedMove: IndexOfPlayer | null = null;
+
+        while (true) {
+            const qualitiesOfMoves = searchQualityOfMoves(search, currentState);
+            memoryOfTurns.push({
+                encodedState: currentState.getEncodedState(),
+                indexOfPlayer: currentState.getIndexOfPlayer(),
+                indexOfPlayerWhoPlayedMove,
+                qualitiesOfMoves
+            });
+
+            const indexesOfValidMoves = game.getIndexesOfValidMoves(currentState);
+            const indexOfPickedMove = random.pickMoveConsideringItsQuality( ↵
+                indexesOfValidMoves, qualitiesOfMoves);
+
+            const nextState = game.play(indexOfPickedMove, currentState);
+            if (nextState.isFinal()) {
+                const finalPointsOfEachPlayer = nextState.getScore() ↵
+                  .getPointsOfEachPlayer();
+                return {
+                    finalPointsOfEachPlayer,
+                    memoryOfTurns,
+                };
+            }
+
+            indexOfPlayerWhoPlayedMove = currentState.getIndexOfPlayer();
+            currentState = nextState;
+        }
+    }
+    ```,
+  )<code:build_memory_of_match>],
+)
+
+A inicialização do processo de geração de memória define a variável que armazenará o histórico de @turno:pl, além dos marcadores auxiliares do @estado atual e do @jogador que realizou o último movimento na @partida.
+Então, o algoritmo utiliza a @mcts para obter as qualidades atribuídas a cada um dos @movimento:pl possíveis.
+Em seguida, os dois marcadores, o @vetor de qualidades e o @estado codificado são armazenados no histórico.
+
+O algoritmo dá prosseguimento ao turno, ao utilizar o método pseudo-aleatório da roleta para selecionar um @movimento.
+Este é executado sobre o @estado atual, que em seguida é aferido para determinar se ele levou ao fim da @partida.
+Caso positivo, a função `buildMemoryOfMatch` retorna um objeto do tipo `QualityOfMatch`, que é composto pelo histórico de @turno:pl e pela @pontuacao de todos os @jogador:pl no fim da @partida.
+Caso contrário, os marcadores do último @jogador a efetuar um @movimento e do @estado atual são atualizados e mais um passo se simulação é realizado.
+
+Considerando que o treinamento de um @agint requer um histórico grande de @partida:pl, criamos uma nova função chamada `buildMemoryOfMatches`.
+Ela recebe do usuário o parâmetro `quantityOfIterations`, acerca da quantidade de @partida:pl a serem simuladas.
+Então, começa um laço de repetição que salva num @vetor do tipo `MemoryOfMatch` todos os resultados das execuções do método `buildMemoryOfMatch` já discutido.
+
+Por fim, o método `convertMemoryOfMatchesToTrainingMemory` transforma o resultado da fase de geração de memórias em três @vetor:pl de tipo único.
+O primeiro deles, `encodedStates`, guarda os @estado:pl codificados salvos em cada @turno simulado.
+Por sua vez, o segundo, `policies`, armazena os @vetor:pl de qualidade de @movimento:pl também salvos durante a simulação.
+Finalmente, o terceiro, `values`, é obtido pelo uso do método auxiliar `calculateQualityOfMatch`, que usa a @pontuacao e o marcador de @jogador atual em cada turno para calcular a qualidade da @partida.
+Esses três @vetor:pl são salvos num objeto do tipo `TrainingMemory`, que é retornado pela função.
