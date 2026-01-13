@@ -79,6 +79,15 @@
     description: [Em inglês, #text_in_english[JavaScript object notation]. Formato simples de intercâmbio de dados baseado em texto. É fácil de ler e escrever para humanos e de analisar e gerar para máquinas.],
     group: "Computação",
   ),
+  (
+    key: "api",
+    short: "API",
+    plural: "APIs",
+    long: "interface de programação de aplicações",
+    longplural: "interfaces de programação de aplicações",
+    description: [Em inglês, #text_in_english[Application Programming Interface]. Conjunto de definições e protocolos que permitem a comunicação entre diferentes componentes de software.],
+    group: "Computação",
+  ),
 )
 
 #let abbreviations_entries = (

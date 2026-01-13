@@ -10,6 +10,20 @@ A fim de atingir os objetivos propostos, o presente trabalho investiga duas téc
 Este capítulo faz a revisão desses métodos, bem como elenca os trabalhos relacionados a uso de @agint:pl como ferramentas de @playtest.
 
 
+== Componentes fundamentais de um jogo
+
+A descrição de um jogo num ambiente de simulação exige identificar seus componentes fundamentais.
+Com esse objetivo, foi criado colaborativamente o projeto BoardGame.io @boardgameio:2022:concepts, que define representa uma @partida como uma sequência de fases.
+Elas estão associadas às regras que definem as ações que os @jogador:pl podem efetuar.
+Uma fase pode ser constituída por @rodada:pl, em que os @jogador:pl se alternam segundo uma ordem definida pelas regras.
+A permissão dada a um @jogador de realizar uma ou mais ações é chamada de @turno, o qual pode ser divido em estágios, similarmente às fases.
+
+O projeto mantém dados mutáveis acerca de um momento da @partida por meio de @estado:pl e contextos.
+A manipulação dos @estado:pl deve ser descrita pelo projetista do @jogo, ao passo em que o contexto de cada turno é gerenciado pela plataforma e salva dados como a quantidade de @jogador:pl e o marcador do @jogador atual.
+Essa atualização dos dados de um @estado ao efetuar uma ação é formalmente definida como um @movimento, que é implementado como uma função imutável.
+Isso significa que todas as informações manipuladas por um @movimento devem estar no @estado que ele recebe como argumento.
+
+
 == #glossarium.gls("mcts", display: [Busca em árvore de Monte Carlo]) <section:mcts>
 
 O método de @mcts:long (@mcts:short) é um algoritmo de decisão em que cada nó de uma árvore representa dado @estado de um @jogo @kocsis:2006:bandit_based_mcts_planning@coulom:2006:efficient_selectivity_backup_operators.
@@ -42,8 +56,6 @@ Ele é formado por quatro etapas: seleção, expansão, simulação, e retro-pro
   )<figure:ciclo_mcts>],
 )
 
-#done_note[#note_from_igor[É bom colocar aqui a expansão do UCT para não obrigar o leitor a ir no glossário ter que ler o termo em inglês de onde a sigla veio]]
-
 A etapa de seleção procura, a partir do nó raiz, o ramo com o melhor nó folha a explorar, orientada por uma diretriz de busca.
 A mais frequentemente utilizada nas implementações de referência é chamada de @uct --- ou #glossarium.gls-custom("uct"), em inglês --- @kocsis:2006:bandit_based_mcts_planning.
 Essa política atribui contadores de visita e de vitória a cada nó.
@@ -55,6 +67,7 @@ A @equation:uct_teorica apresenta essa diretriz utilizada para  escolher uma aç
 #describe_figure(
   source: [Adaptado de #cite(<swiechowski:2022:monte_carlo_tree_search>, form: "prose", supplement: [p. 2505]).],
 )[#figure(
+  placement: auto,
   supplement: "Equação",
   kind: "equation",
   caption: [Cálculo de @fitness da diretriz de @uct usada pela @mcts clássica.],
@@ -81,7 +94,6 @@ A @equation:uct_teorica apresenta essa diretriz utilizada para  escolher uma aç
     - $C$ é o coeficiente que regula a relação entre @exploracao e @aproveitamento.
   ]
 ]]
-
 
 Havendo sido selecionado um nó folha e não sendo este um nó que represente o fim do @jogo, então se executa a fase de expansão.
 Ela escolhe aleatoriamente um @movimento dentre aqueles disponíveis para o @estado atual segundo as regras do @jogo.
@@ -116,10 +128,6 @@ Dispondo do @vetor de probabilidades, o método da seleção aleatória por role
       "../../assets/images/mcts/mcts_probabilities.png",
     ),
   )<figure:probabilidades_mcts>],
-)
-
-#todo_note(
-  note_from_gabriel[Deve-se descrever nos resultados as experiências de utilizar diferentes funções de cálculo de probabilidade. Por exemplo, uma função que usa apenas a quantidade de visitas tende a ser boa na exploração da árvore, mas ela tende a nunca selecionar estados próximos do estado terminal, uma vez que não se pode visitar um estado terminal mais de uma vez],
 )
 
 A descrição do método de @mcts permite concluir que apresenta boas soluções para problemas nos quais o espaço de busca não pode ser percorrido completamente em tempo hábil.
@@ -239,9 +247,6 @@ A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento
 As demais casas apresentam qualidades pouco significativas.
 Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela @value_head.
 Uma vez que o @estado analisado está a um @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
-
-
-#done_note[#note_from_igor[A série de notas na Figura 5 está exagerada. Essa informação deveria vir no texto em parágrafo próprio e ali um compilado.]]
 
 #describe_figure(
   placement: auto,

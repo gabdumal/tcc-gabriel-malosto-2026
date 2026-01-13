@@ -80,7 +80,7 @@ O objetivo dessas etapas compreende testes de estresse e equilíbrio matemático
 Assim, espera-se que a participação de pessoas seja empregada para investigar aspectos lúdicos, sociais e a experiência do jogador, ao passo em que os testes repetitivos serão realizados majoritariamente por @agint:pl.
 
 A fim de construir o ambiente proposto, é necessário estudar a representação de @jogo:pl de @turno:pl em ambiente computacional.
-Identifica-se o foco em estudar a modelagem de estruturas de dados capazes de organizar informações sobre diferentes conceitos, como: @jogo (#glossarium.gls-custom("jogo")), @partida (#glossarium.gls-custom("partida")), @rodada (#glossarium.gls-custom("rodada")), @turno (#glossarium.gls-custom("turno")), @jogador (#glossarium.gls-custom("jogador")), @movimento (#glossarium.gls-custom("movimento")) e @estado (#glossarium.gls-custom("estado")).
+Identifica-se o foco em estudar a modelagem de estruturas de dados capazes de organizar informações sobre diferentes conceitos, como: @jogo, @partida, @rodada, @turno, @jogador, @movimento e @estado.
 
 Além disso, é necessário estudar a implementação de algoritmos de busca e de aprendizado por reforço, a fim de simular @partida:pl e avaliar o @estado do @jogo.
 Etapas relevantes desse processo incluem a geração de massa de dados sobre as @partida:pl simuladas, a avaliação dos @estado:pl do @jogo segundo métricas de balanceamento e a comparação entre agentes treinados em diferentes condições.
@@ -88,12 +88,6 @@ Etapas relevantes desse processo incluem a geração de massa de dados sobre as 
 Tem-se o foco sobre os métodos de @ia, @mcts e @resnet, que se mostram promissores para orientar @agint:pl em @partida:pl simuladas de @jogo_tabuleiro:pl.
 
 #progress_note[#note_from_gabriel[Escrever sobre a estrutura]]
-
-
-#done_note[#note_from_igor[#underline[C]apitulo 1, #underline[C]apítulo 2...]]
-#done_note(
-  note_from_gabriel[A atualização mais nova da ABNT pede que as referências a capítulos, seções, figuras, etc. sejam feitas em letra minúscula, mas eu não consegui garantir isso pra todos os tipos de referências. É mais fácil padronizar em letra maiúscula, mas estaria desrespeitando a norma.],
-)
 
 O presente trabalho está organizado em seis capítulos.
 Este #ref(<chapter:introducao>), de Introdução, apresenta o tema geral e a situação de mercado, delimita o problema de pesquisa e descreve a contribuição esperada.

@@ -13,57 +13,13 @@ Este capítulo descreve o desenvolvimento do sistema @apts, realizado como um pr
 ]
 @malosto:2026:apts.
 Essa aplicação permite a uma pessoa projetista de um @jogo_tabuleiro descrever as regras de um protótipo de @jogo.
-Então, o programa oferece métodos para gerar e treinar modelos de @ia:long que atuam como @agint:pl para simular @partida:pl. As simulações geram conjuntos de dados acerca de quais @movimento:pl tomados levam a melhores resultados.
+Então, o programa oferece métodos para gerar e treinar modelos de @ia:long que atuam como @agint:pl para simular @partida:pl.
+
+As simulações geram conjuntos de dados acerca de quais @movimento:pl tomados levam a melhores resultados.
 Espera-se que, por meio deles, o projetista possa gerar informações estatísticas acerca das regras implementadas.
 Isso tem o objetivo de diminuir o esforço humano nas etapas de @playtest, sobretudo aquelas que envolvem testes de estresse e balanceamento, em que a experiência do jogador não é a variável principal.
 
-== Ambiente de execução
-
-#todo_note[#note_from_igor[esta parte toda está mais para material]]
-
-Os autores têm a expectativa de que o @apts possa ser acessado por meio de programas navegadores da internet, dispondo de uma interface de usuário satisfatória para usuários não familiarizados com programação.
-Entretanto, concluiu-se que seria vantajoso desenvolver scripts de teste de software para verificar sua qualidade durante as versões iniciais de desenvolvimento.
-Por isso, estabeleceu-se como requisito que o sistema funcionasse como uma biblioteca, de forma que possa ser utilizado tanto por um programa de linha de comando, como também por uma página da web.
-
-Com essa perspectiva, escolhemos escrever o código-fonte do sistema na linguagem de programação @js.
-Essa é utilizada comumente para o desenvolvimento de páginas da web, tendo suporte oferecido pelos principais navegadores, como comprovado pelo suporte fornecido pela empresa #cite(form: "prose", <aws:2020:supported_browsers>) ao seu @sdk para @js.
-
-Essa linguagem também pode ser utilizada em um ambiente de execução de linha de comando, sendo o mais comum o @node.
-Ele utiliza o motor de @js V8, o que garante o desempenho para programas. Apesar de rodar em uma só @thread, o ciclo de processamento trata eventos assíncronas por meio de operações primitivas @node:2025:introduction.
-
-== Ambiente de desenvolvimento
-
-#todo_note[#note_from_igor[esta parte toda está mais para material]]
-
-O ambiente de desenvolvimento do projeto foi configurado utilizando o gerenciador de pacotes @pnpm
-#footnote[Acesso em: #link("https://pnpm.io/motivation").].
-Ele instala e mantém atualizadas as ferramentas citadas e suas dependências por meio do registro de pacotes @npm
-#footnote[Acesso em: #link("https://www.npmjs.com/").].
-
-A fim de evitar enganos de programação, utilizamos um superset do @js chamado @ts, que permite atribuir tipos estáticos e mais complexos a variáveis e funções.
-Isso assegura a compatibilidade entre elas ainda em tempo de compilação @typescript:2026:for_javascript_programmers.
-
-Outra ferramenta de inspeção de código-fonte utilizada é o @eslint.
-Ela é um @linter, que encontra e corrige problemas no código-fonte, segundo os padrões e regras configurados @eslint:2025:core_concepts.
-O associamos à análise do @ts e ao formatador automático @prettier
-#footnote[Acesso em: #link("https://prettier.io/").]
-para padronizar a disposição de importações e de atributos.
-
-A fim de arquitetar o @apts como uma biblioteca modular, utilizamos o sistema de construção @turborepo
-#footnote[Acesso em: #link("https://turborepo.com/docs").].
-Ele divide um repositório em pacotes, cada um com suas dependências.
-Um pacote pode ter dependência em outro dentro do mesmo repositório, o que permite construir um sistema complexo, mas composto por partes simples.
-De acordo com as relações inter-módulos, o @turborepo gerencia a compilação e a execução do @linter de forma independente e faz cache dos resultados quando possível.
-
-Finalmente, utilizamos a biblioteca de testes de unidade @vitest
-#footnote[Acesso em: #link("https://vitest.dev/guide/").].
-Ela permite definir casos de teste e executá-los para entradas variadas, o que se provou útil sobretudo para garantir que as regras dos @jogo:pl modelados de fato levem às alterações esperadas nos @estado:pl.
-
-== Arquitetura do projeto
-
-#todo_note[#note_from_igor[esta parte toda ótima para ser a primeira seção do cap 4. Não precisa mencionar o turborepo se as duas forem enviadas para o material ]]
-
-O projeto da aplicação desenvolvida a divide em cinco módulos --- ou pacotes, segundo a terminologia da ferramenta @turborepo ---, quais sejam: `core`, `game`, `search`, `games` e `interface`.
+O projeto da aplicação desenvolvida a divide em cinco módulos, quais sejam: `core`, `game`, `search`, `games` e `interface`.
 A @figure:modulos representa as relações de dependência entre tais módulos e com os pacotes externos `ts-graphviz` e `tensorflow`.
 Esta seção discute a responsabilidade e a implementação de cada um dos módulos internos.
 
@@ -80,7 +36,7 @@ Esta seção discute a responsabilidade e a implementação de cada um dos módu
   )<figure:modulos>],
 )
 
-=== Utilitários
+== Utilitários
 
 O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
 Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
@@ -106,9 +62,9 @@ Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchid
   )<figure:diagrama_pacote_core_tipos>],
 )
 
-=== Componentes fundamentais de um @jogo <subsection:componentes_fundamentais>
+== Descrição de @jogo:pl <subsection:descricao_jogos>
 
-Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes fundamentais para representar um @jogo_turno digitalmente.
+Seguindo a descrição modular do sistema, o módulo `game` é responsável por estabelecer os componentes necessários para descrever um @jogo_turno digitalmente.
 Primeiramente, definimos tipos úteis para esse pacote e para seus dependentes, como apresentado na @figure:diagrama_pacote_game_tipos.
 Uma vez que utilizamos @vetor:pl extensamente pelo projeto, decidimos criar @alias:pl para nomear os índices de @movimento:pl (moves), de @casa:pl (slots) e de @jogador:pl (players).
 
@@ -130,11 +86,7 @@ Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de
 No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
 Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
 
-Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo, que foram inspirados pela descrição dada pela documentação do projeto boardgame.io
-#footnote[
-  Acesso em: #link("https://boardgame.io/documentation/#/").
-]
-@boardgameio:2022:concepts.
+Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo.
 Os implementamos por meio de classes abstratas, uma vez que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
 Os principais atributos e métodos de cada classe, além das relações entre elas, podem ser vistos na @figure:diagrama_classes_pacote_game.
 
@@ -215,7 +167,7 @@ Com uma lógica de implementação similar, o método `getIndexOfNextPlayer` dev
 O retorno desse método deve ser o índice do @jogador escolhido conforme o @vetor salvo na classe `Game`.
 
 Com o auxílio do último método, o projetista pode descrever as regras para atualizar um dado @estado.
-Uma vez que seguimos a convenção de que os objetos representantes de conceitos do @jogo devem ser imutáveis, o método `play`, responsável por essa atualização, retorna um novo objeto da classe `State`.
+Uma vez que seguimos a convenção de que os componentes de descrição do @jogo devem ser imutáveis, o método `play`, responsável por essa atualização, retorna um novo objeto da classe `State`.
 Seus argumentos são o @estado do @turno atual e o índice do @movimento a ser realizado.
 O projetista deve codificar a lógica para descrever a lista de @casa:pl atualizada, incrementar ou decrementar as @pontuacao:pl e definir próximo @jogador.
 
@@ -223,7 +175,7 @@ Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da 
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
 
-=== Implementação do jogo @ligue4
+== Implementação do jogo @ligue4
 
 A fim de executar o experimento desta pesquisa, implementamos, no módulo `games`, os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
 Criamos um conjunto de objetos para cada um desses jogos, de forma a permitir ao usuário do sistema jogá-los.
@@ -243,7 +195,7 @@ Um @jogador vence caso ele posicione $4$ de suas peças de forma adjacente na me
 Configura um empate o caso em que todas as @casa:pl tenham sido preenchidas e nenhum @jogador tenha marcado um dos formatos especificados.
 Essas regras fazem com que haja mais de 4.5 trilhões de combinações possíveis de peças no tabuleiro, mesmo que o jogo permita no máximo $7$ @movimento:pl em qualquer @turno @cahn:2024:connect4.
 
-Nesta seção, descrevemos o processo de implementação do jogo @ligue4, destacando os conceitos fundamentais discutidos na @subsection:componentes_fundamentais.
+Nesta seção, descrevemos o processo de implementação do jogo @ligue4, destacando seus componentes de descrição.
 Em relação à pré-implementação das classes abstratas, poucas adaptações foram necessárias.
 Todas as classes concretas seguiram a convenção de iniciar seus nomes com o termo `ConnectFour` seguido do nome da classe que ela implementa.
 Conforme visto na @figure:diagrama_classes_pacote_games, as classes `Slot` e `Move` foram acrescidas de novos atributos.
@@ -299,7 +251,7 @@ A lógica desses utilitários é sintetizada no @code:get_index_of_player_who_is
 
         for (const slot of slots) {
             const indexOfPlayer = slot.getIndexOfOccupyingPlayer();
-            if (indexOfPlayerOccupyingPreviousSlot === null) {
+            if (indexOfPlayerOccupyingPreviousSlot == null) {
                 indexOfPlayerOccupyingPreviousSlot = indexOfPlayer;
             } else if (indexOfPlayer !== indexOfPlayerOccupyingPreviousSlot) {
                 return null;
@@ -331,7 +283,7 @@ Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seu
 Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
 Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.
 
-=== Elaboração dos algoritmos de busca
+== Elaboração dos algoritmos de busca
 
 Havendo devidamente representado o @jogo @ligue4, passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
 A lógica de construção de suas principais classes foi inspirada pela implementação de referência de #cite(form: "prose", <forster:2023:alphazero>).
@@ -434,7 +386,7 @@ Em seguida, durante a etapa de expansão, os valores estimados por sua @policy_h
 Essa fase é implementada pelo método `expand` da classe concreta `AgentGuidedTreeNode`, que recebe aquele @vetor e guarda a qualidade estimada no novo atributo `qualityOfMoveAttributedByModel` de cada nó filho.
 Por fim, a predição da qualidade da partida é utilizada para orientar a fase de retro-propagação.
 
-=== Construção da @resnet:long
+== Construção da @resnet:long
 
 Considerando a variação de complexidade entre diferentes @jogo:pl e seguindo a recomendação da implementação de referência @forster:2023:alphazero, possibilitamos ao projetista de um protótipo definir parâmetros da arquitetura da @resnet:long utilizada pelos @agint:pl.
 Para isso, criamos a classe `ResidualNeuralNetwork`, que recebe os seguintes dados: (1) #glossarium.gls("seed", display: `seed`), usado para inicializar os @peso:pl e @vies:pl da @rn; (2) `quantityOfResidualBlocks`, para definir a quantidade de blocos residuais a serem criados na @backbone da rede; e (3) `quantityOfHiddenChannels`, referente à quantidade de canais usada nas camadas internas de processamento da rede.
@@ -449,7 +401,7 @@ O alinhamento dos @peso:pl e @vies:pl é realizado pelo método `fit` do objeto 
 Para a @policy_head, selecionamos a função de @perda de @entropia_cruzada_categorica (#glossarium.gls-custom("entropia_cruzada_categorica")), ao passo em que escolhemos a função de @erro_quadratico_medio (#glossarium.gls-custom("erro_quadratico_medio")) para calcular a @perda da @value_head.
 Quanto à execução do programa, permitimos que o usuário escolha os seguintes parâmetros: (1) `quantityOfEpochs`, para definir a quantidade de épocas de treinamento; e (2) `sizeOfBatch`, para ajustar o tamanho do conjunto de entradas e saídas usado a cada passo de alinhamento.
 
-=== Geração de memórias para os @agint:pl
+== Geração de memórias para os @agint:pl
 
 Com o fim de encapsular o uso da @resnet e de relacioná-la com um @jogo implementado, criamos uma nova classe no módulo `search` chamada `PredictionModel`.
 Seu método mais relevante é denominado `predict`, que recebe um @estado e retorna dois elementos: (1) o @vetor das qualidades atribuídas a cada @movimento listado para aquele @jogo; e (2) a qualidade estimada para a @partida a partir do turno atual.
@@ -542,4 +494,9 @@ Por fim, o método `convertMemoryOfMatchesToTrainingMemory` transforma o resulta
 O primeiro deles, `encodedStates`, guarda os @estado:pl codificados salvos em cada @turno simulado.
 Por sua vez, o segundo, `policies`, armazena os @vetor:pl de qualidade de @movimento:pl também salvos durante a simulação.
 Finalmente, o terceiro, `values`, é obtido pelo uso do método auxiliar `calculateQualityOfMatch`, que usa a @pontuacao e o marcador de @jogador atual em cada turno para calcular a qualidade da @partida.
-Esses três @vetor:pl são salvos num objeto do tipo `TrainingMemory`, que é retornado pela função.
+Esses três @vetor:pl são retornados num objeto do tipo `TrainingMemory`.
+
+== Interface com a aplicação
+
+As funcionalidades criadas e discutidas requeriam uma interface padronizada para que aplicações as acessassem sem interagir com os detalhes de implementação.
+Para isso, organizamos no pacote `search`...
