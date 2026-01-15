@@ -1,4 +1,4 @@
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "../../components.typ": get_term, note_from_gabriel, note_from_igor
 #import "/template/common/components.typ": describe_figure, done_note, equation, information_footer, todo_note
 #import "/template/packages.typ": equate, glossarium, subpar
 #import "/template/common/style/style.typ": spacing_for_smaller_text
@@ -138,7 +138,7 @@ O método também diminui a necessidade de uma heurística prévia sobre o domí
 
 == #glossarium.gls("resnet", display: [Redes neurais residuais]) <section:resnet>
 
-As #glossarium.gls(long: true, plural: true, "cnn") são uma classe de @rn:pl profundas especialmente projetadas para processar dados estruturados em grade.
+As #glossarium.gls(first: true, plural: true, "cnn") são uma classe de @rn:pl profundas especialmente projetadas para processar dados estruturados em grade.
 Seus usos se destacam na áreas de visão computacional, sobretudo para o reconhecimento de imagens.
 Aprimorando as @rn:pl tradicionais totalmente conectadas, as @cnn:pl utilizam operações de convolução que permitem capturar padrões espaciais e hierárquicos nos dados de entrada sem definição prévia dos elementos de interesse @li:2022:survey_convolutional_neural_networks.
 
@@ -146,7 +146,7 @@ A arquitetura típica de uma @cnn consiste em camadas convolucionais, camadas de
 As camadas convolucionais aplicam filtros que detectam características locais, como bordas e texturas, enquanto as camadas de @pooling reduzem a dimensionalidade espacial (#text_in_english[downsampling]), preservando as informações mais relevantes @li:2022:survey_convolutional_neural_networks.
 Dessa forma, essa classe de @rn:pl balanceia a precisão dos detalhes com a rapidez de convergência pelo processo de #text_in_english[downsampling].
 
-Seguindo os trabalhos na área, #cite(form: "prose", <he:2015:deep_residual_learning>) introduziram as #glossarium.gls(long: true, plural: true, "resnet") como uma evolução importante das @cnn:pl.
+Seguindo os trabalhos na área, #cite(form: "prose", <he:2015:deep_residual_learning>) introduziram as #glossarium.gls(first: true, plural: true, "resnet") como uma evolução importante das @cnn:pl.
 Seu principal objetivo era resolver o problema de degradação em redes muito profundas.
 Quando @rn:pl convencionais se tornam excessivamente profundas, sua acurácia tende a saturar e depois degradar, não devido ao @overfitting (#glossarium.gls-custom("overfitting")), mas à dificuldade de otimização @he:2015:deep_residual_learning.
 
@@ -209,14 +209,14 @@ Em vez de simular uma @partida para calcular a qualidade de cada @movimento, o @
 A arquitetura da @resnet aplicada no @alphazero é representada na @figure:resnet.
 Ela se inicia pela recepção do @estado do @jogo cujos @movimento:pl viáveis se deseja analisar.
 Esse @estado passa por uma camada de adaptação, que transforma a entrada em um formato adequado para realizar as sucessivas convoluções.
-Em seguida, inicia-se a construção da cadeia profunda de blocos residuais, ao que se denomina @backbone.
+Em seguida, inicia-se a construção da cadeia profunda de blocos residuais, ao que se denomina #get_term("backbone").
 Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
 
 #describe_figure(
   placement: auto,
   sticky: true,
   [#figure(
-    caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma @backbone e camadas de saída @policy_head e @value_head.],
+    caption: [Arquitetura de uma @resnet:long composta por uma camada de adaptação da entrada, uma #get_term("backbone") e camadas de saída #get_term("policy_head") e #get_term("value_head").],
     image(
       width: 80%,
       "../../assets/images/resnet/resnet.png",
@@ -224,19 +224,19 @@ Por fim, a @rn duplica o tensor em processamento para gerar duas saídas.
   )<figure:resnet>],
 )
 
-A primeira saída é construída pela camada de @policy_head, que retorna um @vetor de números reais.
+A primeira saída é construída pela camada de #get_term("policy_head"), que retorna um @vetor de números reais.
 Esses valores representam a qualidade atribuída a cada um dos @movimento:pl válidos a partir do @estado fornecido.
 Na verdade, devido à restrição de formato da saída da rede, o modelo atribuirá uma classificação para todos os movimentos possíveis de acordo com as regras do @jogo, sendo estes válidos ou não a partir do @estado atual.
 Dessa forma, é necessário que o #text_in_english[designer] do @jogo simulado descreva previamente a lista de todos os @movimento:pl e os guarde em um @vetor.
 O algoritmo do @agint indexará as posições deste àquelas do @vetor retornado pela rede.
 
-A segunda saída da @resnet é construída pela camada de @value_head.
+A segunda saída da @resnet é construída pela camada de #get_term("value_head").
 Seu retorno é um valor escalar que representa a estimativa da qualidade do resultado da @partida a partir do @estado fornecido.
 Esse valor será maior para quando houver uma expectativa de vitória e menor para quando a expectativa for de derrota.
 
 Esses retornos são exemplificados pela @figure:predicao, que utiliza valores fictícios.
-O exemplo considera um @estado vantajoso no @jogo_velha para o @jogador "X" que será o próximo a jogar.
-O primeiro retorno se refere às qualidades atribuídas pela @policy_head
+O exemplo considera um @estado vantajoso no #get_term("jogo_velha") para o @jogador "X" que será o próximo a jogar.
+O primeiro retorno se refere às qualidades atribuídas pela #get_term("policy_head")
 #footnote[
   Para fins de melhor visualização consideramos que os valores de qualidade foram transformados em probabilidades.
   O retorno da @rn na verdade é composto por valores reais não normalizados.
@@ -245,7 +245,7 @@ O primeiro retorno se refere às qualidades atribuídas pela @policy_head
 As @casa:pl já preenchidas por peças têm qualidade $0$ atribuída, uma vez que nelas não são permitidos mais @movimento:pl.
 A @casa no canto superior direito, que pode ser marcada pelo terceiro @movimento, apresenta uma qualidade de $0.9$, uma vez que sua marcação levaria à vitória imediata do @jogador "X".
 As demais casas apresentam qualidades pouco significativas.
-Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela @value_head.
+Além disso, a figura também mostra a forma de retorno da estimativa de qualidade da @partida, dada pela #get_term("value_head").
 Uma vez que o @estado analisado está a um @movimento de levar à vitória, a probabilidade de vitória se mostra alta.
 
 #describe_figure(
@@ -266,7 +266,7 @@ Uma vez que o @estado analisado está a um @movimento de levar à vitória, a pr
 O processo de treinamento de um modelo é feito em duas fases.
 A primeira se denomina fase de geração de memória de treinamento, que utiliza a técnica de @selfplay.
 Ela constrói um histórico de @partida:pl que guarda, para cada @partida, a @pontuacao final dos @jogador:pl e a sequência de @turno:pl e seus @estado:pl.
-No caso de jogos sem cálculo de @pontuacao, como o @jogo_velha ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
+No caso de jogos sem cálculo de @pontuacao, como o #get_term("jogo_velha") ou Xadrez, o resultado final será de $1$ ponto para o vencedor e $0$ pontos para o perdedor @swiechowski:2022:monte_carlo_tree_search[p. 2533].
 
 Segue-se então a fase de alinhamento do modelo, que utiliza @aprendizado_maquina (#glossarium.gls-custom("aprendizado_maquina")) para ajustar os @peso:pl e @vies:pl.
 Para isso, o conjunto de dados gerado é convertido em conjuntos de entradas e de saídas esperadas, que são fornecidos para um algoritmo de treinamento.
@@ -330,16 +330,16 @@ Já como componente de @exploracao, a política alinha dois fatores: como numera
   #equation[
     #equate.equate(sub-numbering: true)[
       $
-        m^* = max(m in M(s)) = Q(s,a) + X(s,a)\
-        X(s,a) = C times
-        P(s,a) / (V(s,a) + 1)
+        m^* = max(m in M(s)) = Q(s,m) + X(s,m)\
+        X(s,m) = C times
+        P(s,m) / (V(s,m) + 1)
       $ <equation:uct_adaptada>
 
       Na qual:
       - $m^*$ é o nó que representa o @movimento ótimo selecionado pela diretriz;
       - $M(s)$ é o conjunto de nós que representam os @movimento:pl válidos a partir do @estado $s$, segundo as regras do @jogo;
-      - $X(s,m)$ é o componente de @exploracao (#glossarium.gls-custom("exploracao")) calculado ao jogar o @movimento $m$ no @estado $s$;
       - $Q(s,m)$ é a qualidade da @partida calculada por meio de simulações ao jogar o @movimento $m$ no @estado $s$;
+      - $X(s,m)$ é o componente de @exploracao (#glossarium.gls-custom("exploracao")) calculado ao jogar o @movimento $m$ no @estado $s$;
       - $V(s)$ é quantidade de vezes em que o nó que guarda o @estado $s$ foi visitado nas iterações anteriores;
       - $V(s,m)$ é a quantidade de vezes em que o nó que representa o @movimento $m$ foi visitado nas interações anteriores;
       - $P(s,m)$ é a qualidade previamente atribuída pelo modelo de @resnet para jogar o @movimento $m$ no estado $s$;
@@ -351,7 +351,7 @@ Já como componente de @exploracao, a política alinha dois fatores: como numera
 É relevante considerar como a @mcts utilizada pelo @alphazero representa um @estado do jogo.
 Cada @casa do tabuleiro guarda a informação sobre a peça marcada em si e o @jogador que a posicionou.
 O tabuleiro é salvo atribuindo um número a cada um dos @jogador:pl, que pode ser indexado pela lista de jogadores definida previamente pelo #text_in_english[designer] do @jogo.
-A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do @jogo_velha na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
+A @figure:tabuleiro_jogo_da_velha_e_estado mostra como o estado do #get_term("jogo_velha") na @figure:tabuleiro_jogo_da_velha é codificado na @figure:estado_jogo_da_velha.
 O primeiro @jogador, de símbolo "X", é representado pelo número $0$, ao passo que o segundo @jogador, de símbolo "O", é representado pelo número $1$.
 As posições sem peças são definidas com o valor `null`.
 Outra informação armazenada no @estado é um marcador de qual @jogador deve jogar no @turno atual.
@@ -365,7 +365,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
       sticky: true,
       subpar.super(
         label: <figure:tabuleiro_jogo_da_velha_e_estado>,
-        caption: [Tabuleiro do @jogo_velha e sua representação numérica.],
+        caption: [Tabuleiro do #get_term("jogo_velha") e sua representação numérica.],
         grid(
           columns: (1fr, 1fr),
           row-gutter: spacing_for_smaller_text,
@@ -373,7 +373,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
 
           grid.cell()[
             #figure(
-              caption: [Tabuleiro do @jogo_velha.],
+              caption: [Tabuleiro do #get_term("jogo_velha").],
               image(
                 width: 3.5cm,
                 "../../assets/images/state/tabletop.png",
@@ -382,7 +382,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
           ],
 
           grid.cell()[
-            #figure(caption: [Tabuleiro do @jogo_velha representado numericamente.], image(
+            #figure(caption: [Tabuleiro do #get_term("jogo_velha") representado numericamente.], image(
               width: 3.5cm,
               "../../assets/images/state/state.png",
             ))<figure:estado_jogo_da_velha>
@@ -396,7 +396,7 @@ Outra informação armazenada no @estado é um marcador de qual @jogador deve jo
 A entrada da @resnet utilizada pelo @agint requer que o @estado seja codificado como uma pilha de canais que contêm apenas valores binários ($0$ ou $1$).
 Essa técnica busca aproximar a representação do tabuleiro daquela usada por imagens RGB, comumente fornecidas como entrada a @resnet:pl de reconhecimento de imagens.
 
-No exemplo do @jogo_velha, o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
+No exemplo do #get_term("jogo_velha"), o tabuleiro representado na @figure:estado_jogo_da_velha se torna um conjunto de três canais, como disposto na @figure:estado_codificado.
 O primeiro, associado à cor vermelha, tem uma posição ativada quando o primeiro @jogador (representado pelo símbolo "X") posiciona nela uma peça, como mostrado na @figure:canal_vermelho.
 Similarmente, o segundo canal, associado à cor verde, representa as @casa:pl marcadas pelo segundo @jogador (representado pelo símbolo "O"), como mostrado na @figure:canal_verde.
 Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à cor azul, como mostrado na @figure:canal_azul.
@@ -407,7 +407,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
     sticky: true,
     subpar.super(
       label: <figure:estado_codificado>,
-      caption: [Estado do @jogo_velha representado como canais binários.],
+      caption: [Estado do #get_term("jogo_velha") representado como canais binários.],
       grid(
         columns: (1fr, 1fr, 1fr),
         row-gutter: spacing_for_smaller_text,
@@ -468,7 +468,7 @@ Por fim, as @casa:pl vazias são representadas no terceiro canal, associado à c
 Caso necessário, outras informações podem ser representadas por meio da adição de novos canais à pilha.
 @Jogo_tabuleiro:pl para dois @jogador:pl citados requerem a representação de qual @jogador deve executar um @movimento no @turno atual.
 Isso é definido em um quarto canal, cujas posições são marcadas com o número atribuído ao @jogador.
-Assim, um @estado do @jogo_velha define todo esse canal como $0$ para o @jogador de símbolo "X", e como $1$ para o @jogador de símbolo "O".
+Assim, um @estado do #get_term("jogo_velha") define todo esse canal como $0$ para o @jogador de símbolo "X", e como $1$ para o @jogador de símbolo "O".
 
 
 == Trabalhos relacionados <section:related_works>
@@ -480,7 +480,7 @@ Ademais, os autores desenvolvem um estudo combinando técnicas de regressão e c
 A mecânica desse @jogo é bem definida, mas os parâmetros --- como velocidades de jogador, inimigos e tiros --- são ajustados através de testes exaustivos.
 Nesse trabalho, eles foram substituídos pelo @playtest automatizado.
 
-Nos trabalhos de #cite(form: "prose", <gudmundsson:2018:human_like_playtesting>)#cite(form: "prose", <zook:2019:automatic_playtesting>), a @mcts é utilizada junto a #glossarium.gls(plural: true, long: true, "cnn").
+Nos trabalhos de #cite(form: "prose", <gudmundsson:2018:human_like_playtesting>)#cite(form: "prose", <zook:2019:automatic_playtesting>), a @mcts é utilizada junto a #glossarium.gls(first: true, plural: true, "cnn").
 Elas são treinadas através de um massivo conjunto de dados de @jogador:pl reais para prever a dificuldade de missões em @jogo:pl digitais #text_in_english[match-3] --- respectivamente #text_in_english[Candy Crush] e #text_in_english[Jewels Star Story].
 Neste tipo de @jogo, o @jogador deve mover figuras em uma grade, buscando colocar três ou mais figuras iguais adjacentes, que são retiradas do tabuleiro e podem gerar outras remoções em cadeia.
 Os trabalhos conseguem reproduzir comportamentos de @jogador:pl humanos e avaliar a dificuldade do nível proposto pelo #text_in_english[game designer] para uma melhor experiência de @jogo.

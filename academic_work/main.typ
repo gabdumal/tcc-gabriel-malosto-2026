@@ -11,8 +11,6 @@
 #glossarium.register-glossary(abbreviations_entries)
 #glossarium.register-glossary(symbols_entries)
 #glossarium.register-glossary(glossary_entries)
-#glossarium.register-glossary(terms_entries)
-#glossary(invisible: true, terms_entries)
 
 // Template. Modelo.
 #show: it => template(
@@ -20,6 +18,8 @@
   number_pages: true,
   consider_only_odd_pages: true,
 )
+
+#show link: set text(fill: oklch(25%, 0.17, 264.05deg))
 
 // #drafting.set-margin-note-defaults(hidden: true)
 

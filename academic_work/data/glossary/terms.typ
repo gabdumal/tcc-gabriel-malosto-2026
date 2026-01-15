@@ -54,10 +54,12 @@
   (
     key: "jogo_velha",
     short: [Jogo da Velha],
+    custom: text_in_english[Tic-tac-toe],
   ),
   (
     key: "ligue4",
     short: [Ligue-4],
+    custom: text_in_english[ConnectFour],
   ),
   (
     key: "alice",

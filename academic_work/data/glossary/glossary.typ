@@ -117,10 +117,10 @@
   ),
   (
     key: "alias",
-    short: text_in_english[alias],
-    plural: text_in_english[aliases],
-    custom: [apelido],
-    description: [Em português, apelido. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
+    short: [apelido],
+    plural: [apelidos],
+    custom: text_in_english[alias],
+    description: [Em inglês, #text_in_english[alias]. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
     group: "Computação",
   ),
   (

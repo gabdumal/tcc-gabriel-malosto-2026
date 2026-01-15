@@ -1,6 +1,6 @@
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "../../components.typ": get_term, note_from_gabriel, note_from_igor
 #import "/template/common/components.typ": (
-  describe_figure, equation, information_footer, print_source_for_content_created_by_authors, todo_note,
+  describe_figure, equation, information_footer, print_source_for_content_created_by_authors, progress_note, todo_note,
 )
 #import "/template/packages.typ": glossarium
 #import "/template/common/util.typ": text_in_english
@@ -41,18 +41,20 @@ Esta seção discute a responsabilidade e a implementação de cada um dos módu
 O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
 Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
 Também estão disponíveis utilitários para a formatação de dados de tipos compostos e de descritores dos testes de unidade.
-Além disso, o módulo gerencia a codificação de dados para o formato de @json e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar o histórico de @partida:pl para o treinamento de modelos.
+Além disso, o módulo gerencia a codificação de dados para o formato de #get_term("js")on #footnote[
+  Acesso em: #link("https://www.json.org/json-en.html").
+] e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar o histórico de @partida:pl para o treinamento de modelos.
 
-A fim de facilitar a compreensão de conceitos comuns ao domínio da aplicação, definimos por meio do @ts alguns tipos derivados, utilizados por todo o projeto.
+A fim de facilitar a compreensão de conceitos comuns ao domínio da aplicação, definimos por meio do #get_term("ts") alguns tipos derivados, utilizados por todo o projeto.
 Os principais estão dispostos na @figure:diagrama_pacote_core_tipos.
-Ela explicita os tipos concretos `string` e `number` da linguagem @js, que guardam, respectivamente, texto e números reais.
-O tipo `Char` foi um @alias (#glossarium.gls-custom("alias")) dado para campos de texto de apenas um caractere, como a marcação de uma peça em uma @casa do tabuleiro.
+Ela explicita os tipos concretos `string` e `number` da linguagem #get_term("js"), que guardam, respectivamente, texto e números reais.
+O tipo `Char` foi um @alias (em inglês, #glossarium.gls-custom("alias")) dado para campos de texto de apenas um caractere, como a marcação de uma peça em uma @casa do tabuleiro.
 Já o tipo `Integer` é um @alias para um valor numérico que deve ser preenchido apenas por um número inteiro, como por exemplo na indexação de dados em @vetor:pl.
 
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem #get_term("js").],
   [#figure(
     caption: [Tipos de dados comuns definidos pelo pacote `core`.],
     image(
@@ -71,7 +73,7 @@ Uma vez que utilizamos @vetor:pl extensamente pelo projeto, decidimos criar @ali
 #describe_figure(
   placement: auto,
   sticky: true,
-  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem #get_term("js").],
   [#figure(
     caption: [Tipos de dados comuns definidos pelo pacote `game`.],
     image(
@@ -82,12 +84,14 @@ Uma vez que utilizamos @vetor:pl extensamente pelo projeto, decidimos criar @ali
 )
 
 Outro dado comumente referenciado é a marcação de pontos dos jogadores, que é feita com números inteiros pelo @alias `Points`.
-Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do @js.
+Guardamos a @pontuacao completa de todos os @jogador:pl por meio da estrutura de indexação por chave-valor `Map`, do #get_term("js").
 No tipo abstrato `PointsOfEachPlayer`, as chaves são definidas pelo índice de cada @jogador, conforme registrado pelo projetista do @jogo, ao passo em que os pontos são salvos no campo de valor.
 Finalmente, o tipo `EncodedState` representa o formato de codificação de um estado em canais, como descrito na @section:alphazero. Ele aceita qualquer matriz multidimensional de valores reais, embora tenhamos respeitado a convenção de utilizar apenas os valores os $0$ e $1$ para definirmos tais codificações.
 
-Após definir os tipos, passamos à implementação dos componentes fundamentais para descrever um @jogo.
-Os implementamos por meio de classes abstratas, uma vez que a linguagem @js não dispõe de estruturas como interfaces ou protocolos.
+#progress_note[#note_from_igor[Mudei para voz passiva. Dá um confere]]
+
+Após definir os tipos, passa-se à implementação dos componentes fundamentais para descrever um @jogo.
+Foram implementados por meio de classes abstratas, uma vez que a linguagem #get_term("js") não dispõe de estruturas como interfaces ou protocolos.
 Os principais atributos e métodos de cada classe, além das relações entre elas, podem ser vistos na @figure:diagrama_classes_pacote_game.
 
 #describe_figure(
@@ -103,8 +107,12 @@ Os principais atributos e métodos de cada classe, além das relações entre el
   )<figure:diagrama_classes_pacote_game>],
 )
 
+#todo_note[#note_from_igor[mudaria para parênteses ou vírgulas porque você sabe que o travessão virou crachá de gpt.]]
+
+#todo_note[#note_from_gabriel[Eu sei, mas meu histórico de textos usa travessão desde antes de 2020, então eu gostaria de continuar escrevendo como eu sempre fiz.]]
+
 A classe mais simples é a que representa uma @casa do tabuleiro, chamada de `Slot`.
-Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no @jogo_velha ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
+Esse conceito é um dos mais variáveis em @jogo_turno:pl, que pode marcar apenas o símbolo de um @jogador --- como no #get_term("jogo_velha") ---, uma dentre peças que apresentam comportamentos diversos --- como no Xadrez ---, camadas sucessivas de peças --- como no Gobblet Gobblers #footnote[
   Descrição disponível em: #link("https://boardgamegeek.com/boardgame/13230/gobblet-gobblers").
 ] --- ou até mesmo uma carta específica dentro de uma mão #footnote[
   Apesar de termos determinado como limite do escopo desta pesquisa a investigação de @jogo_tabuleiro:pl, tentamos manter a implementação genérica para representar jogos de cartas futuramente.
@@ -131,13 +139,10 @@ Ela deve manter, por meio do atributo `game`, uma referência para a classe que 
 Outra característica de um @estado é manter a disposição de peças nas @casa:pl do tabuleiro, o que é feito por meio do @vetor `slots`.
 Ele guarda objetos da classe `Slot` e deve ser indexado da mesma forma em todos os @estado:pl para que o programa consiga acessar os componentes de forma direta.
 O método concreto `getSlot` oferece uma facilidade ao desenvolvedor por implementar uma busca de uma @casa naquele vetor dado o seu índice.
-Por isso, a decisão de como organizar os objetos naquele @vetor deve ser pensada no mesmo momento em que o projetista implementa o método abstrato `getEncodedState`, o qual sintetiza todas as informações relevantes num conjunto de canais a ser fornecido para a @rn.
+Por isso, a decisão de como organizar os objetos naquele @vetor deve ser pensada no mesmo momento em que o projetista implementa o método abstrato `getEncodedState`, o qual sintetiza todas as informações relevantes num conjunto de canais a ser fornecido para a @rn. Outro atributo armazenado em cada objeto da classe `State` é o `indexOfPlayer`, que guarda a informação sobre qual dos @jogador:pl pode realizar um @movimento no @turno atual, usualmente chamada de "vez do @jogador".
 
-Outro atributo armazenado em cada objeto da classe `State` é o `indexOfPlayer`, que guarda a informação sobre qual dos @jogador:pl pode realizar um @movimento no @turno atual, usualmente chamada de "vez do @jogador".
 A @pontuacao dos @jogador:pl também depende de como os @turno:pl decorreram durante a @partida, o que é salvo no atributo `score`.
-Para fins de organização do código-fonte e de abertura para expansão, criamos uma classe abstrata chamada `Score` para representar a @pontuacao de todos os @jogador:pl em um determinado @estado.
-
-O único atributo dessa classe é o mapa `pointsOfEachPlayer`, que atribui um valor em pontos para cada jogador de acordo com o índice a esse atribuído pelo projetista.
+Para fins de organização do código-fonte e de abertura para expansão, criamos uma classe abstrata chamada `Score` para representar a @pontuacao de todos os @jogador:pl em um determinado @estado. O único atributo dessa classe é o mapa `pointsOfEachPlayer`, que atribui um valor em pontos para cada jogador de acordo com o índice a esse atribuído pelo projetista.
 É relevante ressaltar que alguns @jogo_tabuleiro:pl, como o Xadrez, não utilizam sistema de @pontuacao, atribuindo apenas o resultado de vitória para um dos @jogador:pl.
 Nesses casos, recomendamos a implementação de forma que a quantidade de pontos permaneça como $0$ durante toda a partida e que, no @estado que representa fim de @jogo, esse marcador seja alterado para $1$ na entrada referente ao vencedor.
 
@@ -148,18 +153,22 @@ O mesmo deve ser feito em relação ao argumento `moves` para a lista de @movime
 A classe oferece métodos auxiliares que buscam por um @movimento ou por um @jogador em seu respectivo @vetor dado o seu índice.
 
 Em relação aos métodos abstratos da classe `Game`, destacamos os `getQuantityOfRows`, `getQuantityOfColumns` e `getQuantityOfChannels` que respectivamente definem a a quantidade de linhas, de colunas e de canais da matriz que representa um @estado codificado.
-Esses dados devem ser definidos previamente e ser imutáveis para um @jogo porque eles são usados na construção da arquitetura da @resnet que orienta o @agint.
+Esses dados devem ser definidos previamente e ser imutáveis para um @jogo, porque eles são usados na construção da arquitetura da @resnet que orienta o @agint.
 
 Outro método que deve ser determinístico é o `constructInitialState`, em que o projetista descreve a forma como o @estado inicial da @partida é construído.
-Por exemplo, no @jogo_velha, ele se iniciaria com um tabuleiro vazio.
+Por exemplo, no #get_term("jogo_velha"), ele se iniciaria com um tabuleiro vazio.
 Já no Xadrez, as @casa:pl de um lado do tabuleiro e do outro devem estar preenchidas pelas devidas peças de cada um dos @jogador:pl.
-O comportamento dos quatro últimos métodos citados seria melhor representado por métodos estáticos.
-Entretanto, a linguagem @js não permite a definição desse tipo de método numa classe abstrata.
 
-Agora tratando dos métodos dinâmicos da classe `State`, destacamos a responsabilidade do método `getIndexesOfValidMoves`.
+O comportamento dos quatro últimos métodos citados seria melhor representado por métodos abstratos estáticos, uma vez que seus resultados não dependem de nenhum dos atributos guardados da classe.
+Entretanto, a linguagem #get_term("js") não permite a definição desse tipo de método, motivo pelo qual foram implementados como métodos abstratos e dinâmicos.
+
+#progress_note[#note_from_igor[qual o contexto deste métodos dinâmicos aqui? ]]
+#todo_note[#note_from_gabriel[Foi usado como oposto de "métodos estáticos". Veja se melhorou agora.]]
+
+Agora tratando dos métodos da classe `State` que utilizam dados de seus objetos, destacamos a responsabilidade do método `getIndexesOfValidMoves`.
 Sua função é determinar, a partir de um certo @estado fornecido, quais são os @movimento:pl que o @jogador daquele turno poderá executar.
 Para fins de otimização de memória, seu retorno deve ser um conjunto sem repetição de índices referentes aos @movimento:pl válidos de acordo com a ordem dada pelo @vetor salvo na classe `Game`.
-Esse comportamento é obtido pela estrutura de dados `Set`, implementada na linguagem @js.
+Esse comportamento é obtido pela estrutura de dados `Set`, implementada na linguagem #get_term("js").
 Esse conjunto de jogadas válidas é utilizado, entre outros, para filtrar o @vetor de qualidades atribuídas pelo modelo de @resnet e apresentar apenas os adequados ao @agint.
 
 Com uma lógica de implementação similar, o método `getIndexOfNextPlayer` deve determinar de qual @jogador será a vez no próximo @turno.
@@ -175,28 +184,40 @@ Após cada @turno, é necessário determinar se o @estado gerado leva ao fim da 
 O projetista deve descrever essa consulta por meio do método `isFinal`, que recebe o @estado referenciado e retorna um valor do tipo `boolean`, definido como `true` para quando a @partida deve se encerrar ou como `false` para quando ela deve continuar.
 Para isso, ele dispõe de todos os dados discutidos, como a disposição das peças, a pontuação dos jogadores e quaisquer outros atributos que ele tenha acrescentado às classes concretas criadas por ele.
 
-== Implementação do jogo @ligue4
+== Implementação do jogo #get_term("ligue4") <section:implementacao_ligue4>
 
-A fim de executar o experimento desta pesquisa, implementamos, no módulo `games`, os @jogo:pl @ligue4, @jogo_velha e uma variação própria do @jogo_velha em um tabuleiro de 9 linhas e 9 colunas em que os @jogador:pl acumulam pontos ao preencher formatos especificados no tabuleiro.
-Criamos um conjunto de objetos para cada um desses jogos, de forma a permitir ao usuário do sistema jogá-los.
-Uma parte representativa desses objetos foram selecionados para realizar testes de unidade, a fim de garantir que suas regras estavam bem definidas antes de prosseguir com a execução dos métodos de busca.
+#progress_note(note_from_gabriel[Detalhar em um capítulo um pouco mais os outros dois jogos])
 
-Escolhemos o @ligue4 para realizar o experimento porque ele é um jogo de informação completa entre dois jogadores que apresenta um tamanho de tabuleiro razoável e uma quantidade pequena de @movimento:pl possíveis.
-Dessa forma, realizamos com atenção a implementação dos objetos relacionados a esse @jogo descritos no módulo `games` e também naqueles dos módulos mais derivados, conforme dispostos na @figure:modulos.
+A fim de executar o experimento desta pesquisa, descrevemos e implementamos os componentes necessários de três @jogo:pl no módulo `games`.
+Para cada um deles, também definimos objetos concretos de forma a permitir ao usuário do sistema jogá-los.
+Uma parte representativa dos objetos foi selecionada para realizar testes de unidade, a fim de garantir que as regras dos @jogo:pl estavam bem definidas antes de prosseguir com a execução dos métodos de busca.
 
-O @ligue4 é jogado em um tabuleiro vertical de $6$ linhas e $7$ colunas, o que resulta em $42$ @casa:pl.
+O primeiro @jogo implementado é o clássico #get_term("jogo_velha") (em inglês, #get_term(field: "custom", "jogo_velha")), em que os @jogador:pl se alternam marcando peças em um tabuleiro de 3 linhas e 3 colunas.
+Um @jogador é considerado vitorioso quando três peças adjacentes por ele colocadas formam uma linha na horizontal ou na vertical ou ainda uma diagonal principal ou secundária no tabuleiro.
+
+Para testar a capacidade de descrição do sistema para @jogo:pl mais complexos, os autores deste trabalho elaboraram um @jogo variante do #get_term("jogo_velha").
+Ele é jogado em um tabuleiro de 9 linhas e 9 colunas, de forma que os @jogador:pl acumulam 1 ponto quando formam uma linha ou diagonal de 5 peças adjacentes, ou ainda quando suas peças formam um quadrado de dimensão 2 ou 3.
+A @partida chega ao fim quando um dos @jogador:pl marca 15 pontos ou quando 45 das 81 peças do tabuleiro são preenchidas.
+Então, @jogador com mais pontos é reconhecido como vencedor.
+
+#todo_note[#note_from_igor[aqui você está explicando o jogo. Avaliar se não é melhor uma seção na fundamentação para isso. Estou na dúvida ainda]]
+
+O terceiro @jogo descrito é o #get_term("ligue4") (em inglês, #get_term(field: "custom", "ligue4")).
+Ele foi escolhido para realizar o experimento porque é um @jogo de informação completa entre dois @jogador:pl que apresenta um tamanho de tabuleiro razoável e uma quantidade pequena de @movimento:pl possíveis.
+
+O #get_term("ligue4") é jogado em um tabuleiro vertical de 6 linhas e 7 colunas, o que resulta em 42 @casa:pl.
 As peças são discos de mesmo tamanho divididas igualmente entre cada um dos @jogador:pl, que recebe todas as peças de uma das duas cores disponíveis.
-Dentro de um @turno, o jogador atual deve escolher uma colunas que já não tenha sido completamente preenchida para colocar sua peça.
-No tabuleiro vertical, ela cairá até a linha mais baixa ainda não preenchida naquela coluna.
+Dentro de um @turno, o jogador atual deve escolher uma coluna que já não tenha sido completamente preenchida para colocar sua peça.
+Sendo o tabuleiro vertical, ela cairá até a linha mais baixa ainda não preenchida naquela coluna.
 Após colocada, uma peça não pode mais ser removida naquela @partida.
 
 Então, a @rodada passa a vez para o segundo @jogador, que deve escolher seu @movimento da mesma forma que o primeiro.
-Um @jogador vence caso ele posicione $4$ de suas peças de forma adjacente na mesma linha, coluna ou diagonal.
+Um @jogador vence caso ele posicione 4 de suas peças de forma adjacente na mesma linha, coluna ou diagonal.
 Configura um empate o caso em que todas as @casa:pl tenham sido preenchidas e nenhum @jogador tenha marcado um dos formatos especificados.
-Essas regras fazem com que haja mais de 4.5 trilhões de combinações possíveis de peças no tabuleiro, mesmo que o jogo permita no máximo $7$ @movimento:pl em qualquer @turno @cahn:2024:connect4.
+Essas regras fazem com que haja mais de 4.5 trilhões de combinações possíveis de peças no tabuleiro, mesmo que o jogo permita no máximo 7 @movimento:pl em qualquer @turno @cahn:2024:connect4.
 
-Nesta seção, descrevemos o processo de implementação do jogo @ligue4, destacando seus componentes de descrição.
-Em relação à pré-implementação das classes abstratas, poucas adaptações foram necessárias.
+Nesta seção, descrevemos o processo de implementação do jogo #get_term("ligue4"), destacando seus componentes de descrição.
+Em relação à implementação das classes abstratas, poucas adaptações foram necessárias.
 Todas as classes concretas seguiram a convenção de iniciar seus nomes com o termo `ConnectFour` seguido do nome da classe que ela implementa.
 Conforme visto na @figure:diagrama_classes_pacote_games, as classes `Slot` e `Move` foram acrescidas de novos atributos.
 Além disso, observamos a necessidade de criar uma nova estrutura de dados abstrata para representar os formatos considerados para levar à vitória, o que foi feito pelo tipo `ConnectFourShape`.
@@ -207,7 +228,7 @@ Ele permite definir linhas de um tamanho arbitrário --- embora tenhamos escolhi
   sticky: true,
   note: [As propriedades com visibilidade privada têm métodos públicos de encapsulamento para a obtenção de seus valores que não foram representados.],
   [#figure(
-    caption: [Classes concretas alteradas na implementação do @ligue4 e tipo utilitário nela definido.],
+    caption: [Classes concretas alteradas na implementação do #get_term("ligue4") e tipo utilitário nela definido.],
     image(
       width: 70%,
       "../../assets/images/uml/games/simplified_class_diagram_of_package_games.png",
@@ -216,19 +237,19 @@ Ele permite definir linhas de um tamanho arbitrário --- embora tenhamos escolhi
 )
 
 A primeira classe concreta implementada foi a `ConnectFourPlayer`, referente aos dados imutáveis de cada @jogador.
-O @ligue4 não guarda nenhuma informação relevante sobre um @jogador exceto aquelas necessárias para a sua distinção na interface com o usuário.
+O #get_term("ligue4") não guarda nenhuma informação relevante sobre um @jogador exceto aquelas necessárias para a sua distinção na interface com o usuário.
 Assim, não foi necessária nenhuma alteração na classe.
-Ao criar seus objetos, escolhemos arbitrariamente o nome @alice:long e o símbolo @alice:short para o @jogador de índice $0$ e o nome @bruno:long e símbolo @bruno:short para o @jogador de índice $1$.
+Ao criar seus objetos, escolhemos arbitrariamente o nome #get_term(field: "long", "alice") e o símbolo #get_term("alice") para o @jogador de índice $0$ e o nome #get_term(field: "long", "bruno") e símbolo #get_term("bruno") para o @jogador de índice $1$.
 Tais valores não representam nomes reais de pessoas, mas servem apenas como facilitadores de distinção entre esses objetos para os desenvolvedores do protótipo.
 
 Em seguida, implementamos a classe concreta `ConnectFourSlot`, que representa o conteúdo guardado em uma @casa do tabuleiro.
-O @ligue4 utiliza peças simples, cuja única diferença é a cor, que é associada a cada um dos @jogador:pl.
+O #get_term("ligue4") utiliza peças simples, cuja única diferença é a cor, que é associada a cada um dos @jogador:pl.
 Por isso, a única informação relevante para cada @casa é se ela está vazia ou, caso não esteja, qual @jogador a preencheu.
-Então, acrescentamos o atributo `indexOfOccupyingPlayer`, que pode ser assinalado com o índice $0$ caso o @jogador @alice tenha marcado uma peça, com o índice $1$ caso o @jogador @bruno o tenha feito, ou com o valor `null` se a @casa estiver vazia.
+Então, acrescentamos o atributo `indexOfOccupyingPlayer`, que pode ser assinalado com o índice $0$ caso o @jogador #get_term("alice") tenha marcado uma peça, com o índice $1$ caso o @jogador #get_term("bruno") o tenha feito, ou com o valor `null` se a @casa estiver vazia.
 Quanto aos objetos utilizados pelo experimento, criamos todas as $49$ @casa:pl, definindo o atributo de jogador ocupante como `null` e nomeando-as com a convenção "rXcY", em que os termos "X" representam o índice da linha que ela ocupa e o termo "Y" representa o da coluna.
 Para os testes de unidade, também criamos novos objetos preenchidos em diferentes combinações.
 
-Diferentemente do @jogo_velha, em que cada @movimento tem relação direta com uma única @casa do tabuleiro, o @ligue4 precisa calcular a posição onde marcar uma peça a depender de dois fatores: o índice da coluna escolhida pelo @jogador e a disposição de peças já marcadas nela.
+Diferentemente do #get_term("jogo_velha"), em que cada @movimento tem relação direta com uma única @casa do tabuleiro, o #get_term("ligue4") precisa calcular a posição onde marcar uma peça a depender de dois fatores: o índice da coluna escolhida pelo @jogador e a disposição de peças já marcadas nela.
 Percebe-se então que esse índice deve ser armazenado no atributo `indexOfColumnInWhichPlacePiece` da classe concreta `ConnectFourMove`.
 Implementamos também o método auxiliar `getIndexOfSlotInWhichPlacePiece`, responsável por acessar, de baixo para cima, cada @casa da coluna para encontrar a primeira que esteja vazia no @estado fornecido.
 Depois, criamos um objeto para cada uma das colunas, cujo índice guardamos no atributo discutido e cujos títulos e descrições foram dados em relação ao seu número ordinal.
@@ -279,22 +300,22 @@ Caso a @partida continue, o método `getIndexOfNextPlayer` é responsável por p
 
 Outra responsabilidade da implementação da classe `Game` é estabelecer a quantidade de linhas, de colunas e de canais do @estado codificado.
 Decidimos utilizar a mesma dimensão do tabuleiro ($6$ linhas e $7$ colunas) para a codificação e empilhar sobre ela $4$ canais de dados, inicializados com o valor $0$.
-Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seus valores definido como $1$ se a @casa correspondente por estiver marcada pelo jogador @alice.
-Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador @bruno, ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
-Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador @alice ou com $1$ caso seja do @jogador @bruno.
+Como descrito na @section:alphazero, o canal de índice $0$ terá cada um de seus valores definido como $1$ se a @casa correspondente por estiver marcada pelo jogador #get_term("alice").
+Já as @casa:pl do canal de índice $1$ serão ativadas pelas peças do @jogador #get_term("bruno"), ao passo em que as @casa:pl vazias ativam o canal de índice $2$.
+Finalmente, o canal de índice $3$ tem a responsabilidade de informar à @rn de qual @jogador é a vez no @turno atual, sendo completamente preenchido com $0$ caso seja do @jogador #get_term("alice") ou com $1$ caso seja do @jogador #get_term("bruno").
 
 == Elaboração dos algoritmos de busca
 
-Havendo devidamente representado o @jogo @ligue4, passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
+Havendo devidamente representado o @jogo #get_term("ligue4"), passamos à implementação do módulo `search`, responsável pelos algoritmos de @mcts:long e de predição por meio de @resnet:pl.
 A lógica de construção de suas principais classes foi inspirada pela implementação de referência de #cite(form: "prose", <forster:2023:alphazero>).
 
-Primeiramente definimos tipos úteis para a melhor descrição de conceitos comuns, como mostrado na @figure:diagrama_pacote_search_tipos.
+Primeiramente define-se tipos úteis para a melhor descrição de conceitos comuns, como mostrado na @figure:diagrama_pacote_search_tipos.
 Todos eles são @alias:pl do tipo primitivo `number`, que representa números reais.
 Seus significados são descritos nesta seção, conforme a discussão acerca de seus usos.
 
 #describe_figure(
   sticky: true,
-  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem @js.],
+  note: [O pacote `primitive` se refere aos tipos de dados concretos disponibilizados pela linguagem #get_term("js").],
   [#figure(
     caption: [Tipos de dados comuns definidos pelo pacote `search`.],
     image(
@@ -334,7 +355,7 @@ Uma vez que esse comportamento é necessário em outras partes do projeto, a mai
 Esse dado de qualidade é retro-propagado recursivamente até o nó raiz por meio do método `updateQualityOfMatchAndQuantityOfVisitsOnBranch`, incrementando-o nos turnos do @jogador vencedor e decrementando-o para os demais.
 
 Já a etapa de seleção é gerenciada pelo método `selectBestChildNode`, que calcula o valor de @fitness para cada nó já expandido e escolhe o melhor.
-Para isso, é chamado o método `calculateFitnessOfChild`, que soma os componentes de @aproveitamento e de @exploracao da equação de @uct, equilibrando-os por meio da constante de @exploracao fornecida.
+Para isso, é chamado o método `calculateFitnessOfChild`, que soma os componentes de @aproveitamento e de @exploracao da equação de @uct, equilibrando-os por meio do coeficiente de @exploracao fornecida.
 Uma vez que a @mcts clássica e a adaptada pelo @alphazero calculam o valor de @fitness de forma diferente, utilizamos os métodos abstratos para defini-los.
 
 Finalmente, o método `qualityOfMove` é responsável por classificar os @movimento:pl válidos a partir do @estado inicial da árvore.
@@ -352,13 +373,13 @@ Para resolver esse problema, decidimos alterar o cálculo da qualidade de um @mo
 )[
   #equation[
     $
-      F(n) = Q(n) + root(4, V(n))
+      A(n) = Q(n) + root(4, V(n))
     $ <equation:qualidade_do_movimento>
 
     Na qual:
-    - $F(s)$ é a qualidade do @movimento representado pelo nó $n$;
+    - $A(n)$ é a qualidade do @movimento representado pelo nó $n$;
     - $Q(n)$ é a qualidade da @partida calculada por meio de simulações a partir do nó $n$;
-    - $V(s)$ é quantidade de vezes em que o nó $n$ foi visitado nas iterações anteriores.
+    - $V(n)$ é quantidade de vezes em que o nó $n$ foi visitado nas iterações anteriores.
   ]
 ]]
 
@@ -371,7 +392,7 @@ Ela armazena dados relevantes para executar o algoritmo, como o coeficiente de e
   [#figure(
     caption: [Classe `Search` definida no pacote `search`.],
     image(
-      width: 60%,
+      width: 50%,
       "../../assets/images/uml/search/simplified_class_diagram_of_package_search_showing_class_search.png",
     ),
   )<figure:diagrama_classes_pacote_search_mostrando_classe_search>],
@@ -382,23 +403,33 @@ Esse primeiro algoritmo foi implementado nas classes concretas `CommonSearch` e 
 Essa define a etapa de expansão por um método chamado `expand`, que recebe o @movimento a expandir e gera um único novo nó.
 
 Já em relação à @mcts adaptada, a classe concreta `AgentGuidedSearch` implementa a busca e define um novo atributo chamado `predictionModel`, que guarda o modelo de @resnet responsável por orientar a etapa de predição.
-Em seguida, durante a etapa de expansão, os valores estimados por sua @policy_head geram todos os @movimento:pl válidos para o @estado atual.
+Em seguida, durante a etapa de expansão, os valores estimados por sua #get_term("policy_head") geram todos os @movimento:pl válidos para o @estado atual.
 Essa fase é implementada pelo método `expand` da classe concreta `AgentGuidedTreeNode`, que recebe aquele @vetor e guarda a qualidade estimada no novo atributo `qualityOfMoveAttributedByModel` de cada nó filho.
 Por fim, a predição da qualidade da partida é utilizada para orientar a fase de retro-propagação.
 
 == Construção da @resnet:long <section:construcao_resnet>
 
 Considerando a variação de complexidade entre diferentes @jogo:pl e seguindo a recomendação da implementação de referência @forster:2023:alphazero, possibilitamos ao projetista de um protótipo definir parâmetros da arquitetura da @resnet:long utilizada pelos @agint:pl.
-Para isso, criamos a classe `ResidualNeuralNetwork`, que recebe os seguintes dados: (1) #glossarium.gls("seed", display: `seed`), usado para inicializar os @peso:pl e @vies:pl da @rn; (2) `quantityOfResidualBlocks`, para definir a quantidade de blocos residuais a serem criados na @backbone da rede; e (3) `quantityOfHiddenChannels`, referente à quantidade de canais usada nas camadas internas de processamento da rede.
+Para isso, criamos a classe `ResidualNeuralNetwork`, que recebe os seguintes dados: (1) #glossarium.gls("seed", display: `seed`), usado para inicializar os @peso:pl e @vies:pl da @rn; (2) `quantityOfResidualBlocks`, para definir a quantidade de blocos residuais a serem criados na #get_term("backbone") da rede; e (3) `quantityOfHiddenChannels`, referente à quantidade de canais usada nas camadas internas de processamento da rede.
 
-A classe construtora de modelos de @rn e as operações sobre tensores foram disponibilizadas pelo pacote do projeto @tensorflow_js.
+A classe construtora de modelos de @rn e as operações sobre tensores foram disponibilizadas pelo pacote do projeto #get_term("tensorflow_js").
 Ele disponibiliza algumas formas de construir a arquitetura da rede, dentre as quais selecionamos a de #text_in_english[LayersModel].
-Tomamos o cuidado de encapsular o uso do @tensorflow dentro dessa classe, a fim de permitir sua substituição se necessário sem requerer a refatoração de outros componentes do projeto.
-Então, definimos funções auxiliares para a construção das camadas de adaptação da entrada, de blocos residuais e de saída para a @policy_head e para a @value_head.
+Tomamos o cuidado de encapsular o uso do #get_term("tensorflow") dentro dessa classe, a fim de permitir sua substituição se necessário sem requerer a refatoração de outros componentes do projeto.
+Então, definimos funções auxiliares para a construção das camadas de adaptação da entrada, de blocos residuais e de saída para a #get_term("policy_head") e para a #get_term("value_head").
 
-Acerca do treinamento, o método `train` dessa mesma classe recebe os conjuntos de @estado:pl codificados e de saídas esperadas para a @policy_head e para a @value_head.
+Acerca do treinamento, o método `train` dessa mesma classe recebe os conjuntos de @estado:pl codificados e de saídas esperadas para a #get_term("policy_head") e para a #get_term("value_head").
 O alinhamento dos @peso:pl e @vies:pl é realizado pelo método `fit` do objeto de `LayersModel`, utilizando o otimizador @adam.
-Para a @policy_head, selecionamos a função de @perda de @entropia_cruzada_categorica (#glossarium.gls-custom("entropia_cruzada_categorica")), ao passo em que escolhemos a função de @erro_quadratico_medio (#glossarium.gls-custom("erro_quadratico_medio")) para calcular a @perda da @value_head.
+Para a #get_term("policy_head"),
+selecionamos a função de @perda de @entropia_cruzada_categorica
+(em inglês, #glossarium.gls(
+  "entropia_cruzada_categorica",
+  display: glossarium.gls-custom("entropia_cruzada_categorica"),
+)),
+ao passo em que escolhemos a função de @erro_quadratico_medio (em inglês, #glossarium.gls(
+  "erro_quadratico_medio",
+  display: glossarium.gls-custom("erro_quadratico_medio"),
+))
+para calcular a @perda da #get_term("value_head").
 Quanto à execução do programa, permitimos que o usuário escolha os seguintes parâmetros: (1) `quantityOfEpochs`, para definir a quantidade de épocas de treinamento; e (2) `sizeOfBatch`, para ajustar o tamanho do conjunto de entradas e saídas usado a cada passo de alinhamento.
 
 == Geração de memórias para os @agint:pl <section:geracao_memorias>
@@ -421,7 +452,7 @@ Para implementar o ciclo de treinamento do modelo, que envolve gerar uma memóri
   [#figure(
     caption: [Tipos de dados relacionados à criação de uma memória de @partida:pl definidos pelo pacote `search`.],
     image(
-      width: 95%,
+      width: 90%,
       "../../assets/images/uml/search/types_diagram_of_package_search_showing_file_memory.png",
     ),
   )<figure:diagrama_pacote_search_tipos_memoria>],
@@ -448,16 +479,18 @@ Ele recebe um objeto do tipo `AgentGuidedSearch`, que realiza a @mcts:long adapt
 
         while (true) {
             const qualitiesOfMoves = searchQualityOfMoves(search, currentState);
-            memoryOfTurns.push({
-                encodedState: currentState.getEncodedState(),
-                indexOfPlayer: currentState.getIndexOfPlayer(),
-                indexOfPlayerWhoPlayedMove,
-                qualitiesOfMoves
-            });
 
             const indexesOfValidMoves = game.getIndexesOfValidMoves(currentState);
             const indexOfPickedMove = random.pickMoveConsideringItsQuality( ↵
                 indexesOfValidMoves, qualitiesOfMoves);
+
+            memoryOfTurns.push({
+                encodedState: currentState.getEncodedState(),
+                indexOfPlayer: currentState.getIndexOfPlayer(),
+                indexOfPlayerWhoPlayedMove,
+                qualitiesOfMoves,
+                indexOfPickedMove
+            });
 
             const nextState = game.play(indexOfPickedMove, currentState);
             if (nextState.isFinal()) {
@@ -477,15 +510,18 @@ Ele recebe um objeto do tipo `AgentGuidedSearch`, que realiza a @mcts:long adapt
   )<code:build_memory_of_match>],
 )
 
-A inicialização do processo de geração de memória define a variável que armazenará o histórico de @turno:pl, além dos marcadores auxiliares do @estado atual e do @jogador que realizou o último movimento na @partida.
-Então, o algoritmo utiliza a @mcts para obter as qualidades atribuídas a cada um dos @movimento:pl.
-Uma vez que a @resnet precisa receber o @vetor completo de todos os @movimento:pl possíveis no @jogo, as posições referentes aos @movimento:pl inválidos são preenchidas com o número especial que representa infinito negativo no @js.
-Em seguida, os dois marcadores, o @vetor de qualidades e o @estado codificado são armazenados no histórico.
+A inicialização do processo de geração de memória define a variável que armazenará o histórico de @turno:pl, implementada como um @vetor de objetos do tipo `MemoryOfMatch`.
+Além disso, são criados os marcadores auxiliares do @estado atual e do @jogador que realizou o último movimento na @partida.
+
+Então, inicia-se um laço de repetição, em que o algoritmo utiliza a @mcts para obter as qualidades atribuídas a cada um dos @movimento:pl.
+Uma vez que a @resnet precisa receber o @vetor completo de todos os @movimento:pl possíveis no @jogo, as posições referentes aos @movimento:pl inválidos são preenchidas com o número especial que representa infinito negativo no #get_term("js").
 
 O algoritmo dá prosseguimento ao turno, ao utilizar o método pseudo-aleatório da roleta para selecionar um @movimento.
-Este é executado sobre o @estado atual, que em seguida é aferido para determinar se ele levou ao fim da @partida.
+Em seguida, os dois marcadores, o @vetor de qualidades, o @estado codificado e o índice do movimento escolhido são armazenados no histórico.
+
+Esse @movimento selecionado é executado sobre o @estado atual, gerando um novo @estado, o qual é aferido para determinar se ele levou ao fim da @partida.
 Caso positivo, a função `buildMemoryOfMatch` retorna um objeto do tipo `QualityOfMatch`, que é composto pelo histórico de @turno:pl e pela @pontuacao de todos os @jogador:pl no fim da @partida.
-Caso contrário, os marcadores do último @jogador a efetuar um @movimento e do @estado atual são atualizados e mais um passo se simulação é realizado.
+Caso contrário, os marcadores auxiliares são atualizados e mais um passo de simulação é realizado.
 
 Considerando que o treinamento de um @agint requer um histórico grande de @partida:pl, criamos uma nova função chamada `buildMemoryOfMatches`.
 Ela recebe do usuário o parâmetro `quantityOfIterations`, acerca da quantidade de @partida:pl a serem simuladas.
@@ -497,16 +533,16 @@ Por sua vez, o segundo, `policies`, armazena os @vetor:pl de qualidade de @movim
 Finalmente, o terceiro, `values`, é obtido pelo uso do método auxiliar `calculateQualityOfMatch`, que usa a @pontuacao e o marcador de @jogador atual em cada turno para calcular a qualidade da @partida.
 Esses três @vetor:pl são retornados num objeto do tipo `TrainingMemory`.
 
-== Interface com o usuário
+== Interface com o usuário <section:interface>
 
 As funcionalidades criadas e discutidas requeriam uma interface padronizada para que aplicações as acessassem sem interagir com os detalhes de implementação.
 Para isso, organizamos no pacote `interface` um conjunto de ações disponíveis ao usuário.
-Elas foram implementadas como comandos de terminal em um outro pacote do projeto chamado `node`, que utilizou para isso a biblioteca @commander.
+Elas foram implementadas como comandos de terminal em um outro pacote do projeto chamado `node`, que utilizou para isso a biblioteca #get_term("commander").
 Os comandos de maior destaque são discutidos nesta seção.
 
 Inicialmente, oferecemos uma forma de visualização da árvore de busca gerada pelo método de @mcts:short.
 Para isso, o usuário fornece os seguintes dados: (1) a estratégia de busca --- se a clássica ou a adaptada pelo @alphazero ---; (1a) o modelo de predição, caso o usuário escolha a versão adaptada; (2) o coeficiente de exploração para cálculo da diretriz @uct; (3) a quantidade de ciclos iterados pela @mcts; (4) o coeficiente de suavização para calcular as probabilidades atribuídas a cada @movimento; (5) uma @seed para calcular os valores pseudo-aleatórios; e (6) o @estado sobre o qual se quer descobrir os melhores @movimento:pl viáveis.
-O programa executará a busca, calculará as qualidades e probabilidades dos @movimento:pl e os imprimirá, juntamente com um arquivo SVG da árvore de busca montada, o qual é gerado pelo programa @graphviz.
+O programa executará a busca, calculará as qualidades e probabilidades dos @movimento:pl e os imprimirá, juntamente com um arquivo SVG da árvore de busca montada, o qual é gerado pelo programa #get_term("graphviz").
 
 Caso o usuário queira obter apenas a avaliação de um modelo de predição sobre um determinado @estado, ele pode informá-los a outro comando, que também requer o coeficiente de suavização.
 Ela solicitará a predição ao modelo e imprimirá as qualidades dos @movimento:pl retornadas e probabilidades calculadas.
@@ -515,7 +551,7 @@ O programa também oferece ambientes de execução de @partida:pl entre dois @jo
 Ele requer que se informe o @estado do @jogo sobre o qual se deseja iniciar a @partida.
 Então, inicia um laço de repetição até que a  @partida chegue a um @estado de fim de @jogo.
 A cada iteração, o algoritmo obtém por meio das regras quais são os @movimento:pl válidos a partir do @estado atual.
-Em seguida, mostra essa lista ao usuário por meio da biblioteca @inquirer e requer que ele escolha um @movimento.
+Em seguida, mostra essa lista ao usuário por meio da biblioteca #get_term("inquirer") e requer que ele escolha um @movimento.
 O programa o efetua, marca o @estado gerado como o atual e verifica se ele representa o fim da @partida.
 
 Laços similares são implementados para as ações em que o usuário decide jogar contra o computador ou quando ele inicia um jogo entre dois @agint:pl.
@@ -523,24 +559,49 @@ Nesses casos, em vez de solicitar a seleção de movimentos para o @jogador, o a
 Então, o @movimento efetuado é escolhido pseudo-aleatoriamente pelo método da roleta.
 
 Acerca da geração de @agint:pl, o programa oferece três comandos relevantes.
-O primeiro é o `constuct-model`, que gera um modelo de @resnet segundo os parâmetros informados e o exporta em dois arquivos de descrição do @tensorflow.
-O primeiro é um arquivo @json que descreve toda a estrutura da @rn, ao passo em que o segundo é um arquivo binário que salva os @peso:pl e @vies:pl aleatoriamente gerados.
-Ao usá-lo, o usuário deve fornecer os dados acerca: (1) do @jogo a ser simulado; (2) da quantidade de blocos residuais; (3) da largura em canais da @backbone da rede; e (4) da @seed usada para inicializar as conexões.
+O primeiro é o `constuct-model`, que gera um modelo de @resnet segundo os parâmetros informados e o exporta em dois arquivos de descrição do #get_term("tensorflow").
+O primeiro é um arquivo #get_term("js")on que descreve toda a estrutura da @rn, ao passo em que o segundo é um arquivo binário que salva os @peso:pl e @vies:pl aleatoriamente gerados.
+Ao usá-lo, o usuário deve fornecer os dados acerca: (1) do @jogo a ser simulado; (2) da quantidade de blocos residuais; (3) da largura em canais da #get_term("backbone") da rede; e (4) da @seed usada para inicializar as conexões.
 
 Esse primeiro modelo gerado não estará apto a orientar um @agint.
 Antes disso, é necessário sujeitá-lo ao processo de treinamento.
 O primeiro passo para isso é gerar a memória de @partida:pl.
-Com esse objetivo, o comando `build-training-memory` gera um @vetor do tipo `MemoryOfMatch` por meio da função `buildMemoryOfMatches` discutida na @section:geracao_memorias e o salva em um arquivo de tipo @json.
-Em seguida, o programa converte a memória num objeto do tipo `TrainingMemory` e também o salva em outro arquivo de tipo @json.
+Com esse objetivo, o comando `build-training-memory` gera um @vetor do tipo `MemoryOfMatch` por meio da função `buildMemoryOfMatches` discutida na @section:geracao_memorias e o salva em um arquivo de tipo #get_term("js")on.
+Em seguida, o programa converte a memória num objeto do tipo `TrainingMemory` e também o salva em outro arquivo de tipo #get_term("js")on.
 
 Finalmente, o comando `train` pode ser chamado para alinhar um modelo ao histórico gerado.
 Para isso, o algoritmo utiliza o método `train` discutido na @section:construcao_resnet.
 Um parâmetro novo que esse comando requer é chamado `valueToReplaceInfinity`, que tem o objetivo de substituir o marcador de @movimento impossível nos @vetor:pl de qualidade salvos na memória de @partida:pl.
-Isso é necessário para que o @tensorflow consiga realizar operações sobre os valores de entrada dentro de seu limite de representação de bits.
+Isso é necessário para que o #get_term("tensorflow") consiga realizar operações sobre os valores de entrada dentro de seu limite de representação de bits.
 Dessa forma, o valor fornecido para o comando de treinamento atua como uma penalidade para os @movimento:pl inválidos.
-Contudo, alguns testes preliminares não mostraram diferença significativa nas métricas de acurácia do processo de alinhamento ao utilizar diferentes valores, o que nos motivou a definir a penalidade como $0$.
 
-Além da aplicação @apts, elaboramos também um script em linguagem fish que realiza o ciclo de treinamento automaticamente.
-Ele se inicia na pasta em que um modelo havia sido exportado, e chama o comando `build-training-memory` com argumentos especificados.
-Então, o algoritmo acessa a pasta de memórias e executa o comando `train`, para gerar um novo modelo de @rn.
+== Execução do experimento
+
+Como já discutido, é requisito para a execução do programa @apts gerar os objetos para as classes de representação de @jogo:pl e de estruturação de uma @resnet.
+Uma vez que já descrevemos na @section:implementacao_ligue4 como foram criados os objetos relativos ao @jogo #get_term("ligue4"), discutimos a seguir como os @agint:pl orientados por @resnet:pl foram criados.
+
+O primeiro passo nesse objetivo é executar o comando `constuct-model` já discutido na @section:interface.
+Inspirados pela sugestão dada pela implementação de referência @forster:2023:alphazero, decidimos construir um modelo para o @jogo #get_term("ligue4") de $8$ blocos residuais e com largura de $128$ canais internos.
+O algoritmo desse comando constrói a @rn e a exporta como uma pasta que guarda dois arquivos: o de estrutura das camadas; e o de definição dos @peso:pl e @vies:pl.
+
+Em seguida, elaboramos um conjunto de scripts para facilitar a execução de comandos em série com o apoio da ferramenta de @ia para geração de texto Claude Sonnet 4.5
+#footnote[
+  Acesso em: #link("https://www.anthropic.com/claude/sonnet").
+].
+O primeiro script, chamado de `train_model`, é descrito em linguagem fish
+#footnote[
+  Acesso em: #link("https://fishshell.com/docs/current/language.html").
+] e realiza o ciclo de treinamento descrito na @section:alphazero.
+
+Esse script chama o comando `build-training-memory` com argumentos especificados, definindo o @agint que orienta a simulação de partidas como aquele gerado pelo comando anterior.
+Seu algoritmo então começa a simular uma série de @partida:pl jogadas segundo o método de @mcts adaptada pelo @alphazero.
+Ao final, ele guarda, em uma pasta aninhada dentro da pasta do modelo de @resnet, as memórias de @partida:pl e de treinamento geradas.
+
+Para esse comando, definimos a @mcts para realizar $512$ ciclos de busca, a um coeficiente de @exploracao de $1.4$.
+O @agint utilizou o método de @softmax a um coeficiente de suavização de
+
+O segundo passo desse script é executar o comando `train` para gerar um novo modelo de @rn.
 Outro ciclo se inicia quando o script abre a pasta desse novo modelo e gera memórias de treinamento utilizando-o para orientar o @agint durante as @partida:pl.
+
+Por meio de alguns testes preliminares, identificamos que o valor de penalidade para @movimento:pl inválidos não mostrou diferença significativa nas métricas de acurácia do processo de alinhamento, o que nos motivou a defini-lo como 0.
+Definimos a penalidade para @movimento:pl inválidos como 0,
