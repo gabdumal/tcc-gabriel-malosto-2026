@@ -41,7 +41,7 @@ Esta seção discute a responsabilidade e a implementação de cada um dos módu
 O módulo `core` tem a responsabilidade de definir constantes, tipos e funções utilitárias para todos os demais módulos.
 Destacam-se algumas funções de conversão de tipos de dados, sobretudo para tratar argumentos fornecidos pela linha de comando em suas representações numéricas.
 Também estão disponíveis utilitários para a formatação de dados de tipos compostos e de descritores dos testes de unidade.
-Além disso, o módulo gerencia a codificação de dados para o formato de #get_term("js")on #footnote[
+Além disso, o módulo gerencia a codificação de dados para o formato de @json #footnote[
   Acesso em: #link("https://www.json.org/json-en.html").
 ] e a equivalente conversão para objetos em memória, o que é necessário para salvar e interpretar o histórico de @partida:pl para o treinamento de modelos.
 
@@ -560,14 +560,14 @@ Então, o @movimento efetuado é escolhido pseudo-aleatoriamente pelo método da
 
 Acerca da geração de @agint:pl, o programa oferece três comandos relevantes.
 O primeiro é o `constuct-model`, que gera um modelo de @resnet segundo os parâmetros informados e o exporta em dois arquivos de descrição do #get_term("tensorflow").
-O primeiro é um arquivo #get_term("js")on que descreve toda a estrutura da @rn, ao passo em que o segundo é um arquivo binário que salva os @peso:pl e @vies:pl aleatoriamente gerados.
+O primeiro é um arquivo @json que descreve toda a estrutura da @rn, ao passo em que o segundo é um arquivo binário que salva os @peso:pl e @vies:pl aleatoriamente gerados.
 Ao usá-lo, o usuário deve fornecer os dados acerca: (1) do @jogo a ser simulado; (2) da quantidade de blocos residuais; (3) da largura em canais da #get_term("backbone") da rede; e (4) da @seed usada para inicializar as conexões.
 
 Esse primeiro modelo gerado não estará apto a orientar um @agint.
 Antes disso, é necessário sujeitá-lo ao processo de treinamento.
 O primeiro passo para isso é gerar a memória de @partida:pl.
-Com esse objetivo, o comando `build-training-memory` gera um @vetor do tipo `MemoryOfMatch` por meio da função `buildMemoryOfMatches` discutida na @section:geracao_memorias e o salva em um arquivo de tipo #get_term("js")on.
-Em seguida, o programa converte a memória num objeto do tipo `TrainingMemory` e também o salva em outro arquivo de tipo #get_term("js")on.
+Com esse objetivo, o comando `build-training-memory` gera um @vetor do tipo `MemoryOfMatch` por meio da função `buildMemoryOfMatches` discutida na @section:geracao_memorias e o salva em um arquivo de tipo @json.
+Em seguida, o programa converte a memória num objeto do tipo `TrainingMemory` e também o salva em outro arquivo de tipo @json.
 
 Finalmente, o comando `train` pode ser chamado para alinhar um modelo ao histórico gerado.
 Para isso, o algoritmo utiliza o método `train` discutido na @section:construcao_resnet.

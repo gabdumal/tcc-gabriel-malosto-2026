@@ -3,7 +3,7 @@
 
 #import "/template/academic_work/pages.typ": include_acknowledgments
 #import "/template/common/components.typ": todo_note
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "../../components.typ": note_from_gabriel, note_from_igor
 
 #include_acknowledgments()[
 

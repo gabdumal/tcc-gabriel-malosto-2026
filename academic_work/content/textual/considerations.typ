@@ -1,4 +1,4 @@
-#import "../../components/note.typ": note_from_gabriel
+#import "../../components.typ": note_from_gabriel
 #import "/template/common/components.typ": todo_note
 
 = Considerações finais <chapter:consideracoes>

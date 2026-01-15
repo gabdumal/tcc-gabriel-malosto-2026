@@ -1,7 +1,7 @@
 // # Abstract. Resumo.
 // NBR 14724:2024 4.2.1.7, NBR 14724:2024 4.2.1.8
 
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "../../components.typ": note_from_gabriel, note_from_igor
 #import "/template/academic_work/pages.typ": include_abstract
 #import "/template/common/components.typ": done_note, progress_note, todo_note
 #import "/template/packages.typ": glossarium

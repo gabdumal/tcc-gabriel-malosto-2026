@@ -1,7 +1,7 @@
 // # Dedication. Dedicatória.
 // NBR 14724:2024 4.2.1.4, NBR 14724:2024 5.2.4
 
-#import "../../components/note.typ": note_from_gabriel
+#import "../../components.typ": note_from_gabriel
 #import "/template/academic_work/pages.typ": include_dedication
 #import "/template/common/components.typ": todo_note
 

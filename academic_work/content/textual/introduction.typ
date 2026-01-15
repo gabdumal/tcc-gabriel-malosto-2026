@@ -1,4 +1,4 @@
-#import "../../components/note.typ": note_from_gabriel, note_from_igor
+#import "../../components.typ": note_from_gabriel, note_from_igor
 #import "/template/common/components.typ": done_note, progress_note, todo_note
 #import "/template/common/util.typ": text_in_english
 #import "/template/packages.typ": glossarium
