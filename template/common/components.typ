@@ -831,7 +831,7 @@
   // The first column should be left-aligned, and the following columns should be right-aligned
   set table(
     align: (x, y) => {
-      if y == 0 { center } else if x == 0 { left } else { right }
+      if y == 0 { center + horizon } else if x == 0 { left + horizon } else { right + horizon }
     },
   )
 

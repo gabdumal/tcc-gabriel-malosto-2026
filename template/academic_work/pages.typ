@@ -7,6 +7,7 @@
 // ### Cover. Capa.
 // NBR 14724:2024 4.1.1
 
+#import "../academic_work/components.typ": print_advisors
 #import "../common/components.typ": (
   consider_only_odd_pages, not_count_page, not_number_page, not_start_on_new_page, print_people, print_title,
   should_count_this_page,
@@ -871,16 +872,7 @@ print_institutional_information,
         #v(1fr)
 
         // Advisors
-        #let is_first_advisor = true
-        #for advisor in advisors {
-          [
-            #capitalize_first_letter(get_advisor_role(gender: advisor.gender, is_co_advisor: not is_first_advisor)):
-            #advisor.prefix
-            #print_person(person: advisor)
-            #linebreak()
-          ]
-          is_first_advisor = false
-        }
+        #print_advisors(advisors: advisors)
 
         #v(1fr)
 

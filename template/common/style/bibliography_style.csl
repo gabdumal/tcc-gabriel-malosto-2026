@@ -634,8 +634,8 @@
                         <text macro="container-part" />
                         <text variable="collection-title" prefix=": " suffix=". " />
                         <text macro="locators" suffix=". " />
-                        <text macro="event-core" />
-                        <text macro="publisher" prefix=". " suffix=". " />
+                        <text macro="event-core" suffix=". " />
+                        <text macro="publisher" suffix=". " />
                         <text macro="access" suffix="." />
                     </group>
                 </else-if>
@@ -698,7 +698,7 @@
                     <text macro="container-contributors" />
                     <text macro="secondary-contributors" suffix=". " />
                     <text macro="container-title" />
-                    <text variable="collection-title" prefix=": " suffix="." />
+                    <text variable="collection-title" suffix=". " />
                     <text macro="locators" />
                     <group delimiter=". ">
                         <text macro="event-proceedings" />
@@ -746,7 +746,7 @@
                     <text macro="access" suffix=". " />
                 </else>
             </choose>
-            <text variable="note" prefix=" " suffix="." />
+            <text variable="note" suffix="." />
         </layout>
     </bibliography>
 </style>

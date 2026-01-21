@@ -1,7 +1,10 @@
-// # Cover. Capa.
+// # External elements. Elementos externos.
+// NBR 14724:2024 4.1
+
+// ## Cover. Capa.
 // NBR 14724:2024 4.1.1
 
-#import "../../data/main.typ": (
+#import "../data/main.typ": (
   address, authors, institution, organization, program, subtitle, title, volume_number, year,
 )
 #import "/template/academic_work/pages.typ": include_cover

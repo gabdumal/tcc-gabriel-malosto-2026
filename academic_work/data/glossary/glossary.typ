@@ -8,34 +8,34 @@
     key: "pooling",
     short: text_in_english[pooling],
     custom: [agrupamento],
-    description: [Em português, agrupamento. Operação em @cnn:pl que reduz a dimensionalidade espacial dos dados, preservando as informações mais relevantes ao selecionar valores representativos de regiões locais.],
+    description: [Em português, agrupamento. Operação em @cnn:pl que reduz a dimensionalidade espacial dos dados, preservando as informações mais relevantes ao selecionar valores representativos de regiões locais @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
     key: "overfitting",
     short: text_in_english[overfitting],
     custom: [sobre-ajuste],
-    description: [Em português, sobre-ajuste. Fenômeno em que um modelo de aprendizado de máquina se ajusta excessivamente aos dados de treinamento, capturando ruído e padrões específicos em vez de generalizar para novos dados, resultando em baixo desempenho para dados não vistos.],
+    description: [Em português, sobre-ajuste. Fenômeno em que um modelo de aprendizado de máquina se ajusta excessivamente aos dados de treinamento, capturando ruído e padrões específicos em vez de generalizar para novos dados, resultando em baixo desempenho para dados não vistos @geeksforgeeks:2025:underfitting_overfitting.],
     group: "Computação",
   ),
   (
     key: "aprendizado_maquina",
     short: [aprendizado de máquina],
     custom: text_in_english[machine learning],
-    description: [Em inglês, #text_in_english[machine learning]. Área da @ia que desenvolve algoritmos capazes de aprender padrões a partir de dados sem programação explícita, melhorando seu desempenho através da experiência.],
+    description: [Em inglês, #text_in_english[machine learning]. Área da @ia que desenvolve algoritmos capazes de aprender padrões a partir de dados sem programação explícita, melhorando seu desempenho através da experiência @geeksforgeeks:2025:machine_learning_algorithms.],
     group: "Computação",
   ),
   (
     key: "softmax",
     short: text_in_english[softmax],
-    description: [Função de ativação que converte um @vetor de valores reais em uma distribuição de probabilidade, na qual cada elemento é transformado num valor entre $0$ e $1$, e a soma de todos os elementos resulta em $1$.],
+    description: [Função de ativação que converte um @vetor de valores reais em uma distribuição de probabilidade, na qual cada elemento é transformado num valor entre $0$ e $1$, e a soma de todos os elementos resulta em $1$ @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
     key: "selfplay",
     short: text_in_english[self-play],
     custom: [autoaprendizado por simulação de partidas],
-    description: [Em português, autoaprendizado por simulação de partidas. Técnica em que um @agint treina jogando contra versões de si mesmo para aprender estratégias por reforço sem dados externos.],
+    description: [Em português, autoaprendizado por simulação de partidas. Técnica em que um @agint treina jogando contra versões de si mesmo para aprender estratégias por reforço sem dados externos @silver:2017:mastering_chess_shogi.],
     group: "Computação",
   ),
   (
@@ -43,7 +43,7 @@
     short: [exploração],
     plural: [explorações],
     custom: text_in_english[exploration],
-    description: [Em inglês #text_in_english[exploration]. Componente do critério @uct na @mcts que eleva o termo de confiança para priorizar nós pouco visitados, ampliando a busca e evitando convergir cedo demais.],
+    description: [Em inglês #text_in_english[exploration]. Componente do critério @uct na @mcts que prioriza nós pouco visitados, ampliando a busca e evitando convergir cedo demais @kocsis:2006:bandit_based_mcts_planning.],
     group: "Computação",
   ),
   (
@@ -51,13 +51,13 @@
     short: [aproveitamento],
     plural: [aproveitamentos],
     custom: [exploitation],
-    description: [Em inglês, #text_in_english[exploitation]. Componente do critério @uct na @mcts que favorece nós com maior valor médio estimado, aproveitando recompensas já observadas para guiar a seleção.],
+    description: [Em inglês, #text_in_english[exploitation]. Componente do critério @uct na @mcts que favorece nós com maior valor médio estimado, aproveitando recompensas já observadas para guiar a seleção @kocsis:2006:bandit_based_mcts_planning.],
     group: "Computação",
   ),
   (
     key: "alphazero",
     short: text_in_english[AlphaZero],
-    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pelo laboratório Google DeepMind.],
+    description: [Algoritmo de autoaprendizado por reforço que combina @mcts e @resnet:pl profundas para dominar jogos de tabuleiro, desenvolvido pelo laboratório Google DeepMind @silver:2018:general_reinforcement_learning_algorithm.],
     group: "Computação",
   ),
   (
@@ -72,7 +72,7 @@
     key: "agint",
     short: "agente inteligente",
     plural: "agentes inteligentes",
-    description: [Sistema capaz de interpretar um estado, tomar decisões autônomas e agir para atingir objetivos definidos, aprendendo a adaptar seu comportamento.],
+    description: [Sistema capaz de interpretar um estado, tomar decisões autônomas e agir para atingir objetivos definidos, aprendendo a adaptar seu comportamento @holmgard:2019:automated_playtesting_procedural_personas.],
     group: "Computação",
   ),
   (
@@ -80,7 +80,7 @@
     short: "rede neural",
     plural: "redes neurais",
     custom: text_in_english[neural network],
-    description: [Em inglês, #text_in_english[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos, inspirado em redes biológicas.],
+    description: [Em inglês, #text_in_english[neural network]. Modelo computacional composto por camadas de unidades interligadas que aprendem padrões em dados por meio de ajustes de pesos @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
@@ -88,7 +88,7 @@
     short: [peso],
     plural: [pesos],
     custom: text_in_english[weight],
-    description: [Em inglês, #text_in_english[weight]. Parâmetro ajustável que pondera a conexão entre neurônios em uma @rn, determinando a força da influência de uma entrada sobre a saída de uma unidade.],
+    description: [Em inglês, #text_in_english[weight]. Parâmetro ajustável que pondera a conexão entre neurônios em uma @rn, determinando a força da influência de uma entrada sobre a saída de uma unidade @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
@@ -96,7 +96,7 @@
     short: [viés],
     plural: [vieses],
     custom: text_in_english[bias],
-    description: [Em inglês, #text_in_english[bias]. Parâmetro aditivo em um neurônio de @rn que ajusta o limiar de ativação, permitindo que o modelo se adapte melhor aos dados.],
+    description: [Em inglês, #text_in_english[bias]. Parâmetro aditivo em um neurônio de @rn que ajusta o limiar de ativação, permitindo que o modelo se adapte melhor aos dados @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
@@ -117,10 +117,10 @@
   ),
   (
     key: "alias",
-    short: text_in_english[alias],
-    plural: text_in_english[aliases],
-    custom: [apelido],
-    description: [Em português, apelido. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
+    short: "apelido",
+    plural: "apelidos",
+    custom: text_in_english[alias],
+    description: [Em inglês, #text_in_english[alias]. Nome alternativo dado a um tipo de dado, função ou outro elemento de programação para referenciá-lo de forma mais conveniente.],
     group: "Computação",
   ),
   (
@@ -131,6 +131,35 @@
     description: [Em inglês, #text_in_english[array]. Estrutura de dados que armazena uma coleção ordenada de elementos acessíveis por índices numéricos sequenciais.],
     group: "Computação",
   ),
+  (
+    key: "seed",
+    short: text_in_english[seed],
+    custom: [semente],
+    description: [Em português, semente. Valor inicial fornecido a um gerador de números pseudo-aleatórios para garantir reprodutibilidade dos resultados.],
+    group: "Computação",
+  ),
+  (
+    key: "entropia_cruzada_categorica",
+    short: [entropia cruzada categórica],
+    custom: text_in_english[categorical cross-entropy],
+    description: [Em inglês, #text_in_english[categorical cross-entropy]. Função de perda utilizada em problemas de classificação multi-classe que mede a divergência entre a distribuição de probabilidade prevista pelo modelo e a distribuição real das classes @li:2022:survey_convolutional_neural_networks.],
+    group: "Computação",
+  ),
+  (
+    key: "erro_quadratico_medio",
+    short: [erro quadrático médio],
+    custom: text_in_english[mean squared error],
+    description: [Em inglês, #text_in_english[mean squared error]. Função de perda que calcula a média dos quadrados das diferenças entre valores previstos e valores reais, utilizada em problemas de regressão @li:2022:survey_convolutional_neural_networks.],
+    group: "Computação",
+  ),
+  (
+    key: "perda",
+    short: [perda],
+    plural: [perdas],
+    custom: text_in_english[loss],
+    description: [Em inglês, #text_in_english[loss]. Métrica que quantifica a discrepância entre as predições de um modelo de @aprendizado_maquina e os valores reais esperados @li:2022:survey_convolutional_neural_networks.],
+    group: "Computação",
+  ),
 )
 
 #let glossary_entries_about_games = (
@@ -139,7 +168,7 @@
     short: "jogo",
     plural: "jogos",
     custom: text_in_english[game],
-    description: [Em inglês, #text_in_english[game]. Sistema de regras que define objetivos, @jogador:pl, @movimento:pl e condições de vitória ou encerramento.],
+    description: [Em inglês, #text_in_english[game]. Sistema de regras que define objetivos, @jogador:pl, @movimento:pl e condições de vitória ou encerramento @suits:1967:what_is_a_game.],
     group: "Jogos",
   ),
   (
@@ -227,6 +256,15 @@
     plural: "jogadores",
     custom: text_in_english[player],
     description: [Em inglês, #text_in_english[player]. Participante que toma decisões e executa @movimento:pl conforme as regras do @jogo.],
+    group: "Jogos",
+  ),
+  (
+    key: "snowball",
+    short: "snowball",
+    plural: "snowball",
+    custom: text_in_english[snowball],
+    description: [Em inglês, #text_in_english[snowball]. 
+    @jogo criado pelo autor para experimentar a os elementos de criação da ferramenta.],
     group: "Jogos",
   ),
 )

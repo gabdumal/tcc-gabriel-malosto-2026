@@ -75,7 +75,8 @@
 
 // Subtitle — optional.
 // Subtítulo — opcional.
-#let subtitle = {}
+#let subtitle = {
+}
 
 // Organization — required. Usually the name of the university.
 // Organização — obrigatório. Geralmente o nome da universidade.

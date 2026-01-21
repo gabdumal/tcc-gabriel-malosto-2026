@@ -10,14 +10,14 @@
     plural: "IAs",
     long: "inteligência artificial",
     longplural: "inteligências artificiais",
-    description: "Campo da computação dedicado a criar sistemas capazes de perceber, aprender e agir de forma autônoma.",
+    description: [Campo da computação dedicado a criar sistemas capazes de perceber, aprender e agir de forma autônoma, inspirados pela inteligência humana @geeksforgeeks:2025:what_is_ai.],
     group: "Computação",
   ),
   (
     key: "mcts",
     short: "MCTS",
     long: "busca em árvore de Monte Carlo",
-    description: [Em inglês, #text_in_english[Monte Carlo tree search]. Algoritmo de busca por simulação usado para explorar espaços de decisão em jogos.],
+    description: [Em inglês, #text_in_english[Monte Carlo tree search]. Algoritmo de busca por simulação usado para explorar espaços de decisão em jogos @swiechowski:2022:monte_carlo_tree_search.],
     group: "Computação",
   ),
   (
@@ -25,7 +25,8 @@
     short: "UCT",
     long: "limite superior de confiança aplicado a árvores",
     longplural: "limites superiores de confiança aplicados a árvores",
-    description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e em um termo de confiança (UCB).],
+    custom: text_in_english[Upper Confidence bounds applied to Trees],
+    description: [Em inglês, #text_in_english[Upper Confidence bounds applied to Trees]. Critério de seleção do MCTS que equilibra exploração e aproveitamento ao escolher nós com base na média de recompensas e na quantidade de visitas aos nós @kocsis:2006:bandit_based_mcts_planning.],
     group: "Computação",
   ),
   (
@@ -34,7 +35,7 @@
     plural: "ResNets",
     long: "rede neural residual",
     longplural: "redes neurais residuais",
-    description: [Em inglês, #text_in_english[residual neural network]. Arquitetura de rede neural profunda com conexões de atalho para facilitar o treinamento de camadas muito profundas.],
+    description: [Em inglês, #text_in_english[residual neural network]. Arquitetura de rede neural profunda com conexões de atalho para facilitar o treinamento de camadas muito profundas @he:2015:deep_residual_learning.],
     group: "Computação",
   ),
   (
@@ -43,7 +44,7 @@
     plural: "CNNs",
     long: "rede neural convolucional",
     longplural: "redes neurais convolucionais",
-    description: [Em inglês, #text_in_english[convolutional neural network]. Arquitetura de rede neural especializada em processar dados com estrutura de grade, como imagens, usando camadas convolucionais para extrair características.],
+    description: [Em inglês, #text_in_english[convolutional neural network]. Arquitetura de rede neural especializada em processar dados com estrutura de grade, como imagens, usando camadas convolucionais para extrair características @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
@@ -51,7 +52,14 @@
     short: "ReLU",
     long: "unidade linear retificada",
     longplural: "unidades lineares retificadas",
-    description: [Em inglês, #text_in_english[rectified linear unit]. Função de ativação não-linear que retorna o valor de entrada se positivo, ou zero caso contrário.],
+    description: [Em inglês, #text_in_english[rectified linear unit]. Função de ativação não-linear que retorna o valor de entrada se positivo, ou zero caso contrário @nair:2010:rectified_linear_units.],
+    group: "Computação",
+  ),
+  (
+    key: "adam",
+    short: text_in_english[Adam],
+    custom: [estimativa de momento adaptativo],
+    description: [Em inglês, #text_in_english[Adaptive Moment Estimation]. Algoritmo de otimização para treinamento de @rn:pl que combina taxas de aprendizado adaptativas para cada parâmetro @li:2022:survey_convolutional_neural_networks.],
     group: "Computação",
   ),
   (
@@ -76,6 +84,15 @@
     short: "JSON",
     long: "notação de objetos do JavaScript",
     description: [Em inglês, #text_in_english[JavaScript object notation]. Formato simples de intercâmbio de dados baseado em texto. É fácil de ler e escrever para humanos e de analisar e gerar para máquinas.],
+    group: "Computação",
+  ),
+  (
+    key: "api",
+    short: "API",
+    plural: "APIs",
+    long: "interface de programação de aplicações",
+    longplural: "interfaces de programação de aplicações",
+    description: [Em inglês, #text_in_english[Application Programming Interface]. Conjunto de definições e protocolos que permitem a comunicação entre diferentes componentes de software.],
     group: "Computação",
   ),
 )

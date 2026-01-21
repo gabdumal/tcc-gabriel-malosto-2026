@@ -1,6 +1,6 @@
 // # Components. Componentes.
 
-#import "../common/components.typ": print_person
+#import "../common/components.typ": print_person, get_advisor_role
 #import "../common/style/style.typ": leading_for_common_text
 #import "../common/util.typ": capitalize_first_letter, get_gender_ending
 
@@ -202,4 +202,36 @@
       Área de concentração: #area_of_concentration.
     ]
   ]
+}
+
+#let print_advisors = (
+    advisors: {
+    (
+      (
+        first_name: "Ciclana",
+        middle_name: "de",
+        last_name: "Castro",
+        gender: "feminine",
+        prefix: {
+          // "Profª Drª"
+        },
+        organization: (
+          name: "Nome da organização",
+          gender: "feminine",
+        ),
+      ),
+    )
+  },
+) => {        
+  // Advisors
+  let is_first_advisor = true
+  for advisor in advisors {
+    [
+      #capitalize_first_letter(get_advisor_role(gender: advisor.gender, is_co_advisor: not is_first_advisor)):
+      #advisor.prefix
+      #print_person(person: advisor)
+      #linebreak()
+    ]
+    is_first_advisor = false
+  }
 }
